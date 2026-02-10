@@ -1,7 +1,170 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  return <div></div>;
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showRegister, setShowRegister] = useState(false);
+  const [motDePasse2, registerPassword] = useState("");
+  const [motDePasse3, registerPassword2] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMsg("");
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/client/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            mot_de_passe: motDePasse,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.message || "Erreur de connexion");
+        return;
+      }
+
+      const { token, client } = data;
+
+      login(token, client);
+      navigate("/");
+    } catch (error) {
+      console.error("Erreur lors de la connexion: ", error);
+      setErrorMsg("Une erreur s'est produite lors de la connexion");
+    }
+  };
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    setErrorMsg("mot de passe différents");
+    if (motDePasse2 !== motDePasse3) {
+      setErrorMsg("Mots de passe différents");
+
+      try {
+        console.log("Compte créé avec succès");
+      } catch (error) {
+        setErrorMsg("Une erreur est survenue");
+      }
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-card auth-card-single">
+        {!showRegister ? (
+          <section className="auth-panel auth-login">
+            <h2>Déjà client</h2>
+            <form onSubmit={handleSubmit} className="auth-form">
+              <label className="sr-only" htmlFor="email">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                required
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <label className="sr-only" htmlFor="password">
+                Mot de passe
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={motDePasse}
+                required
+                placeholder="Mot de passe"
+                onChange={(e) => setMotDePasse(e.target.value)}
+              />
+
+              {errorMsg && <div className="error-message">{errorMsg}</div>}
+
+              <button type="submit" className="auth-button">
+                Connexion
+              </button>
+            </form>
+            <p className="auth-switch">
+              Si vous n'avez pas de compte,{" "}
+              <button
+                type="button"
+                className="auth-link"
+                onClick={() => setShowRegister(true)}
+              >
+                inscrivez-vous
+              </button>
+              .
+            </p>
+          </section>
+        ) : (
+          <section id="inscription" className="auth-panel auth-register">
+            <h2>Nouveau client</h2>
+            <p className="auth-subtitle">
+              Créez un compte pour suivre vos commandes et profiter d'offres
+              exclusives.
+            </p>
+            <form onSubmit={handleCreate} className="auth-form">
+              <label className="sr-only" htmlFor="firstName">
+                Prénom
+              </label>
+              <input id="firstName" type="text" placeholder="Prénom" />
+
+              <label className="sr-only" htmlFor="lastName">
+                Nom
+              </label>
+              <input id="lastName" type="text" placeholder="Nom" />
+
+              <label className="sr-only" htmlFor="registerEmail">
+                Email
+              </label>
+              <input id="registerEmail" type="email" placeholder="Email" />
+
+              <label className="sr-only" htmlFor="registerPassword">
+                Mot de passe
+              </label>
+              <input
+                id="registerPassword"
+                type="password"
+                placeholder="Mot de passe"
+              />
+              <input
+                id="registerPassword2"
+                type="password"
+                placeholder="Confirmer votre mot de passe"
+              />
+
+              <button type="button" className="auth-button">
+                Inscription
+              </button>
+            </form>
+            <p className="auth-switch">
+              Déjà un compte ?{" "}
+              <button
+                type="button"
+                className="auth-link"
+                onClick={() => setShowRegister(false)}
+              >
+                connectez-vous
+              </button>
+              .
+            </p>
+          </section>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Login;

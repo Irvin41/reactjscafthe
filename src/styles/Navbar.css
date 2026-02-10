@@ -1,0 +1,395 @@
+/* 1. IMPORT DE LA POLICE CORMORANT GARAMOND */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+/* 2. VARIABLES POUR TES COULEURS (FACILITE LES MODIFICATIONS) */
+:root {
+    --vert-cafthe: #1b3d2f; /* Le vert foncé de ton logo */
+    --or-cafthe: #c5a059;   /* Une touche dorée pour le survol */
+    --noir-texte: #1a1a1a;
+    --blanc: #ffffff;
+}
+
+/* 3. STYLE GLOBAL DE LA NAVBAR */
+.navbar {
+    font-family: 'Cormorant Garamond', serif;
+    background-color: var(--blanc);
+    padding: 10px 40px;
+    border-bottom: 1px solid #f2f2f2;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* SECTION LOGO ET MENU CENTRAL */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.logo img {
+    height: 65px;
+    width: auto;
+    display: block;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: var(--noir-texte);
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--or-cafthe);
+}
+
+/* ACTIONS À DROITE (PANIER / COMPTE) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.burger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: var(--blanc);
+    cursor: pointer;
+    padding: 0 10px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.burger-btn span {
+    width: 100%;
+    height: 2px;
+    background: var(--noir-texte);
+    display: block;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.burger-btn.is-open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.burger-btn.is-open span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-btn.is-open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.nav-overlay {
+    display: none;
+}
+
+.user-logged {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.cart-btn-nav, .account-link {
+    background: none;
+    border: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--noir-texte);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0;
+}
+
+.cart-btn-nav:hover, .account-link:hover {
+    opacity: 0.7;
+}
+
+/* BADGE DU PANIER */
+.badge {
+    background-color: var(--vert-cafthe);
+    color: white;
+    font-size: 0.75rem;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: absolute;
+    top: -8px;
+    right: -18px;
+}
+
+/* 4. LE PANIER LATÉRAL (CART DRAWER) */
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 400px;
+    max-width: 85vw;
+    height: 100vh;
+    background-color: var(--blanc);
+    z-index: 2000;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-drawer.open {
+    right: 0;
+}
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1999;
+}
+
+.cart-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* INTERIEUR DU PANIER */
+.drawer-header {
+    padding: 25px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawer-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-drawer {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.drawer-content {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.drawer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.item-name { font-weight: 600; margin: 0; }
+.item-price { color: #666; margin: 5px 0; }
+
+.qty-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.qty-picker button {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+}
+
+/* PIED DU PANIER (TOTAL ET BOUTON) */
+.drawer-footer {
+    padding: 25px;
+    border-top: 1px solid #eee;
+    background-color: #fcfcfc;
+}
+
+.total-box {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--vert-cafthe);
+    color: white;
+    border: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+    background-color: #2a5a45;
+}
+
+/* 5. RESPONSIVE NAVBAR */
+@media (max-width: 1100px) {
+    .navbar {
+        padding: 10px 24px;
+    }
+
+    .logo-section {
+        gap: 24px;
+    }
+
+    .nav-menu {
+        gap: 18px;
+    }
+
+    .nav-menu a,
+    .cart-btn-nav,
+    .account-link {
+        font-size: 1.05rem;
+    }
+}
+
+@media (max-width: 860px) {
+    .nav-container {
+        position: relative;
+    }
+
+    .logo-section {
+        width: 100%;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .burger-btn {
+        display: inline-flex;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: calc(100% + 110px);
+        left: 0;
+        right: 0;
+        background: var(--blanc);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 18px;
+        flex-direction: column;
+        gap: 16px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+        z-index: 1001;
+    }
+
+    .nav-menu.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-actions {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: var(--blanc);
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 16px 18px 18px;
+        justify-content: space-between;
+        gap: 16px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+        z-index: 1001;
+    }
+
+    .nav-actions.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        z-index: 1000;
+        border: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .navbar {
+        padding: 10px 16px;
+    }
+
+    .logo img {
+        height: 52px;
+    }
+
+    .nav-menu a,
+    .cart-btn-nav,
+    .account-link {
+        font-size: 1rem;
+    }
+
+    .nav-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-menu {
+        top: calc(100% + 140px);
+    }
+}
