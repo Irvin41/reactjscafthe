@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -18,23 +17,33 @@ export const CartProvider = ({ children }) => {
   const normalizeProduct = (product) => {
     if (!product) return null;
 
+    // ID: priorité à id_article (BDD), puis fallback
     const id =
-      product.id ??
       product.id_article ??
+      product.id ??
       product.sku ??
       product.slug ??
-      product.nom_article ??
-      product.name;
+      product.nom_article;
 
+    // NOM: priorité à nom_article (BDD)
     const name =
-      product.name ??
       product.nom_article ??
+      product.name ??
       product.nom_produit ??
       product.title ??
       "Produit";
 
-    
+    // PRIX: priorité à prix_ttc (BDD), puis prix_ht
+    const price =
+      product.prix_ttc ?? product.prix_ht ?? product.price ?? product.prix ?? 0;
 
+    // DESCRIPTION (optionnel)
+    const description = product.description ?? "";
+
+    // STOCK (optionnel mais important pour la gestion)
+    const stock = product.stock ?? null;
+
+    // IMAGE: gestion du champ image de la BDD
     const rawImage = product.image ?? product.imageUrl ?? null;
     const image =
       typeof rawImage === "string" && rawImage.length > 0
@@ -51,6 +60,8 @@ export const CartProvider = ({ children }) => {
       name,
       price,
       image,
+      description,
+      stock,
     };
   };
 
@@ -58,17 +69,30 @@ export const CartProvider = ({ children }) => {
     const normalized = normalizeProduct(product);
     if (!normalized?.id) return;
 
+    // Vérifier le stock disponible avant d'ajouter
+    if (normalized.stock !== null && normalized.stock <= 0) {
+      console.warn("Produit en rupture de stock");
+      return;
+    }
+
     setCart((prevCart) => {
-      const isProductInCart = prevCart.find(
+      const existingProduct = prevCart.find(
         (item) => item.id === normalized.id,
       );
-      if (isProductInCart) {
+
+      if (existingProduct) {
+        // Vérifier si on peut augmenter la quantité
+        const newQuantity = existingProduct.quantity + 1;
+        if (normalized.stock !== null && newQuantity > normalized.stock) {
+          console.warn("Stock insuffisant");
+          return prevCart;
+        }
+
         return prevCart.map((item) =>
-          item.id === normalized.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
+          item.id === normalized.id ? { ...item, quantity: newQuantity } : item,
         );
       }
+
       return [...prevCart, { ...normalized, quantity: 1 }];
     });
     setIsCartOpen(true);
@@ -80,11 +104,20 @@ export const CartProvider = ({ children }) => {
 
   const updateQuantity = (productId, amount) => {
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
-          : item,
-      ),
+      prevCart.map((item) => {
+        if (item.id === productId) {
+          const newQuantity = Math.max(1, item.quantity + amount);
+
+          // Vérifier le stock si disponible
+          if (item.stock !== null && newQuantity > item.stock) {
+            console.warn("Stock insuffisant");
+            return item;
+          }
+
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      }),
     );
   };
 
@@ -118,4 +151,14 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export const useCart = () => useContext(CartContext);
+// Export nommé du hook
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart doit être utilisé dans un CartProvider");
+  }
+  return context;
+};
+
+// Export par défaut du hook
+export default useCart;

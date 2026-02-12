@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProductDetails from "./pages/ProductDetails.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx"; // ← CORRIGÉ : Un seul import, bon nom
 import Login from "./pages/Login.jsx";
 import Layout from "./layout/Layout.jsx";
 import Home from "./pages/Home.jsx";
+import Profile from "./pages/Profile.jsx";
+import Orders from "./pages/Orders";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 
@@ -16,9 +18,11 @@ function App() {
             {/* Route parent : Layout contient navbar + outlet + footer */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              {/* id est un paramètre dynamique contenu dans l'url */}
-              <Route path="produit/:id" element={<ProductDetails />} />
+              {/* Route pour le détail produit - UNE SEULE route */}
+              <Route path="produit/:id" element={<ProductDetail />} />
               <Route path="login" element={<Login />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="/commandes" element={<Orders />} />
             </Route>
           </Routes>
         </BrowserRouter>

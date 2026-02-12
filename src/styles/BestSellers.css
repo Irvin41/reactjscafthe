@@ -1,0 +1,69 @@
+.prod-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  gap: 10px;
+}
+
+.prod-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-view-details,
+.btn-add-to-cart {
+  border: 1px solid #d7d7d7;
+  border-radius: 999px;
+  background: #fff;
+  color: #2e2e2e;
+  text-decoration: none;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 7px 11px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-view-details:hover,
+.btn-add-to-cart:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--color-green);
+  color: var(--color-green);
+}
+
+.btn-add-to-cart.adding {
+  border-color: #2b8744;
+  color: #2b8744;
+}
+/* Messages d'état pour FavoriteProducts et BestSellers */
+.message-container {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #fafafa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.message-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2e2e2e;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.message-text {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.message-container .btn-view-details {
+  margin-top: 1rem;
+  display: inline-block;
+}

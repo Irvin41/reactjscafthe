@@ -2,45 +2,8 @@ import React from "react";
 import "../styles/Home.css";
 import logo from "../assets/logo.png";
 import heroBox from "../assets/box-cafthe.png";
-import coffretDecouverte from "../assets/image/coffret/coffret-découverte-café.png";
-import filtreClassique from "../assets/image/café/moulu-filtre.png";
-import decafeineSuisse from "../assets/image/café/decafeine.png";
-
-const bestSellers = [
-  {
-    id: "coffret-decouverte",
-    badge: "Découverte",
-    badgeClass: "badge-color",
-    category: "COFFRETS",
-    origin: "Monde",
-    name: "Coffret Découverte",
-    desc: "Assortiment 5 cafés du monde 5×50g.",
-    price: "45,00 €",
-    image: coffretDecouverte,
-  },
-  {
-    id: "filtre-classique",
-    badge: "MOULU",
-    badgeClass: "badge-color",
-    category: "CAFÉS MOULUS",
-    origin: "Amérique Centrale",
-    name: "Filtre Classique",
-    desc: "Mouture moyenne pour cafetière filtre - 250g.",
-    price: "14,00 €",
-    image: filtreClassique,
-  },
-  {
-    id: "decafeine-suisse",
-    badge: "GRAINS",
-    badgeClass: "badge-color",
-    category: "CAFÉS EN GRAINS",
-    origin: "Suisse",
-    name: "Décaféiné Suisse",
-    desc: "Café décaféiné doux, méthode à l'eau - 250g.",
-    price: "19,00 €",
-    image: decafeineSuisse,
-  },
-];
+import BestSellers from "../components/BestSellers.jsx";
+import FavoriteProducts from "../components/FavoriteProducts.jsx";
 
 const Home = () => {
   return (
@@ -75,7 +38,6 @@ const Home = () => {
           />
         </div>
       </section>
-
       {/* --- SECTION PRODUITS : INCONTOURNABLES --- */}
       <section className="section-padding">
         <div className="section-header-flex">
@@ -86,38 +48,8 @@ const Home = () => {
           Les produits préférés de notre communauté.
         </p>
 
-        <div className="products-layout-grid">
-          {bestSellers.map((product) => (
-            <article className="product-item-card" key={product.id}>
-              <div className="product-image-wrap">
-                <div className={`badge ${product.badgeClass}`}>
-                  {product.badge}
-                </div>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="product-image"
-                  loading="lazy"
-                />
-              </div>
-              <div className="product-body">
-                <span className="prod-meta">
-                  {product.category} • {product.origin}
-                </span>
-                <h3 className="prod-name">{product.name}</h3>
-                <p className="prod-desc-short">{product.desc}</p>
-                <div className="prod-footer-row">
-                  <span className="prod-price">{product.price}</span>
-                  <button className="round-add-btn" type="button">
-                    +
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <BestSellers />
       </section>
-
       {/* --- SECTION FIDÉLITÉ --- */}
       <section className="loyalty-full-width">
         <h2 className="loyalty-title">VOTRE FIDÉLITÉ SE SAVOURE !</h2>
@@ -125,9 +57,21 @@ const Home = () => {
           <p>Parce que chaque tasse compte, rejoignez le Cercle Cafthé.</p>
           <p>100 points offerts à l'inscription</p>
           <p>1 point à chaque euro dépensé</p>
-          <p className="promo-free">Gratuit Sans engagement</p>
+          <p className="promo-free">Inscription gratuite et sans engagement</p>
           <button className="btn-dark-green">INSCRIPTION</button>
         </div>
+      </section>
+
+      <section className="section-padding">
+        <div className="section-header-flex">
+          <h2 className="section-title">Vos Favoris</h2>
+          <span className="link-view-all">Vos commandes</span>
+        </div>
+        <p className="section-subtitle">
+          Les produits que vous commandez le plus souvent.
+        </p>
+
+        <FavoriteProducts />
       </section>
     </div>
   );

@@ -1,11 +1,66 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo-cafthe.png";
 
 const Footer = () => {
   return (
-    <div>
-      <h2>FOOTER</h2>
-      <p>© - {new Date().getFullYear()} - Cafthé - Tous droits réservés </p>
-    </div>
+    <footer className="site-footer">
+      <div className="site-footer-grid">
+        <div className="footer-brand">
+          <img src={logo} alt="CAF'THE" />
+          <p>
+            L'excellence du the et du cafe premium, sourcee de maniere ethique
+            et durable.
+          </p>
+        </div>
+
+        <div className="footer-col">
+          <h3>BOUTIQUE</h3>
+          <ul>
+            <li>
+              <Link to="/thes">Thes</Link>
+            </li>
+            <li>
+              <Link to="/cafes">Cafe</Link>
+            </li>
+            <li>
+              <Link to="/accessoires">Accessoires</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-col">
+          <h3>INFORMATION</h3>
+          <ul>
+            <li>
+              <Link to="/a-propos">A Propos</Link>
+            </li>
+            <li>
+              <Link to="/livraison">Livraison</Link>
+            </li>
+            <li>
+              <Link to="/faq">FAQ</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-col footer-newsletter">
+          <h3>NEWSLETTER</h3>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="footer-newsletter-form"
+          >
+            <input type="email" placeholder="Votre email" />
+            <button type="submit" aria-label="Envoyer">
+              →
+            </button>
+          </form>
+        </div>
+      </div>
+      <p className="footer-bottom">
+        © {new Date().getFullYear()} CAFTHE • ARTISANS DU GOUT
+      </p>
+    </footer>
   );
 };
 

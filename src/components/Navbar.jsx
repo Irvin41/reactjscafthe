@@ -7,10 +7,10 @@ import CartDrawer from "./CartDrawer.jsx";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
   const { itemCount, toggleCart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const { user } = useContext(AuthContext);
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
@@ -68,10 +68,17 @@ const Navbar = () => {
 
         {/* Section droite : Panier + Compte */}
         <div className={`nav-actions ${isMenuOpen ? "is-open" : ""}`}>
+          <button className="cart-btn-nav" onClick={toggleCart}>
+            Mon Panier
+            {itemCount > 0 && <span className="badge">{itemCount}</span>}
+          </button>
+
           {isAuthenticated ? (
             <div className="user-logged">
-              <span className="user-name">{user?.prenom}</span>
-              <button className="account-link" onClick={logout}>
+              <Link to="/profile" className="account-link" onClick={closeMenu}>
+                {user ? user.prenom : ""}
+              </Link>
+              <button className="account-link-red" onClick={logout}>
                 Déconnexion
               </button>
             </div>
@@ -80,11 +87,6 @@ const Navbar = () => {
               Mon Compte
             </Link>
           )}
-
-          <button className="cart-btn-nav" onClick={toggleCart}>
-            Mon Panier
-            {itemCount > 0 && <span className="badge">{itemCount}</span>}
-          </button>
         </div>
       </div>
 
@@ -97,7 +99,6 @@ const Navbar = () => {
         />
       )}
 
-      {/* Le Panier latéral est injecté ici */}
       <CartDrawer />
     </nav>
   );

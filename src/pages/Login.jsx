@@ -1,20 +1,25 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [motDePasse2, setMotDePasse2] = useState("");
+  const [motDePasse3, setMotDePasse3] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [showRegister, setShowRegister] = useState(false);
-  const [motDePasse2, registerPassword] = useState("");
-  const [motDePasse3, registerPassword2] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -22,6 +27,7 @@ const Login = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             email,
             mot_de_passe: motDePasse,
@@ -35,27 +41,68 @@ const Login = () => {
         setErrorMsg(data.message || "Erreur de connexion");
         return;
       }
-
-      const { token, client } = data;
-
-      login(token, client);
+      const { client } = data;
+      // Appel au login via le contexte
+      login(client);
       navigate("/");
     } catch (error) {
       console.error("Erreur lors de la connexion: ", error);
       setErrorMsg("Une erreur s'est produite lors de la connexion");
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleCreate = async (e) => {
     e.preventDefault();
-    setErrorMsg("mot de passe différents");
-    if (motDePasse2 !== motDePasse3) {
-      setErrorMsg("Mots de passe différents");
+    setErrorMsg("");
+    setLoading(true);
 
-      try {
-        console.log("Compte créé avec succès");
-      } catch (error) {
-        setErrorMsg("Une erreur est survenue");
+    // Validation des mots de passe
+    if (motDePasse2 !== motDePasse3) {
+      setErrorMsg("Les mots de passe ne correspondent pas");
+      setLoading(false);
+      return;
+    }
+
+    // Validation des champs requis
+    if (!firstName || !lastName || !registerEmail || !motDePasse2) {
+      setErrorMsg("Tous les champs sont requis");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/client/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            prenom: firstName,
+            nom: lastName,
+            email: registerEmail,
+            mot_de_passe: motDePasse2,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.message || "Erreur lors de la création du compte");
+        return;
       }
+
+      // Connexion automatique après inscription réussie
+      login(data.client);
+      navigate("/");
+    } catch (error) {
+      console.error("Erreur lors de l'inscription: ", error);
+      setErrorMsg("Une erreur s'est produite lors de l'inscription");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,8 +139,8 @@ const Login = () => {
 
               {errorMsg && <div className="error-message">{errorMsg}</div>}
 
-              <button type="submit" className="auth-button">
-                Connexion
+              <button type="submit" className="auth-button" disabled={loading}>
+                {loading ? "Connexion..." : "Connexion"}
               </button>
             </form>
             <p className="auth-switch">
@@ -119,17 +166,38 @@ const Login = () => {
               <label className="sr-only" htmlFor="firstName">
                 Prénom
               </label>
-              <input id="firstName" type="text" placeholder="Prénom" />
+              <input
+                id="firstName"
+                type="text"
+                value={firstName}
+                placeholder="Prénom"
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
 
               <label className="sr-only" htmlFor="lastName">
                 Nom
               </label>
-              <input id="lastName" type="text" placeholder="Nom" />
+              <input
+                id="lastName"
+                type="text"
+                value={lastName}
+                placeholder="Nom"
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
 
               <label className="sr-only" htmlFor="registerEmail">
                 Email
               </label>
-              <input id="registerEmail" type="email" placeholder="Email" />
+              <input
+                id="registerEmail"
+                type="email"
+                value={registerEmail}
+                placeholder="Email"
+                onChange={(e) => setRegisterEmail(e.target.value)}
+                required
+              />
 
               <label className="sr-only" htmlFor="registerPassword">
                 Mot de passe
@@ -137,16 +205,28 @@ const Login = () => {
               <input
                 id="registerPassword"
                 type="password"
+                value={motDePasse2}
                 placeholder="Mot de passe"
+                onChange={(e) => setMotDePasse2(e.target.value)}
+                required
               />
+
+              <label className="sr-only" htmlFor="registerPassword2">
+                Confirmer mot de passe
+              </label>
               <input
                 id="registerPassword2"
                 type="password"
+                value={motDePasse3}
                 placeholder="Confirmer votre mot de passe"
+                onChange={(e) => setMotDePasse3(e.target.value)}
+                required
               />
 
-              <button type="button" className="auth-button">
-                Inscription
+              {errorMsg && <div className="error-message">{errorMsg}</div>}
+
+              <button type="submit" className="auth-button" disabled={loading}>
+                {loading ? "Création du compte..." : "Inscription"}
               </button>
             </form>
             <p className="auth-switch">
