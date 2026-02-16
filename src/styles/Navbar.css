@@ -286,7 +286,59 @@
 .checkout-btn:hover {
   background: #174f3b;
 }
+/* ─── Recherche ─────────────────────────────────────────────────── */
+.nav-search {
+  display: flex;
+  align-items: center;
+}
 
+.nav-search-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.nav-search-btn:hover {
+  color: var(--color-green);
+}
+
+.nav-search-input {
+  width: 0;
+  opacity: 0;
+  border: none;
+  border-bottom: 1.5px solid var(--color-text);
+  background: transparent;
+  font-family: var(--font-title);
+  font-size: 1rem;
+  color: var(--color-text);
+  outline: none;
+  padding: 2px 8px;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-search.is-open .nav-search-input {
+  width: 180px;
+  opacity: 1;
+}
+
+.nav-search-close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.nav-search-close:hover {
+  color: var(--color-text);
+}
 @media (max-width: 920px) {
   .navbar {
     padding: 10px 14px;

@@ -199,14 +199,15 @@
     color: #5f5f5d;
 }
 
-.order-status-badge.status-delivered { background: #e8f5e9; color: #199b5f; }
-.order-status-badge.status-shipping  { background: #fff8e1; color: #d5912b; }
-.order-status-badge.status-pending   { background: #fff3e0; color: #e67e22; }
-.order-status-badge.status-cancelled { background: #ffeaea; color: #c0392b; }
+.order-status-badge.status-delivered  { background: var(--color-green); color: var(--color-green-soft); }
+.order-status-badge.status-shipping   { background: #d5912b; color:  #fff8e1; }
+.order-status-badge.status-prepared   { background: #181d4d; color: #baddf7; }
+.order-status-badge.status-validated  { background: #ede7f6; color: #6a1b9a; }
+.order-status-badge.status-pending    { background: #8c0606; color: #fff3e0; }
 
 .order-full-total {
-    font-family: var(--font-title);
-    font-size: 1rem;
+    font-family: var(--font-body);
+    font-size: .8rem;
     font-weight: 700;
     color: #222221;
     white-space: nowrap;
@@ -311,10 +312,10 @@
 
 .recap-row span  { color: #a1a19f; letter-spacing: 0.06em; font-size: 0.68rem; }
 .recap-row strong { color: #222221; font-weight: 700; }
-
+.recap-row strong.status-prepared  { color: #181d4d }
 .recap-row strong.status-delivered { color: #199b5f; }
 .recap-row strong.status-shipping  { color: #d5912b; }
-.recap-row strong.status-pending   { color: #e67e22; }
+.recap-row strong.status-pending   { color: #8c0606; }
 
 .recap-total {
     margin-top: 6px;

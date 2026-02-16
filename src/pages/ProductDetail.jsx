@@ -46,6 +46,26 @@ const calculerPrix = (prixBase, categorie, selectedPoids) => {
 };
 
 const isCafeThe = (categorie) => CATEGORIES_POIDS.includes(categorie);
+const EXCLUDED_EXTRA_FIELDS = new Set([
+  "id_article",
+  "nom_article",
+  "categorie",
+  "description",
+  "description_detaillee",
+  "origine",
+  "image",
+  "prix_ht",
+  "taux_tva",
+  "prix_ttc",
+  "stock",
+]);
+
+const formatFieldLabel = (key) =>
+  key
+    .replace(/_/g, " ")
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -145,6 +165,13 @@ const ProductDetail = () => {
   const prixAffiche = afficherPoids
     ? calculerPrix(produit.prix_ttc, produit.categorie, selectedPoids)
     : Number(produit.prix_ttc).toFixed(2);
+  const infosSupplementaires = Object.entries(produit).filter(([key, value]) => {
+    if (EXCLUDED_EXTRA_FIELDS.has(key)) return false;
+    if (value === null || value === undefined) return false;
+    if (typeof value === "string" && value.trim() === "") return false;
+    if (typeof value === "object") return false;
+    return true;
+  });
 
   return (
     <div className="pd-page">
@@ -199,9 +226,19 @@ const ProductDetail = () => {
             {produit.origine && (
               <div className="pd-origin">
                 <span className="pd-origin-label">ORIGINE</span>
-                <span className="pd-origin-value">
-                  {produit.origine.split(",")[0]}
-                </span>
+                <span className="pd-origin-value">{produit.origine}</span>
+              </div>
+            )}
+
+            {infosSupplementaires.length > 0 && (
+              <div className="pd-origin pd-extra">
+                <span className="pd-origin-label">INFOS COMPLÉMENTAIRES</span>
+                {infosSupplementaires.map(([key, value]) => (
+                  <div key={key} className="pd-extra-row">
+                    <span className="pd-extra-key">{formatFieldLabel(key)}:</span>
+                    <span className="pd-origin-value">{String(value)}</span>
+                  </div>
+                ))}
               </div>
             )}
 

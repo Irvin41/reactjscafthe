@@ -7,7 +7,13 @@ const Footer = () => {
     <footer className="site-footer">
       <div className="site-footer-grid">
         <div className="footer-brand">
-          <img src={logo} alt="CAF'THE" />
+          <Link
+            to="#"
+            className="logo"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <img src={logo} alt="CAF'THÉ" />
+          </Link>
           <p>
             L'excellence du the et du cafe premium, sourcee de maniere ethique
             et durable.
@@ -25,6 +31,9 @@ const Footer = () => {
             </li>
             <li>
               <Link to="/accessoires">Accessoires</Link>
+            </li>
+            <li>
+              <Link to="/coffret">Coffrets</Link>
             </li>
           </ul>
         </div>

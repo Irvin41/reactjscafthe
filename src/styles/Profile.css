@@ -64,13 +64,15 @@
   letter-spacing: 0.14em;
   color: #b0b0ae;
   font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding-bottom: 8px;
+  border-bottom: 2px solid transparent;
 }
 
 .profile-tabs span.is-active {
-  color: #212120;
-  border-bottom: 2px solid #212120;
-  padding-bottom: 8px;
-  margin-bottom: -11px;
+  color: #1e5d49 !important;
+  border-bottom: 2px solid #1e5d49;
 }
 
 .profile-grid {
@@ -117,7 +119,7 @@
 }
 
 .field-grid label {
-  font-size: 0.6rem;
+  font-size: .8rem;
   letter-spacing: 0.12em;
   color: #a1a19f;
   font-weight: 700;
@@ -127,6 +129,8 @@
 
 .field-grid input {
   width: 100%;
+  font-size: 14px;
+  font-height: 500;
   border: 1px solid #ececeb;
   border-radius: 10px;
   height: 40px;
@@ -157,6 +161,8 @@
   background: #f8f8f7;
   cursor: pointer;
 }
+
+/* ─── Encart fidélité ───────────────────────────────────────────────── */
 
 .loyalty-mini-card {
   background: #1e5d49;
@@ -190,6 +196,15 @@
   margin: 6px 0 8px;
 }
 
+/* Numéro de fidélité — taille réduite pour afficher le code complet */
+.fidelite-numero {
+  font-size: 1.1rem !important;
+  letter-spacing: 0.18em;
+  font-family: monospace;
+  word-break: break-all;
+  margin: 8px 0 10px !important;
+}
+
 .loyalty-mini-card small {
   display: block;
   max-width: 210px;
@@ -212,6 +227,8 @@
   cursor: pointer;
 }
 
+/* ─── Favoris ───────────────────────────────────────────────────────── */
+
 .favorites-mini h4 {
   font-size: 0.68rem;
   letter-spacing: 0.13em;
@@ -219,28 +236,18 @@
   margin-bottom: 12px;
 }
 
-.favorites-mini ul {
-  list-style: none;
-  display: grid;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.favorites-mini li {
-  border: 1px solid #e8e8e7;
-  border-radius: 10px;
-  height: 42px;
+.favorites-cards {
   display: flex;
-  align-items: center;
-  padding: 0 12px;
-  font-size: 0.78rem;
-  color: #585857;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.favorites-mini button {
-  background: #1e5d49;
-  color: #fff;
+/* Forcer les ProductCard à prendre toute la largeur dans la sidebar */
+.favorites-cards > * {
+  width: 100% !important;
 }
+
+/* ─── Commandes ─────────────────────────────────────────────────────── */
 
 .orders-header {
   display: flex;
@@ -284,6 +291,16 @@
   background: #fbfbfa;
 }
 
+.order-item--clickable {
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.order-item--clickable:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-color: #c8c8c7;
+}
+
 .order-head {
   display: flex;
   justify-content: space-between;
@@ -317,15 +334,15 @@
   cursor: pointer;
 }
 
-.status-shipping {
-  color: #d5912b;
-  font-weight: 700;
+.order-arrow {
+  font-size: 1.1rem;
+  color: #b0b0ae;
 }
 
-.status-delivered {
-  color: #199b5f;
-  font-weight: 700;
-}
+.status-shipping  { color: #d5912b; font-weight: 700; }
+.status-delivered { color: #199b5f; font-weight: 700; }
+.status-pending   { color: #8c0606; font-weight: 700; }
+.status-prepared  { color: #181d4d; font-weight: 700; }
 
 .order-products {
   border-top: 1px solid #ebebea;
@@ -344,6 +361,83 @@
   color: #666664;
 }
 
+/* ─── Boutons voir tout ─────────────────────────────────────────────── */
+
+.btn-voir-tout {
+  border: 1px solid #1e5d49;
+  border-radius: 8px;
+  background: transparent;
+  color: #1e5d49;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-voir-tout:hover { background: #1e5d49; color: white; }
+
+.btn-voir-tout--block {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+/* ─── Édition profil ────────────────────────────────────────────────── */
+
+.edit-btns { display: flex; gap: 8px; }
+
+.btn-save {
+  color: #1e5d49;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+.btn-cancel {
+  color: #b0b0ae;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+/* ─── Alertes ───────────────────────────────────────────────────────── */
+
+.profile-loading {
+  text-align: center;
+  color: #8f8f8d;
+  font-size: 0.9rem;
+  padding: 4rem 0;
+}
+
+.profile-empty {
+  color: #8f8f8d;
+  font-size: 0.82rem;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+.profile-alert {
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.profile-alert--ok  { color: #199b5f; background: #e8f5e9; }
+.profile-alert--err { color: #c0392b; background: #ffeaea; }
+
 .tiers-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -356,44 +450,85 @@
   background: #f5f5f4;
   min-height: 156px;
   padding: 18px 16px;
+  transition: all 0.4s ease;
+  opacity: 0.7; /* Légèrement effacé si pas actif */
 }
 
+/* --- État Actif Général --- */
 .tier-item.is-active {
-  border-color: #2f2f2e;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
-  background: #fbfbfa;
+  opacity: 1;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
 }
+
+/* --- Couleurs Spécifiques (Actives) --- */
+
+/* BRONZE */
+.tier-bronze.is-active {
+  border: 2px solid #cd7f32;
+}
+.tier-bronze.is-active h3 { color: #cd7f32; }
+.tier-bronze.is-active .tier-badge { background: #cd7f32; }
+
+/* ARGENT */
+.tier-argent.is-active {
+  border: 2px solid #a9a9a9;
+}
+.tier-argent.is-active h3 { color: #808080; }
+.tier-argent.is-active .tier-badge { background: #808080; }
+
+/* OR */
+.tier-or.is-active {
+  border: 2px solid #d4af37;
+  background: linear-gradient(to bottom, #ffffff, #fffdf0);
+}
+.tier-or.is-active h3 { color: #c5a028; }
+.tier-or.is-active .tier-badge { background: #d4af37; }
+
+/* --- Éléments internes --- */
 
 .tier-badge {
+  display: inline-block;
   border-radius: 999px;
-  background: #1b1b1b;
+  background: #b0b0ae; /* Couleur par défaut */
   color: #fff;
-  font-size: 0.5rem;
+  font-size: 0.55rem;
   letter-spacing: 0.14em;
-  padding: 4px 8px;
+  padding: 4px 10px;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .tier-item h3 {
   font-size: 2rem;
   margin: 8px 0 2px;
+  font-family: var(--font-title);
+  color: #444; /* Gris foncé par défaut */
 }
 
 .tier-item p {
   color: #8c8c8a;
   font-size: 0.72rem;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .tier-item ul {
   list-style: none;
   display: grid;
-  gap: 6px;
+  gap: 8px;
+  padding: 0;
 }
 
 .tier-item li {
   font-size: 0.78rem;
   color: #595958;
+  display: flex;
+  align-items: center;
 }
+
+/* ─── Responsive ─────────────────────────────────────────────────────── */
 
 @media (max-width: 1020px) {
   .profile-card,
@@ -429,4 +564,39 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Titre de section principale */
+.profile-section-heading {
+  font-size: 1.07rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #212120;
+}
+
+/* Favoris en grille sous les tiers */
+.favorites-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .favorites-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Onglets sticky ─────────────────────────────────────────────────── */
+.profile-tabs--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f8f8f7;
+  padding: 20px 0 10px;
+  margin-bottom: 28px;
+}
+
+.profile-tabs--sticky span:hover {
+  color: #212120;
 }

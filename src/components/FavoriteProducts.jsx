@@ -3,46 +3,57 @@ import { AuthContext } from "../context/AuthContext";
 import ProductCard from "./ProductCard.jsx";
 import "../styles/BestSellers.css";
 
+const API = import.meta.env.VITE_API_URL;
+
 const FavoriteProducts = () => {
   const {
     user,
     isAuthenticated,
     loading: authLoading,
   } = useContext(AuthContext);
+  const id = user?.id_client || user?.id; // supporte les deux formats
+
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (authLoading) return;
+
+    if (!isAuthenticated || !id) {
+      setIsLoading(false);
+      return;
+    }
+
     const fetchFavorites = async () => {
-      // Attendre que l'authentification soit vérifiée
-      if (authLoading) return;
-
-      // Si pas connecté, pas besoin de fetch
-      if (!isAuthenticated || !user?.id_client) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        setError(null);
-
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/article/favorites/${user.id_client}`,
-          {
-            credentials: "include",
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP ${response.status}`);
-        }
+        const response = await fetch(`${API}/api/articles/favoris/${id}`, {
+          credentials: "include",
+        });
+        if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
 
         const data = await response.json();
-        console.log(data);
-        setFavorites(data.articles);
+        const baseArticles = data.articles || [];
+
+        const detailedArticles = await Promise.all(
+          baseArticles.map(async (article) => {
+            if (!article?.id_article) return article;
+            try {
+              const detailResponse = await fetch(
+                `${API}/api/articles/${article.id_article}`,
+              );
+              if (!detailResponse.ok) return article;
+              const detailData = await detailResponse.json();
+              return detailData.article || article;
+            } catch {
+              return article;
+            }
+          }),
+        );
+
+        setFavorites(detailedArticles);
       } catch (err) {
-        console.error("Erreur lors du chargement des favoris :", err);
+        console.error("Erreur favoris :", err);
         setError("Impossible de charger vos produits favoris");
       } finally {
         setIsLoading(false);
@@ -50,19 +61,16 @@ const FavoriteProducts = () => {
     };
 
     void fetchFavorites();
-  }, [user, isAuthenticated, authLoading]);
+  }, [id, isAuthenticated, authLoading]);
 
-  // Chargement de l'authentification
-  if (authLoading || isLoading) {
+  if (authLoading || isLoading)
     return (
       <div className="message-container">
         <p>Chargement de vos favoris...</p>
       </div>
     );
-  }
 
-  // Utilisateur non connecté
-  if (!isAuthenticated) {
+  if (!isAuthenticated)
     return (
       <div className="message-container">
         <h3 className="message-title">Connectez-vous pour voir vos favoris</h3>
@@ -71,10 +79,8 @@ const FavoriteProducts = () => {
         </p>
       </div>
     );
-  }
 
-  // Erreur
-  if (error) {
+  if (error)
     return (
       <div className="message-container">
         <h3 className="message-title">Une erreur est survenue</h3>
@@ -87,30 +93,22 @@ const FavoriteProducts = () => {
         </button>
       </div>
     );
-  }
 
-  // Aucun favori
-  if (favorites.length === 0) {
+  if (favorites.length === 0)
     return (
       <div className="message-container">
-        <h3 className="message-title">
-          Vous n'avez pas encore de produits favoris
-        </h3>
+        <h3 className="message-title">Vous n'avez pas encore de commandes</h3>
         <p className="message-text">
-          Commencez à commander pour voir vos préférences ici !
+          Vos 3 produits les plus commandés apparaîtront ici !
         </p>
       </div>
     );
-  }
 
-  // Affichage normal
   return (
-    <div>
-      <div className="products-layout-grid">
-        {favorites.map((article) => (
-          <ProductCard key={article.id_article} produit={article} />
-        ))}
-      </div>
+    <div className="products-layout-grid">
+      {favorites.map((article) => (
+        <ProductCard key={article.id_article} produit={article} />
+      ))}
     </div>
   );
 };

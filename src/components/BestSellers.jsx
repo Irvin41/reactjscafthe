@@ -21,8 +21,25 @@ const BestSellers = () => {
         }
 
         const data = await response.json();
-        console.log(data);
-        setBestSellers(data.articles);
+        const baseArticles = data.articles || [];
+
+        const detailedArticles = await Promise.all(
+          baseArticles.map(async (article) => {
+            if (!article?.id_article) return article;
+            try {
+              const detailResponse = await fetch(
+                `${import.meta.env.VITE_API_URL}/api/articles/${article.id_article}`,
+              );
+              if (!detailResponse.ok) return article;
+              const detailData = await detailResponse.json();
+              return detailData.article || article;
+            } catch {
+              return article;
+            }
+          }),
+        );
+
+        setBestSellers(detailedArticles);
       } catch (err) {
         console.error("Erreur lors du chargement des best-sellers :", err);
         setError("Impossible de charger les meilleures ventes");

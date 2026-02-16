@@ -9,9 +9,9 @@ const statusClass = (statut = "") => {
   const s = statut.toUpperCase();
   if (s.includes("LIVRE")) return "status-delivered";
   if (s.includes("EXPED")) return "status-shipping";
-  if (s.includes("ATTENTE") || s.includes("PREPARATION"))
-    return "status-pending";
-  if (s.includes("ANNUL")) return "status-cancelled";
+  if (s.includes("PREPAR")) return "status-prepared";
+  if (s.includes("VALID")) return "status-validated";
+  if (s.includes("ATTENTE")) return "status-pending";
   return "";
 };
 
@@ -19,9 +19,9 @@ const statusLabel = (statut = "") => {
   const s = statut.toUpperCase();
   if (s.includes("LIVRE")) return "Livré";
   if (s.includes("EXPED")) return "Expédié";
-  if (s.includes("PREPARATION")) return "En préparation";
+  if (s.includes("PREPAR")) return "En préparation";
+  if (s.includes("VALID")) return "Validée";
   if (s.includes("ATTENTE")) return "En attente";
-  if (s.includes("ANNUL")) return "Annulé";
   return statut;
 };
 

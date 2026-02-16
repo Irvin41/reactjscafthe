@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../styles/Home.css";
 import logo from "../assets/logo.png";
 import heroBox from "../assets/box-cafthe.png";
 import BestSellers from "../components/BestSellers.jsx";
 import FavoriteProducts from "../components/FavoriteProducts.jsx";
+import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   return (
     <div className="home-wrapper">
       {/* --- SECTION HERO --- */}
@@ -24,25 +28,26 @@ const Home = () => {
               placeholder="Rechercher un thé, un café, un accessoire..."
               aria-label="Rechercher des produits"
             />
-            <button className="hero-search-btn" type="button">
+            <button className="btn-gold-explorer" type="button">
               Rechercher
             </button>
           </div>
-          <button className="btn-gold-explorer">EXPLORER LA COLLECTION</button>
         </div>
-        <div className="hero-image-side">
+        <picture className="hero-image-side">
           <img
             src={heroBox}
             alt="Box avec des fleurs"
             className="main-shadow-img"
           />
-        </div>
+        </picture>
       </section>
       {/* --- SECTION PRODUITS : INCONTOURNABLES --- */}
       <section className="section-padding">
         <div className="section-header-flex">
           <h2 className="section-title">Nos Incontournables</h2>
-          <span className="link-view-all">VOIR TOUT</span>
+          <Link to="/shop" className="link-view-all">
+            VOIR TOUT
+          </Link>
         </div>
         <p className="section-subtitle">
           Les produits préférés de notre communauté.
@@ -52,14 +57,29 @@ const Home = () => {
       </section>
       {/* --- SECTION FIDÉLITÉ --- */}
       <section className="loyalty-full-width">
-        <h2 className="loyalty-title">VOTRE FIDÉLITÉ SE SAVOURE !</h2>
         <div className="loyalty-inner">
-          <p>Parce que chaque tasse compte, rejoignez le Cercle Cafthé.</p>
-          <p>100 points offerts à l'inscription</p>
-          <p>1 point à chaque euro dépensé</p>
-          <p className="promo-free">Inscription gratuite et sans engagement</p>
-          <button className="btn-dark-green">INSCRIPTION</button>
+          <h2 className="loyalty-eyebrow">✦ VOTRE FIDÉLITÉ SE SAVOURE ✦</h2>{" "}
+          <h3 className="loyalty-title">
+            Parce que chaque tasse compte, rejoignez le Cercle Cafthé.
+          </h3>
+          <div className="loyalty-perk">
+            <strong>100 points</strong>
+            <span> offerts à l'inscription</span>
+          </div>
+          <div className="loyalty-perk">
+            <strong>1 point</strong>
+            <span> par euro dépensé</span>
+          </div>
+          <div className="loyalty-perk">
+            <p> Inscrivez vous pour découvrir notre programme </p>
+          </div>
         </div>
+        <button
+          className="btn-dark-green"
+          onClick={() => (user ? navigate("/profile") : navigate("/login"))}
+        >
+          INSCRIPTION
+        </button>
       </section>
 
       <section className="section-padding">

@@ -1,7 +1,4 @@
-/* ============================================
-   PRODUCTDETAIL.CSS - Style maquette Caf'Thé
-   Sans Bootstrap
-   ============================================ */
+
 
 /* ─── Page ──────────────────────────────────────────────────────────────────── */
 
@@ -93,9 +90,10 @@
 }
 
 .pd-image {
-    width: 100%;
-    height: 100%;
+    width: 115%;
+    height: 115%;
     object-fit: cover;
+    margin: -5%;
     display: block;
 }
 
@@ -166,8 +164,8 @@
 }
 
 .pd-price {
-    font-family: var(--font-title);
-    font-size: 2rem;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-text);
 }
@@ -205,7 +203,7 @@
 }
 
 .pd-origin-label {
-    font-size: 0.72rem;
+    font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -213,8 +211,25 @@
 }
 
 .pd-origin-value {
-    font-family: var(--font-title);
-    font-size: 1rem;
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.pd-extra {
+    gap: 0.6rem;
+}
+
+.pd-extra-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.pd-extra-key {
+    font-size: .9rem;
     font-weight: 600;
     color: var(--color-text);
 }
@@ -238,8 +253,10 @@
 .pd-poids-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .pd-poids-options {
@@ -247,6 +264,7 @@
     gap: 0.5rem;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
 }
 
 .pd-poids-btn {
@@ -279,7 +297,9 @@
 .pd-qty-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
+    flex-direction: column;
 }
 
 .pd-qty-selector {
@@ -336,15 +356,17 @@
 /* ─── Bouton panier ─────────────────────────────────────────────────────────── */
 
 .pd-cart-btn {
-    flex: 1;
+    flex: 0 0 auto;
     min-width: 180px;
     height: 48px;
     background: var(--color-gold);
     color: white;
     border: none;
     border-radius: 8px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 0.95rem;
+    padding-left: 16px;
+    padding-right: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
