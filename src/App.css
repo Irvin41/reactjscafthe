@@ -17,9 +17,11 @@
   --font-body: 'Arial', sans-serif;
 
   --content-width: 1240px;
+  --page-width: 900px;
   --transition: all 0.25s ease;
 }
 
+/* ─── Reset ─────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -71,26 +73,179 @@ select {
   font: inherit;
 }
 
-.container {
+/* Utilitaires */
+.contenu {
   width: min(var(--content-width), 92vw);
   margin: 0 auto;
 }
 
-.btn {
+.vert {
+  color: var(--color-green);
+}
+
+.dore {
+  color: var(--color-gold);
+}
+
+.centre {
+  text-align: center;
+}
+
+.discret {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.etroit {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.aere {
+  margin-top: 100px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Boutons */
+.bouton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
   transition: var(--transition);
+  padding: 15px 40px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 16px;
 }
 
-.text-gold {
-  color: var(--color-gold);
+/* Principal — Or */
+.bouton-principal {
+  background: #C4A052;
+  color: #FFFFFF;
 }
 
-.text-green {
+.bouton-principal:hover {
+  background: #FFD88A;
+  color: #000000;
+}
+
+/* Secondaire — Vert */
+.bouton-secondaire {
+  background: #1B4D3E;
+  color: #F5F5F0;
+}
+
+.bouton-secondaire:hover {
+  background: #7BA88B;
+  color: #000000;
+}
+
+/* Tertiaire — Clair */
+.bouton-tertiaire {
+  background: #F5F5F0;
+  color: #1B4D3E;
+}
+
+.bouton-tertiaire:hover {
+  background: #A0A09F;
+  color: #1B4D3E;
+}
+
+/* Désactivé */
+.bouton-desactive,
+.bouton:disabled {
+  background: #E0E0E0;
+  color: #999999;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Pages — Layout  */
+.page {
+  max-width: var(--page-width);
+  margin: 40px auto;
+  padding: 0 20px;
+  line-height: 1.8;
+}
+
+.titre {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.titre::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: var(--color-green);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sous-titre {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--color-green);
+  padding-left: 15px;
+}
+
+.texte {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.bloc {
+  margin-bottom: 60px;
+}
+
+.trait {
+  width: 40px;
+  height: 1px;
+  background-color: var(--color-green);
+  margin: 0 auto 40px auto;
+}
+
+.gros-chiffre {
+  display: block;
+  font-size: 12rem;
+  letter-spacing: 5px;
   color: var(--color-green);
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/*  Auth — Connexion / Inscription  */
+.auth-inscription {
+  display: none;
+}
+
+.auth-card.inscription .auth-connexion {
+  display: none;
+}
+
+.auth-card.inscription .auth-inscription {
+  display: block;
 }
 
 .auth-page {
@@ -196,6 +351,8 @@ select {
   color: var(--color-gold);
 }
 
+/* Footer */
+
 .site-footer {
   margin-top: 80px;
   border-top: 1px solid #d6d6d4;
@@ -278,17 +435,9 @@ select {
   text-transform: uppercase;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 840px) {
   .auth-card {
     grid-template-columns: 1fr;
@@ -303,5 +452,28 @@ select {
 
   .footer-brand p {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    margin: 20px;
+    padding: 24px;
+  }
+
+  .aere {
+    margin-top: 60px;
+  }
+
+  .titre {
+    font-size: 1.8rem;
+  }
+
+  .texte {
+    text-align: left;
+  }
+
+  .centre {
+    text-align: center;
   }
 }

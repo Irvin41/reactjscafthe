@@ -37,9 +37,6 @@ export const CartProvider = ({ children }) => {
     const price =
       product.prix_ttc ?? product.prix_ht ?? product.price ?? product.prix ?? 0;
 
-    // DESCRIPTION (optionnel)
-    const description = product.description ?? "";
-
     // STOCK (optionnel mais important pour la gestion)
     const stock = product.stock ?? null;
 
@@ -60,7 +57,6 @@ export const CartProvider = ({ children }) => {
       name,
       price,
       image,
-      description,
       stock,
     };
   };

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
-import "../styles/Cafes.css";
+import "../styles/CategoryPage.css";
 
 const normalize = (v) =>
   String(v ?? "")
@@ -85,10 +85,10 @@ const Recherche = () => {
   );
 
   return (
-    <div className="cafes-page">
-      <section className="cafes-hero">
-        <div className="cafes-hero-inner">
-          <p className="cafes-eyebrow">RÉSULTATS DE RECHERCHE</p>
+    <div className="cat-page">
+      <section className="cat-hero">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">RÉSULTATS DE RECHERCHE</p>
           <h1 className="section-title">
             {rawQuery ? `« ${rawQuery} »` : "Recherche"}
           </h1>
@@ -100,7 +100,7 @@ const Recherche = () => {
         </div>
       </section>
 
-      <section className="section-padding cafes-list-section">
+      <section className="section-padding cat-list-section">
         {isLoading && (
           <div className="message-container">
             <h3 className="message-title">Recherche en cours</h3>
@@ -116,7 +116,7 @@ const Recherche = () => {
             </p>
             <button
               type="button"
-              className="cafes-filter-btn is-active"
+              className="cat-filter-btn is-active"
               style={{ marginTop: "16px" }}
               onClick={() => navigate("/")}
             >
@@ -134,22 +134,22 @@ const Recherche = () => {
             </div>
 
             {totalPages > 1 && (
-              <nav className="cafes-pagination" aria-label="Pagination">
+              <nav className="cat-pagination" aria-label="Pagination">
                 <button
                   type="button"
-                  className="cafes-page-btn"
+                  className="cat-page-btn"
                   onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                   disabled={currentPage === 1}
                 >
                   Précédent
                 </button>
 
-                <div className="cafes-page-numbers">
+                <div className="cat-page-numbers">
                   {pageNumbers.map((page) => (
                     <button
                       key={page}
                       type="button"
-                      className={`cafes-page-btn ${page === currentPage ? "is-active" : ""}`}
+                      className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                       onClick={() => setCurrentPage(page)}
                     >
                       {page}
@@ -159,7 +159,7 @@ const Recherche = () => {
 
                 <button
                   type="button"
-                  className="cafes-page-btn"
+                  className="cat-page-btn"
                   onClick={() =>
                     setCurrentPage((p) => Math.min(p + 1, totalPages))
                   }

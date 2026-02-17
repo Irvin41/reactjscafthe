@@ -2,6 +2,7 @@ import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../utils/formatters";
+import "../styles/CartDrawer.css";
 
 const CartDrawer = () => {
   const {

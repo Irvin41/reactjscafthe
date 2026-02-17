@@ -21,17 +21,6 @@ const Home = () => {
             Découvrez notre sélection exclusive de thés et cafés sourcés
             directement auprès des producteurs.
           </p>
-          <div className="hero-search">
-            <input
-              type="search"
-              className="hero-search-input"
-              placeholder="Rechercher un thé, un café, un accessoire..."
-              aria-label="Rechercher des produits"
-            />
-            <button className="btn-gold-explorer" type="button">
-              Rechercher
-            </button>
-          </div>
         </div>
         <picture className="hero-image-side">
           <img

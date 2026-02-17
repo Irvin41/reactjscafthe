@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
-import "../styles/Thes.css";
+import "../styles/CategoryPage.css";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
 
@@ -12,7 +12,11 @@ const normalize = (value) =>
 
 const isTeaCollection = (article) => {
   const category = normalize(article?.categorie);
-  return category.startsWith("the_") || category === "matcha" || category === "infusion";
+  return (
+    category.startsWith("the_") ||
+    category === "matcha" ||
+    category === "infusion"
+  );
 };
 
 const FILTERS = [
@@ -102,7 +106,10 @@ const Thes = () => {
     return base.filter((article) => matchesFilter(article, selectedFilter));
   }, [articles, selectedFilter]);
 
-  const totalPages = Math.max(1, Math.ceil(teaArticles.length / PRODUCTS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(teaArticles.length / PRODUCTS_PER_PAGE),
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -125,10 +132,10 @@ const Thes = () => {
   );
 
   return (
-    <div className="thes-page">
-      <section className="thes-hero section-padding">
-        <div className="thes-hero-inner">
-          <p className="thes-eyebrow">COLLECTION THÉ</p>
+    <div className="cat-page cat-page--thes">
+      <section className="cat-hero section-padding">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">COLLECTION THÉ</p>
           <h1 className="section-title">Tous Nos Thés, Matcha et Infusions</h1>
           <p className="section-subtitle">
             Noir, vert, blanc, oolong, matcha et infusions dans une seule page.
@@ -136,14 +143,18 @@ const Thes = () => {
         </div>
       </section>
 
-      <section className="section-padding thes-list-section">
+      <section className="section-padding cat-list-section">
         {!isLoading && !error && (
-          <div className="thes-filters" role="tablist" aria-label="Filtrer les thés">
+          <div
+            className="cat-filters"
+            role="tablist"
+            aria-label="Filtrer les thés"
+          >
             {FILTERS.map((filter) => (
               <button
                 key={filter.key}
                 type="button"
-                className={`thes-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
+                className={`cat-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
                 onClick={() => setSelectedFilter(filter.key)}
               >
                 {filter.label}
@@ -155,7 +166,9 @@ const Thes = () => {
         {isLoading && (
           <div className="message-container">
             <h3 className="message-title">Chargement en cours</h3>
-            <p className="message-text">Nous préparons votre sélection de thés.</p>
+            <p className="message-text">
+              Nous préparons votre sélection de thés.
+            </p>
           </div>
         )}
 
@@ -170,7 +183,8 @@ const Thes = () => {
           <div className="message-container">
             <h3 className="message-title">Aucun thé disponible</h3>
             <p className="message-text">
-              Aucun thé, matcha ou infusion n&apos;est disponible pour le moment.
+              Aucun thé, matcha ou infusion n&apos;est disponible pour le
+              moment.
             </p>
           </div>
         )}
@@ -183,22 +197,22 @@ const Thes = () => {
               ))}
             </div>
 
-            <nav className="thes-pagination" aria-label="Pagination des thés">
+            <nav className="cat-pagination" aria-label="Pagination des thés">
               <button
                 type="button"
-                className="thes-page-btn"
+                className="cat-page-btn"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Précédent
               </button>
 
-              <div className="thes-page-numbers">
+              <div className="cat-page-numbers">
                 {pageNumbers.map((page) => (
                   <button
                     key={page}
                     type="button"
-                    className={`thes-page-btn ${page === currentPage ? "is-active" : ""}`}
+                    className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                     onClick={() => setCurrentPage(page)}
                     aria-current={page === currentPage ? "page" : undefined}
                   >
@@ -209,7 +223,7 @@ const Thes = () => {
 
               <button
                 type="button"
-                className="thes-page-btn"
+                className="cat-page-btn"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }

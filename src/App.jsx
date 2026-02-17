@@ -15,6 +15,7 @@ import AboutPage from "./pages/AboutPage.jsx";
 import Shop from "./components/Shop.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path="commandes" element={<Orders />} />
               <Route path="a-propos" element={<AboutPage />} />
               <Route path="shop" element={<Shop />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

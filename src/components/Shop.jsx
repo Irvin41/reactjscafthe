@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
-import "../styles/Cafes.css";
+import "../styles/CategoryPage.css";
 
 const normalize = (value) =>
   String(value ?? "")
@@ -18,6 +18,7 @@ const FILTERS_CONFIG = {
       { key: "grains", label: "En Grains" },
       { key: "moulu", label: "Moulu" },
       { key: "capsule", label: "Capsules" },
+      { key: "bio", label: "Bio" },
     ],
   },
   the: {
@@ -28,6 +29,7 @@ const FILTERS_CONFIG = {
       { key: "blanc", label: "Thé Blanc" },
       { key: "matcha", label: "Matcha" },
       { key: "infusion", label: "Infusions" },
+      { key: "bio", label: "Bio" },
     ],
   },
   accessoire: { label: "Accessoires", sub: [] },
@@ -74,18 +76,19 @@ const Shop = () => {
   const filteredArticles = useMemo(() => {
     return articles.filter((a) => {
       const cat = normalize(a.categorie);
+      const name = normalize(a.nom_article || a.nom || "");
 
       if (mainFilter === "all") return true;
 
-      // Logique spécifique pour le groupe CAFÉ (inclut les capsules)
       if (mainFilter === "cafe") {
         const isCoffeeRelated = cat.includes("cafe") || cat.includes("capsule");
         if (!isCoffeeRelated) return false;
         if (subFilter === "all") return true;
+        if (subFilter === "bio")
+          return cat.includes("bio") || name.includes("bio");
         return cat.includes(subFilter);
       }
 
-      // Logique spécifique pour le groupe THÉ (inclut matcha et infusion)
       if (mainFilter === "the") {
         const isTeaRelated =
           cat.includes("the") ||
@@ -93,10 +96,11 @@ const Shop = () => {
           cat.includes("infusion");
         if (!isTeaRelated) return false;
         if (subFilter === "all") return true;
+        if (subFilter === "bio")
+          return cat.includes("bio") || name.includes("bio");
         return cat.includes(subFilter);
       }
 
-      // Logique pour Accessoires et Coffrets
       if (cat.includes(mainFilter)) {
         if (subFilter === "all") return true;
         return cat.includes(subFilter);
@@ -118,20 +122,20 @@ const Shop = () => {
   const totalPages = Math.ceil(filteredArticles.length / PRODUCTS_PER_PAGE);
 
   return (
-    <div className="cafes-page">
-      <section className="cafes-hero section-padding">
-        <div className="cafes-hero-inner">
-          <p className="cafes-eyebrow">BOUTIQUE</p>
+    <div className="cat-page">
+      <section className="cat-hero section-padding">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">BOUTIQUE</p>
           <h1 className="section-title">Tout notre Univers</h1>
         </div>
       </section>
 
-      <section className="section-padding cafes-list-section">
-        <div className="cafes-filters">
+      <section className="section-padding cat-list-section">
+        <div className="cat-filters">
           {Object.keys(FILTERS_CONFIG).map((key) => (
             <button
               key={key}
-              className={`cafes-filter-btn ${mainFilter === key ? "is-active" : ""}`}
+              className={`cat-filter-btn ${mainFilter === key ? "is-active" : ""}`}
               onClick={() => {
                 setMainFilter(key);
                 setSubFilter("all");
@@ -144,11 +148,11 @@ const Shop = () => {
 
         {FILTERS_CONFIG[mainFilter].sub.length > 0 && (
           <div
-            className="cafes-filters"
+            className="cat-filters"
             style={{ borderTop: "none", paddingTop: "0" }}
           >
             <button
-              className={`cafes-filter-btn ${subFilter === "all" ? "is-active" : ""}`}
+              className={`cat-filter-btn ${subFilter === "all" ? "is-active" : ""}`}
               onClick={() => setSubFilter("all")}
             >
               Tous
@@ -156,7 +160,7 @@ const Shop = () => {
             {FILTERS_CONFIG[mainFilter].sub.map((sub) => (
               <button
                 key={sub.key}
-                className={`cafes-filter-btn ${subFilter === sub.key ? "is-active" : ""}`}
+                className={`cat-filter-btn ${subFilter === sub.key ? "is-active" : ""}`}
                 onClick={() => setSubFilter(sub.key)}
               >
                 {sub.label}
@@ -182,20 +186,20 @@ const Shop = () => {
             </div>
 
             {totalPages > 1 && (
-              <nav className="cafes-pagination" style={{ marginTop: "40px" }}>
+              <nav className="cat-pagination" style={{ marginTop: "40px" }}>
                 <button
-                  className="cafes-page-btn"
+                  className="cat-page-btn"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((prev) => prev - 1)}
                 >
                   Précédent
                 </button>
-                <div className="cafes-page-numbers">
+                <div className="cat-page-numbers">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
                       <button
                         key={page}
-                        className={`cafes-page-btn ${page === currentPage ? "is-active" : ""}`}
+                        className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                         onClick={() => setCurrentPage(page)}
                       >
                         {page}
@@ -204,7 +208,7 @@ const Shop = () => {
                   )}
                 </div>
                 <button
-                  className="cafes-page-btn"
+                  className="cat-page-btn"
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((prev) => prev + 1)}
                 >

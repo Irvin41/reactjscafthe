@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
-import "../styles/Cafes.css";
+import "../styles/CategoryPage.css";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
 
@@ -129,10 +129,10 @@ const Cafes = () => {
   );
 
   return (
-    <div className="cafes-page">
-      <section className="cafes-hero section-padding">
-        <div className="cafes-hero-inner">
-          <p className="cafes-eyebrow">COLLECTION CAFÉ</p>
+    <div className="cat-page cat-page--cafes">
+      <section className="cat-hero section-padding">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">COLLECTION CAFÉ</p>
           <h1 className="section-title">Tous Nos Cafés et Capsules</h1>
           <p className="section-subtitle">
             Une sélection complète de cafés en grains, moulus et capsules.
@@ -140,10 +140,10 @@ const Cafes = () => {
         </div>
       </section>
 
-      <section className="section-padding cafes-list-section">
+      <section className="section-padding cat-list-section">
         {!isLoading && !error && (
           <div
-            className="cafes-filters"
+            className="cat-filters"
             role="tablist"
             aria-label="Filtrer les cafés"
           >
@@ -151,7 +151,7 @@ const Cafes = () => {
               <button
                 key={filter.key}
                 type="button"
-                className={`cafes-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
+                className={`cat-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
                 onClick={() => setSelectedFilter(filter.key)}
               >
                 {filter.label}
@@ -194,22 +194,22 @@ const Cafes = () => {
               ))}
             </div>
 
-            <nav className="cafes-pagination" aria-label="Pagination des cafés">
+            <nav className="cat-pagination" aria-label="Pagination des cafés">
               <button
                 type="button"
-                className="cafes-page-btn"
+                className="cat-page-btn"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Précédent
               </button>
 
-              <div className="cafes-page-numbers">
+              <div className="cat-page-numbers">
                 {pageNumbers.map((page) => (
                   <button
                     key={page}
                     type="button"
-                    className={`cafes-page-btn ${page === currentPage ? "is-active" : ""}`}
+                    className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                     onClick={() => setCurrentPage(page)}
                     aria-current={page === currentPage ? "page" : undefined}
                   >
@@ -220,7 +220,7 @@ const Cafes = () => {
 
               <button
                 type="button"
-                className="cafes-page-btn"
+                className="cat-page-btn"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }

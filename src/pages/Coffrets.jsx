@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
-import "../styles/Coffrets.css";
+import "../styles/CategoryPage.css";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
 
@@ -27,7 +27,8 @@ const matchesFilter = (article, filterKey) => {
   );
 
   if (filterKey === "cafe") return haystack.includes("cafe");
-  if (filterKey === "the") return haystack.includes("the") || haystack.includes("matcha");
+  if (filterKey === "the")
+    return haystack.includes("the") || haystack.includes("matcha");
   if (filterKey === "infusion") return haystack.includes("infusion");
   if (filterKey === "barista") return haystack.includes("barista");
 
@@ -85,7 +86,10 @@ const Coffrets = () => {
     return base.filter((article) => matchesFilter(article, selectedFilter));
   }, [articles, selectedFilter]);
 
-  const totalPages = Math.max(1, Math.ceil(coffretArticles.length / PRODUCTS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(coffretArticles.length / PRODUCTS_PER_PAGE),
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -108,21 +112,22 @@ const Coffrets = () => {
   );
 
   return (
-    <div className="coffrets-page">
-      <section className="coffrets-hero section-padding">
-        <div className="coffrets-hero-inner">
-          <p className="coffrets-eyebrow">COLLECTION COFFRETS</p>
+    <div className="cat-page cat-page--coffrets">
+      <section className="cat-hero section-padding">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">COLLECTION COFFRETS</p>
           <h1 className="section-title">Tous Nos Coffrets</h1>
           <p className="section-subtitle">
-            Des coffrets découverte, barista et thés à offrir ou à s&apos;offrir.
+            Des coffrets découverte, barista et thés à offrir ou à
+            s&apos;offrir.
           </p>
         </div>
       </section>
 
-      <section className="section-padding coffrets-list-section">
+      <section className="section-padding cat-list-section">
         {!isLoading && !error && (
           <div
-            className="coffrets-filters"
+            className="cat-filters"
             role="tablist"
             aria-label="Filtrer les coffrets"
           >
@@ -130,7 +135,7 @@ const Coffrets = () => {
               <button
                 key={filter.key}
                 type="button"
-                className={`coffrets-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
+                className={`cat-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
                 onClick={() => setSelectedFilter(filter.key)}
               >
                 {filter.label}
@@ -172,22 +177,25 @@ const Coffrets = () => {
               ))}
             </div>
 
-            <nav className="coffrets-pagination" aria-label="Pagination des coffrets">
+            <nav
+              className="cat-pagination"
+              aria-label="Pagination des coffrets"
+            >
               <button
                 type="button"
-                className="coffrets-page-btn"
+                className="cat-page-btn"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Précédent
               </button>
 
-              <div className="coffrets-page-numbers">
+              <div className="cat-page-numbers">
                 {pageNumbers.map((page) => (
                   <button
                     key={page}
                     type="button"
-                    className={`coffrets-page-btn ${page === currentPage ? "is-active" : ""}`}
+                    className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                     onClick={() => setCurrentPage(page)}
                     aria-current={page === currentPage ? "page" : undefined}
                   >
@@ -198,7 +206,7 @@ const Coffrets = () => {
 
               <button
                 type="button"
-                className="coffrets-page-btn"
+                className="cat-page-btn"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }

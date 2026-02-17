@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
-import "../styles/Accessoires.css";
+import "../styles/CategoryPage.css";
 import "../styles/Home.css";
 import "../styles/BestSellers.css";
 
@@ -124,10 +124,10 @@ const Accessoires = () => {
   );
 
   return (
-    <div className="accessoires-page">
-      <section className="accessoires-hero section-padding">
-        <div className="accessoires-hero-inner">
-          <p className="accessoires-eyebrow">COLLECTION ACCESSOIRES</p>
+    <div className="cat-page cat-page--accessoires">
+      <section className="cat-hero section-padding">
+        <div className="cat-hero-inner">
+          <p className="cat-eyebrow">COLLECTION ACCESSOIRES</p>
           <h1 className="section-title">Tous Nos Accessoires</h1>
           <p className="section-subtitle">
             Théières, infuseurs, moulins, cafetières et tout le nécessaire.
@@ -135,10 +135,10 @@ const Accessoires = () => {
         </div>
       </section>
 
-      <section className="section-padding accessoires-list-section">
+      <section className="section-padding cat-list-section">
         {!isLoading && !error && (
           <div
-            className="accessoires-filters"
+            className="cat-filters"
             role="tablist"
             aria-label="Filtrer les accessoires"
           >
@@ -146,7 +146,7 @@ const Accessoires = () => {
               <button
                 key={filter.key}
                 type="button"
-                className={`accessoires-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
+                className={`cat-filter-btn ${selectedFilter === filter.key ? "is-active" : ""}`}
                 onClick={() => setSelectedFilter(filter.key)}
               >
                 {filter.label}
@@ -189,24 +189,24 @@ const Accessoires = () => {
             </div>
 
             <nav
-              className="accessoires-pagination"
+              className="cat-pagination"
               aria-label="Pagination des accessoires"
             >
               <button
                 type="button"
-                className="accessoires-page-btn"
+                className="cat-page-btn"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Précédent
               </button>
 
-              <div className="accessoires-page-numbers">
+              <div className="cat-page-numbers">
                 {pageNumbers.map((page) => (
                   <button
                     key={page}
                     type="button"
-                    className={`accessoires-page-btn ${page === currentPage ? "is-active" : ""}`}
+                    className={`cat-page-btn ${page === currentPage ? "is-active" : ""}`}
                     onClick={() => setCurrentPage(page)}
                     aria-current={page === currentPage ? "page" : undefined}
                   >
@@ -217,7 +217,7 @@ const Accessoires = () => {
 
               <button
                 type="button"
-                className="accessoires-page-btn"
+                className="cat-page-btn"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
