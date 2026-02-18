@@ -1,8 +1,7 @@
-/* ═══════════════════════════════════════════════════════════════
-   Navbar.css — Navigation principale
-   ═══════════════════════════════════════════════════════════════ */
+/*
+   Navbar.css — Navigation principale */
 
-/* ─── Barre sticky ──────────────────────────────────────────── */
+/*  Barre sticky */
 .navbar {
   position: sticky;
   top: 0;
@@ -11,7 +10,7 @@
   padding: 14px 4vw;
 }
 
-/* ─── Conteneur flex ────────────────────────────────────────── */
+/* Conteneur flex  */
 .nav-container {
   width: min(var(--content-width), 100%);
   margin: 0 auto;
@@ -21,7 +20,7 @@
   gap: 24px;
 }
 
-/* ─── Logo ──────────────────────────────────────────────────── */
+/*  Logo  */
 .logo-section {
   display: flex;
   align-items: center;
@@ -39,7 +38,7 @@
   display: block;
 }
 
-/* ─── Menu principal ────────────────────────────────────────── */
+/* Menu principal  */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -60,8 +59,12 @@
 .nav-menu a:hover {
   color: var(--color-green);
 }
+.nav-menu a.active {
+  color: var(--color-green);
+  border-bottom: 1px solid var(--color-green);
+}
 
-/* ─── Actions (panier, compte, recherche) ───────────────────── */
+/*  Actions (panier, compte, recherche) */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -102,7 +105,7 @@
   color: #8d0f24;
 }
 
-/* ─── Badge panier ──────────────────────────────────────────── */
+/*  Badge panier  */
 .cart-btn-nav .badge {
   position: absolute;
   top: -8px;
@@ -119,7 +122,7 @@
   font-weight: 700;
 }
 
-/* ─── Burger (mobile) ───────────────────────────────────────── */
+/*  Burger (mobile)  */
 .burger-btn {
   display: none;
   width: 40px;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
+import "../styles/ProductDetail.css";
 import "../styles/Home.css";
-import "../styles/BestSellers.css";
 import "../styles/CategoryPage.css";
 
 const normalize = (value) =>
@@ -49,7 +49,7 @@ const Shop = () => {
     const fetchArticles = async () => {
       try {
         const baseUrl = import.meta.env.VITE_API_URL;
-        const endpoints = [`${baseUrl}/api/articles`, `${baseUrl}/api/article`];
+        const endpoints = [`${baseUrl}/api/articles`];
         const allItems = [];
 
         for (const endpoint of endpoints) {
@@ -171,15 +171,15 @@ const Shop = () => {
 
         {isLoading ? (
           <div className="message-container">
-            <h3 className="message-title">Chargement...</h3>
+            <h3 className="titre">Chargement...</h3>
           </div>
         ) : filteredArticles.length === 0 ? (
           <div className="message-container">
-            <h3 className="message-title">Aucun article trouvé</h3>
+            <h3 className="titre">Aucun article trouvé</h3>
           </div>
         ) : (
           <>
-            <div className="products-layout-grid" style={{ marginTop: "30px" }}>
+            <div className="grille-produits" style={{ marginTop: "30px" }}>
               {paginatedArticles.map((article) => (
                 <ProductCard key={article.id_article} produit={article} />
               ))}

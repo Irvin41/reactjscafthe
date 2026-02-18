@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/Profile.css";
 
 const API = import.meta.env.VITE_API_URL;
 
-const tiers = [
+const paliers = [
   {
     name: "Bronze",
     points: "0-200 PTS",
@@ -29,20 +29,20 @@ const tiers = [
   },
 ];
 
-const getCurrentTierIndex = (pts) =>
-  tiers.findIndex((t) => pts >= t.min && pts <= t.max);
+const getIndexPalier = (pts) =>
+  paliers.findIndex((t) => pts >= t.min && pts <= t.max);
 
-const statusClass = (statut = "") => {
+const classeStatut = (statut = "") => {
   const s = statut.toUpperCase();
-  if (s.includes("LIVRE")) return "status-delivered";
-  if (s.includes("EXPED")) return "status-shipping";
-  if (s.includes("PREPAREE")) return "status-prepared";
+  if (s.includes("LIVRE")) return "statut-livre";
+  if (s.includes("EXPED")) return "statut-expedition";
+  if (s.includes("PREPAREE")) return "statut-prepare";
   if (s.includes("ATTENTE") || s.includes("PREPARATION"))
-    return "status-pending";
+    return "statut-attente";
   return "";
 };
 
-const Field = ({
+const Champ = ({
   label,
   field,
   type = "text",
@@ -63,7 +63,6 @@ const Field = ({
 
 const Profile = () => {
   const { user, loading: authLoading } = useContext(AuthContext);
-  const navigate = useNavigate();
   const id = user?.id_client || user?.id;
 
   const [activeTab, setActiveTab] = useState("MON PROFIL");
@@ -72,17 +71,16 @@ const Profile = () => {
   const refCommandes = useRef(null);
   const refFidelite = useRef(null);
 
-  const TABS = [
+  const ONGLETS = [
     { label: "MON PROFIL", ref: refProfil },
     { label: "MES COMMANDES", ref: refCommandes },
     { label: "PROGRAMME FIDELITE", ref: refFidelite },
   ];
 
-  const scrollTo = (ref) => {
+  const scrollVers = (ref) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // ── Détection de la section visible ──
   useEffect(() => {
     const sections = [
       { label: "MON PROFIL", el: refProfil.current },
@@ -106,13 +104,13 @@ const Profile = () => {
     return () => observer.disconnect();
   }, [refProfil.current, refCommandes.current, refFidelite.current]);
 
-  const renderTabs = () => (
-    <div className="profile-tabs profile-tabs--sticky">
-      {TABS.map((t) => (
+  const renderOnglets = () => (
+    <div className="profil-onglets profil-onglets--fixe">
+      {ONGLETS.map((t) => (
         <span
           key={t.label}
-          onClick={() => scrollTo(t.ref)}
-          className={activeTab === t.label ? "is-active" : ""}
+          onClick={() => scrollVers(t.ref)}
+          className={activeTab === t.label ? "actif" : ""}
         >
           {t.label}
         </span>
@@ -205,36 +203,36 @@ const Profile = () => {
   const listeCommandes = Array.isArray(commandes) ? commandes : [];
   const commandesApercu = listeCommandes.slice(0, 3);
   const points = profil?.points_fidelite ?? 0;
-  const tierIndex = getCurrentTierIndex(points);
-  const nextTier = tiers[tierIndex + 1];
+  const indexPalier = getIndexPalier(points);
+  const palierSuivant = paliers[indexPalier + 1];
 
   if (authLoading)
     return (
-      <main className="profile-page">
-        <div className="profile-loading">Chargement…</div>
+      <main className="page-profil">
+        <div className="profil-chargement">Chargement…</div>
       </main>
     );
   if (!user)
     return (
-      <main className="profile-page">
-        <div className="profile-loading">
+      <main className="page-profil">
+        <div className="profil-chargement">
           Vous devez être connecté pour accéder à votre profil.
         </div>
       </main>
     );
   if (loadingProfil)
     return (
-      <main className="profile-page">
-        <div className="profile-loading">Chargement du profil…</div>
+      <main className="page-profil">
+        <div className="profil-chargement">Chargement du profil…</div>
       </main>
     );
 
   return (
-    <main className="profile-page">
+    <main className="page-profil">
       {/* ════════ SECTION 1 : MON PROFIL ════════ */}
-      <section className="profile-card" ref={refProfil}>
-        {renderTabs()}
-        <div className="profile-head">
+      <section className="carte-profil" ref={refProfil}>
+        {renderOnglets()}
+        <div className="profil-entete">
           <div>
             <h1>Bonjour, {profil?.prenom || user?.prenom}.</h1>
             <p>
@@ -251,31 +249,30 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="profile-grid">
-          <div className="profile-main">
+        <div className="profil-grille">
+          <div className="profil-principal">
             {saveOk && (
-              <div className="profile-alert profile-alert--ok">
+              <div className="profil-alerte profil-alerte--ok">
                 ✓ Profil mis à jour
               </div>
             )}
             {saveError && (
-              <div className="profile-alert profile-alert--err">
+              <div className="profil-alerte profil-alerte--err">
                 ✗ {saveError}
               </div>
             )}
 
-            <article className="profile-section">
-              <div className="section-title-row">
+            <article className="profil-section">
+              <div className="ligne-titre">
                 <h2>INFORMATIONS PERSONNELLES</h2>
                 {!editing ? (
                   <button type="button" onClick={() => setEditing(true)}>
                     MODIFIER
                   </button>
                 ) : (
-                  <div className="edit-btns">
+                  <div className="boutons-edition">
                     <button
                       type="button"
-                      className="btn-save"
                       onClick={handleSave}
                       disabled={saving}
                     >
@@ -283,7 +280,7 @@ const Profile = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn-cancel"
+                      className="annuler"
                       onClick={handleCancel}
                     >
                       ANNULER
@@ -291,16 +288,16 @@ const Profile = () => {
                   </div>
                 )}
               </div>
-              <div className="field-grid two-col">
-                <Field label="PRÉNOM" field="prenom" {...fieldProps} />
-                <Field label="NOM" field="nom" {...fieldProps} />
-                <Field
+              <div className="grille-champs deux-colonnes">
+                <Champ label="PRÉNOM" field="prenom" {...fieldProps} />
+                <Champ label="NOM" field="nom" {...fieldProps} />
+                <Champ
                   label="EMAIL"
                   field="email"
                   type="email"
                   {...fieldProps}
                 />
-                <Field
+                <Champ
                   label="TÉLÉPHONE"
                   field="telephone"
                   type="tel"
@@ -309,8 +306,8 @@ const Profile = () => {
               </div>
             </article>
 
-            <article className="profile-section">
-              <div className="section-title-row">
+            <article className="profil-section">
+              <div className="ligne-titre">
                 <h2>MOT DE PASSE</h2>
                 {!editing && (
                   <button type="button" onClick={() => setEditing(true)}>
@@ -318,7 +315,7 @@ const Profile = () => {
                   </button>
                 )}
               </div>
-              <div className="field-grid two-col">
+              <div className="grille-champs deux-colonnes">
                 <label>
                   NOUVEAU MOT DE PASSE
                   <input
@@ -344,8 +341,8 @@ const Profile = () => {
               </div>
             </article>
 
-            <article className="profile-section">
-              <div className="section-title-row">
+            <article className="profil-section">
+              <div className="ligne-titre">
                 <h2>ADRESSE DE LIVRAISON</h2>
                 {!editing && (
                   <button type="button" onClick={() => setEditing(true)}>
@@ -353,30 +350,30 @@ const Profile = () => {
                   </button>
                 )}
               </div>
-              <div className="field-grid">
-                <Field label="RUE" field="adresse" {...fieldProps} />
-                <div className="field-grid two-col">
-                  <Field
+              <div className="grille-champs">
+                <Champ label="RUE" field="adresse" {...fieldProps} />
+                <div className="grille-champs deux-colonnes">
+                  <Champ
                     label="CODE POSTAL"
                     field="code_postal"
                     {...fieldProps}
                   />
-                  <Field label="VILLE" field="ville" {...fieldProps} />
+                  <Champ label="VILLE" field="ville" {...fieldProps} />
                 </div>
               </div>
             </article>
           </div>
 
-          <aside className="profile-side">
-            <article className="loyalty-mini-card">
+          <aside className="profil-lateral">
+            <article className="carte-fidelite-mini">
               <p>POINTS FIDÉLITÉ</p>
               <p style={{ fontSize: "0.68rem", opacity: 0.8, marginTop: 4 }}>
                 N° {profil?.numero_fidelite ?? "—"}
               </p>
               <strong>{points}</strong>
               <small>
-                {nextTier
-                  ? `Plus que ${nextTier.min - points} pts avant le niveau ${nextTier.name}`
+                {palierSuivant
+                  ? `Plus que ${palierSuivant.min - points} pts avant le niveau ${palierSuivant.name}`
                   : "Vous êtes au niveau maximum 🏆"}
               </small>
             </article>
@@ -385,32 +382,28 @@ const Profile = () => {
       </section>
 
       {/* ════════ SECTION 2 : MES COMMANDES ════════ */}
-      <section className="profile-card" ref={refCommandes}>
-        {renderTabs()}
-        <div className="section-title-row" style={{ marginBottom: "24px" }}>
-          <h2 className="profile-section-heading">MES COMMANDES</h2>
-          <button
-            type="button"
-            className="btn-voir-tout"
-            onClick={() => navigate("/commandes")}
-          >
-            HISTORIQUE COMPLET →
-          </button>
+      <section className="carte-profil" ref={refCommandes}>
+        {renderOnglets()}
+        <div className="ligne-titre" style={{ marginBottom: "24px" }}>
+          <h2 className="profil-titre-section">MES COMMANDES</h2>
+          <Link to="/commandes" className="lien">
+            Historique complet →
+          </Link>
         </div>
 
         {loadingCommandes ? (
-          <p className="profile-empty">Chargement des commandes…</p>
+          <p className="profil-vide">Chargement des commandes…</p>
         ) : commandesApercu.length === 0 ? (
-          <p className="profile-empty">Aucune commande pour l'instant</p>
+          <p className="profil-vide">Aucune commande pour l'instant</p>
         ) : (
-          <div className="orders-list">
+          <div className="liste-commandes">
             {commandesApercu.map((order) => (
-              <article
+              <Link
                 key={order.id_commande}
-                className="order-item order-item--clickable"
-                onClick={() => navigate("/commandes")}
+                to="/commandes"
+                className="commande-item commande-item--cliquable"
               >
-                <div className="order-head">
+                <div className="commande-entete">
                   <div>
                     <p>
                       {new Date(order.date_commande).toLocaleDateString(
@@ -421,10 +414,10 @@ const Profile = () => {
                       ORD-{String(order.id_commande).padStart(6, "0")}
                     </strong>
                   </div>
-                  <div className="order-meta">
+                  <div className="commande-meta">
                     <p>
                       STATUT{" "}
-                      <span className={statusClass(order.statut)}>
+                      <span className={classeStatut(order.statut)}>
                         {order.statut}
                       </span>
                     </p>
@@ -437,11 +430,11 @@ const Profile = () => {
                         €
                       </strong>
                     </p>
-                    <span className="order-arrow">›</span>
+                    <span className="commande-fleche">›</span>
                   </div>
                 </div>
                 {order.articles?.length > 0 && (
-                  <div className="order-products">
+                  <div className="commande-produits">
                     {order.articles.map((a, i) => (
                       <span key={i}>
                         {a.nom_article}
@@ -450,35 +443,31 @@ const Profile = () => {
                     ))}
                   </div>
                 )}
-              </article>
+              </Link>
             ))}
           </div>
         )}
       </section>
 
       {/* ════════ SECTION 3 : PROGRAMME FIDÉLITÉ ════════ */}
-      <section className="profile-card" ref={refFidelite}>
-        {renderTabs()}
-        <h2
-          className="profile-section-heading"
-          style={{ marginBottom: "24px" }}
-        >
+      <section className="carte-profil" ref={refFidelite}>
+        {renderOnglets()}
+        <h2 className="profil-titre-section" style={{ marginBottom: "24px" }}>
           PROGRAMME FIDÉLITÉ
         </h2>
-        <div className="tiers-grid">
-          {tiers.map((tier, i) => (
+        <div className="grille-paliers">
+          {paliers.map((palier, i) => (
             <article
-              key={tier.name}
-              /* On ajoute une classe basée sur le nom : tier-bronze, tier-argent, tier-or */
-              className={`tier-item tier-${tier.name.toLowerCase()} ${i === tierIndex ? "is-active" : ""}`}
+              key={palier.name}
+              className={`palier palier-${palier.name.toLowerCase()} ${i === indexPalier ? "actif" : ""}`}
             >
-              {i === tierIndex && (
-                <span className="tier-badge">VOTRE NIVEAU</span>
+              {i === indexPalier && (
+                <span className="palier-badge">VOTRE NIVEAU</span>
               )}
-              <h3>{tier.name}</h3>
-              <p>{tier.points}</p>
+              <h3>{palier.name}</h3>
+              <p>{palier.points}</p>
               <ul>
-                {tier.perks.map((perk) => (
+                {palier.perks.map((perk) => (
                   <li key={perk}>{perk}</li>
                 ))}
               </ul>

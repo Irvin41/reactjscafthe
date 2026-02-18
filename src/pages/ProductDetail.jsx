@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { formatText, formatStock } from "../utils/formatters";
-import "../styles/Productdetail.css";
+import "../styles/ProductDetail.css";
 
-// ── Catégories avec sélecteur de poids ──────────────────────────────
 const CATEGORIES_POIDS = [
   "Cafe_grains",
   "Cafe_moulu",
@@ -46,6 +45,7 @@ const calculerPrix = (prixBase, categorie, selectedPoids) => {
 };
 
 const isCafeThe = (categorie) => CATEGORIES_POIDS.includes(categorie);
+
 const EXCLUDED_EXTRA_FIELDS = new Set([
   "id_article",
   "nom_article",
@@ -135,9 +135,9 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="pd-page">
-        <div className="pd-spinner-wrap">
-          <div className="pd-spinner" />
+      <div className="detail-page">
+        <div className="detail-chargement">
+          <div className="detail-spinner" />
         </div>
       </div>
     );
@@ -145,10 +145,10 @@ const ProductDetail = () => {
 
   if (error || !produit) {
     return (
-      <div className="pd-page">
-        <div className="pd-error">
+      <div className="detail-page centre">
+        <div className="detail-erreur">
           <p>{error || "Produit non trouvé"}</p>
-          <Link to="/produits" className="pd-btn-back">
+          <Link to="/produits" className="bouton bouton-principal">
             Retour aux produits
           </Link>
         </div>
@@ -165,29 +165,33 @@ const ProductDetail = () => {
   const prixAffiche = afficherPoids
     ? calculerPrix(produit.prix_ttc, produit.categorie, selectedPoids)
     : Number(produit.prix_ttc).toFixed(2);
-  const infosSupplementaires = Object.entries(produit).filter(([key, value]) => {
-    if (EXCLUDED_EXTRA_FIELDS.has(key)) return false;
-    if (value === null || value === undefined) return false;
-    if (typeof value === "string" && value.trim() === "") return false;
-    if (typeof value === "object") return false;
-    return true;
-  });
+  const infosSupplementaires = Object.entries(produit).filter(
+    ([key, value]) => {
+      if (EXCLUDED_EXTRA_FIELDS.has(key)) return false;
+      if (value === null || value === undefined) return false;
+      if (typeof value === "string" && value.trim() === "") return false;
+      if (typeof value === "object") return false;
+      return true;
+    },
+  );
 
   return (
-    <div className="pd-page">
-      <div className="pd-wrapper">
+    <div className="detail-page">
+      <div className="detail-wrapper contenu">
         {/* ── Bloc principal ── */}
-        <div className="pd-container">
+        <div className="detail-carte">
           {/* ── Colonne gauche : image ── */}
-          <div className="pd-col-left">
-            <div className="pd-image-wrap">
+          <div className="detail-col-gauche">
+            <div className="detail-image-boite">
               {produit.categorie && (
-                <div className="pd-badge">{formatText(produit.categorie)}</div>
+                <div className="detail-pastille">
+                  {formatText(produit.categorie)}
+                </div>
               )}
               <img
                 src={imageUrl}
                 alt={produit.nom_article}
-                className="pd-image"
+                className="detail-image"
                 onError={(e) => {
                   e.target.src =
                     "https://placehold.co/600x600?text=Image+non+disponible";
@@ -197,20 +201,20 @@ const ProductDetail = () => {
           </div>
 
           {/* ── Colonne droite : infos ── */}
-          <div className="pd-col-right">
-            <h1 className="pd-title">{produit.nom_article}</h1>
+          <div className="detail-col-droite">
+            <h1 className="gros-titre">{produit.nom_article}</h1>
 
-            <div className="pd-price-row">
-              <span className="pd-price">
+            <div className="detail-prix-ligne">
+              <span className="produit-prix detail-prix">
                 {String(prixAffiche).replace(".", ",")} €
               </span>
               {produit.stock !== undefined && produit.stock !== null && (
                 <span
-                  className={`pd-stock ${
+                  className={`produit-stock ${
                     produit.stock === 0
-                      ? "pd-stock--out"
+                      ? "produit-stock--rupture"
                       : produit.stock < 50
-                        ? "pd-stock--low"
+                        ? "produit-stock--bas"
                         : ""
                   }`}
                 >
@@ -220,23 +224,25 @@ const ProductDetail = () => {
             </div>
 
             {produit.description && (
-              <p className="pd-description">{produit.description}</p>
+              <p className="texte discret">{produit.description}</p>
             )}
 
             {produit.origine && (
-              <div className="pd-origin">
-                <span className="pd-origin-label">ORIGINE</span>
-                <span className="pd-origin-value">{produit.origine}</span>
+              <div className="detail-bloc-info">
+                <span className="detail-label">ORIGINE</span>
+                <span className="detail-valeur">{produit.origine}</span>
               </div>
             )}
 
             {infosSupplementaires.length > 0 && (
-              <div className="pd-origin pd-extra">
-                <span className="pd-origin-label">INFOS COMPLÉMENTAIRES</span>
+              <div className="detail-bloc-info detail-extras">
+                <span className="detail-label">INFOS COMPLÉMENTAIRES</span>
                 {infosSupplementaires.map(([key, value]) => (
-                  <div key={key} className="pd-extra-row">
-                    <span className="pd-extra-key">{formatFieldLabel(key)}:</span>
-                    <span className="pd-origin-value">{String(value)}</span>
+                  <div key={key} className="detail-extra-ligne">
+                    <span className="detail-extra-cle">
+                      {formatFieldLabel(key)}:
+                    </span>
+                    <span className="detail-valeur">{String(value)}</span>
                   </div>
                 ))}
               </div>
@@ -244,14 +250,14 @@ const ProductDetail = () => {
 
             {/* ── Sélecteur poids (café/thé) ── */}
             {afficherPoids && (
-              <div className="pd-poids-selector">
-                <span className="pd-poids-label">QUANTITÉ</span>
-                <div className="pd-poids-row">
-                  <div className="pd-poids-options">
+              <div className="detail-selecteur">
+                <span className="detail-label">QUANTITÉ</span>
+                <div className="detail-selecteur-col">
+                  <div className="detail-poids-options">
                     {poidsDisponibles.map((poids) => (
                       <button
                         key={poids}
-                        className={`pd-poids-btn ${selectedPoids === poids ? "pd-poids-btn--active" : ""}`}
+                        className={`detail-poids-bouton ${selectedPoids === poids ? "detail-poids-bouton--actif" : ""}`}
                         onClick={() => setSelectedPoids(poids)}
                       >
                         {poids}
@@ -259,7 +265,7 @@ const ProductDetail = () => {
                     ))}
                   </div>
                   <button
-                    className={`pd-cart-btn ${isAdding ? "pd-cart-btn--added" : ""}`}
+                    className={`bouton bouton-principal ${isAdding ? "bouton-ajoute" : ""}`}
                     onClick={handleAddToCart}
                     disabled={isAdding || produit.stock === 0}
                   >
@@ -277,68 +283,69 @@ const ProductDetail = () => {
 
             {/* ── Sélecteur quantité (capsules/accessoires) ── */}
             {!afficherPoids && (
-              <div className="pd-qty-row">
-                <div className="pd-qty-selector">
+              <div className="detail-selecteur">
+                <div className="detail-selecteur-col">
+                  <div className="detail-quantite">
+                    <button
+                      className="detail-quantite-bouton"
+                      onClick={decreaseQuantity}
+                      disabled={quantity <= 1}
+                    >
+                      −
+                    </button>
+                    <input
+                      className="detail-quantite-input"
+                      type="number"
+                      min="1"
+                      value={quantityInput}
+                      onChange={(e) => {
+                        setQuantityInput(e.target.value);
+                        const val = parseInt(e.target.value, 10);
+                        if (!isNaN(val) && val >= 1) {
+                          setQuantity(val);
+                        }
+                      }}
+                      onBlur={() => {
+                        const val = parseInt(quantityInput, 10);
+                        if (isNaN(val) || val < 1) {
+                          setQuantity(1);
+                          setQuantityInput("1");
+                        } else {
+                          setQuantityInput(String(val));
+                        }
+                      }}
+                    />
+                    <button
+                      className="detail-quantite-bouton"
+                      onClick={increaseQuantity}
+                      disabled={!produit.stock || quantity >= produit.stock}
+                    >
+                      +
+                    </button>
+                  </div>
                   <button
-                    className="pd-qty-btn"
-                    onClick={decreaseQuantity}
-                    disabled={quantity <= 1}
+                    className={`bouton bouton-principal ${isAdding ? "bouton-ajoute" : ""}`}
+                    onClick={handleAddToCart}
+                    disabled={isAdding || produit.stock === 0}
                   >
-                    −
-                  </button>
-                  <input
-                    className="pd-qty-input"
-                    type="number"
-                    min="1"
-                    value={quantityInput}
-                    onChange={(e) => {
-                      setQuantityInput(e.target.value);
-                      const val = parseInt(e.target.value, 10);
-                      if (!isNaN(val) && val >= 1) {
-                        setQuantity(val);
-                      }
-                    }}
-                    onBlur={() => {
-                      // Quand on quitte le champ : si vide ou invalide → remet 1
-                      const val = parseInt(quantityInput, 10);
-                      if (isNaN(val) || val < 1) {
-                        setQuantity(1);
-                        setQuantityInput("1");
-                      } else {
-                        setQuantityInput(String(val));
-                      }
-                    }}
-                  />
-                  <button
-                    className="pd-qty-btn"
-                    onClick={increaseQuantity}
-                    disabled={!produit.stock || quantity >= produit.stock}
-                  >
-                    +
+                    {isAdding ? (
+                      <>
+                        <i className="bi bi-check-lg" /> AJOUTÉ AU PANIER
+                      </>
+                    ) : (
+                      "AJOUTER AU PANIER"
+                    )}
                   </button>
                 </div>
-                <button
-                  className={`pd-cart-btn ${isAdding ? "pd-cart-btn--added" : ""}`}
-                  onClick={handleAddToCart}
-                  disabled={isAdding || produit.stock === 0}
-                >
-                  {isAdding ? (
-                    <>
-                      <i className="bi bi-check-lg" /> AJOUTÉ AU PANIER
-                    </>
-                  ) : (
-                    "AJOUTER AU PANIER"
-                  )}
-                </button>
               </div>
             )}
 
             {/* ── Livraison ── */}
-            <div className="pd-delivery">
-              <i className="bi bi-truck pd-delivery-icon" />
+            <div className="detail-livraison">
+              <i className="bi bi-truck detail-livraison-icone" />
               <div>
-                <p className="pd-delivery-title">LIVRAISON OFFERTE</p>
-                <p className="pd-delivery-sub">Dès 45€ d'achat</p>
+                <p className="detail-livraison-titre">LIVRAISON OFFERTE</p>
+                <p className="discret">Dès 45€ d'achat</p>
               </div>
             </div>
           </div>
@@ -346,13 +353,13 @@ const ProductDetail = () => {
 
         {/* ── Description détaillée ── */}
         {produit.description_detaillee && (
-          <div className="pd-detail-section">
-            <div className="pd-detail-card">
-              <h3 className="pd-detail-title">
+          <div className="detail-description-bloc">
+            <div className="detail-description-carte">
+              <h3 className="detail-description-titre">
                 <i className="bi bi-info-circle" />
                 Description détaillée
               </h3>
-              <div className="pd-detail-content">
+              <div className="detail-description-contenu">
                 {produit.description_detaillee
                   .split("\n")
                   .map((line, index) => {
@@ -362,15 +369,20 @@ const ProductDetail = () => {
                       )
                     ) {
                       return (
-                        <p key={index} className="pd-detail-heading">
+                        <p key={index} className="detail-description-entete">
                           {line}
                         </p>
                       );
                     }
                     if (line.trim() === "")
-                      return <div key={index} className="pd-detail-spacer" />;
+                      return (
+                        <div
+                          key={index}
+                          className="detail-description-espace"
+                        />
+                      );
                     return (
-                      <p key={index} className="pd-detail-text">
+                      <p key={index} className="texte">
                         {line}
                       </p>
                     );

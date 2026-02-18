@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard.jsx";
-import "../styles/BestSellers.css";
 
 const BestSellers = () => {
   const [bestSellers, setBestSellers] = useState([]);
@@ -51,43 +50,42 @@ const BestSellers = () => {
     void fetchBestSellers();
   }, []);
 
-  // Chargement
   if (isLoading) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
+      <div className="centre bloc">
         <p>Chargement des meilleures ventes...</p>
       </div>
     );
   }
 
-  // Erreur
   if (error) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
+      <div className="centre bloc">
         <h3>Une erreur est survenue</h3>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Réessayer</button>
+        <p className="discret">{error}</p>
+        <button
+          className="bouton bouton-secondaire"
+          onClick={() => window.location.reload()}
+        >
+          Réessayer
+        </button>
       </div>
     );
   }
 
-  // Aucun best-seller
   if (bestSellers.length === 0) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p>Aucune vente disponible pour le moment</p>
+      <div className="centre bloc">
+        <p className="discret">Aucune vente disponible pour le moment</p>
       </div>
     );
   }
 
-  // Affichage normal
   return (
-    <div>
-      <div className="products-layout-grid">
-        {bestSellers.map((article) => (
-          <ProductCard key={article.id_article} produit={article} />
-        ))}
-      </div>
+    <div className="grille-produits">
+      {bestSellers.map((article) => (
+        <ProductCard key={article.id_article} produit={article} />
+      ))}
     </div>
   );
 };

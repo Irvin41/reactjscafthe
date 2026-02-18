@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
 import "../styles/CategoryPage.css";
 import "../styles/Home.css";
-import "../styles/BestSellers.css";
 
 const normalize = (value) =>
   String(value ?? "")
@@ -188,7 +187,7 @@ const Cafes = () => {
 
         {!isLoading && !error && coffeeArticles.length > 0 && (
           <>
-            <div className="products-layout-grid">
+            <div className="grille-produits">
               {paginatedArticles.map((article) => (
                 <ProductCard key={article.id_article} produit={article} />
               ))}

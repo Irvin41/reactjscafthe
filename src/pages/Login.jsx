@@ -152,7 +152,7 @@ const Login = () => {
             Si vous n'avez pas de compte,{" "}
             <button
               type="button"
-              className="auth-link"
+              className="lien"
               onClick={() => {
                 setErrorMsg("");
                 setShowRegister(true);
@@ -244,7 +244,7 @@ const Login = () => {
             Déjà un compte ?{" "}
             <button
               type="button"
-              className="auth-link"
+              className="lien"
               onClick={() => {
                 setErrorMsg("");
                 setShowRegister(false);

@@ -10,76 +10,78 @@ import { AuthContext } from "../context/AuthContext.jsx";
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+
   return (
-    <div className="home-wrapper">
-      {/* --- SECTION HERO --- */}
-      <section className="hero-container">
-        <div className="hero-content">
-          <img src={logo} alt="CAF'THÉ" className="hero-logo-img" />
-          <h1 className="hero-title">L'ESSENCE DU THÉ ET DU CAFÉ</h1>
-          <p className="hero-description">
+    <div className="accueil">
+      {/* --- HERO --- */}
+      <section className="hero contenu">
+        <div className="hero-contenu">
+          <img src={logo} alt="CAF'THÉ" className="hero-logo" />
+          <h1 className="gros-titre">L'ESSENCE DU THÉ ET DU CAFÉ</h1>
+          <p className="texte discret">
             Découvrez notre sélection exclusive de thés et cafés sourcés
             directement auprès des producteurs.
           </p>
         </div>
-        <picture className="hero-image-side">
+        <picture className="hero-image">
           <img
             src={heroBox}
             alt="Box avec des fleurs"
-            className="main-shadow-img"
+            className="image-ombre"
           />
         </picture>
       </section>
-      {/* --- SECTION PRODUITS : INCONTOURNABLES --- */}
-      <section className="section-padding">
-        <div className="section-header-flex">
-          <h2 className="section-title">Nos Incontournables</h2>
-          <Link to="/shop" className="link-view-all">
-            VOIR TOUT
+
+      {/* --- INCONTOURNABLES --- */}
+      <section className="zone-produits contenu">
+        <div className="entete-section">
+          <h2 className="titre">Nos Incontournables</h2>
+          <Link to="/shop" className="lien">
+            Voir tout les produits
           </Link>
         </div>
-        <p className="section-subtitle">
+        <p className="texte discret">
           Les produits préférés de notre communauté.
         </p>
-
         <BestSellers />
       </section>
-      {/* --- SECTION FIDÉLITÉ --- */}
-      <section className="loyalty-full-width">
-        <div className="loyalty-inner">
-          <h2 className="loyalty-eyebrow">✦ VOTRE FIDÉLITÉ SE SAVOURE ✦</h2>{" "}
-          <h3 className="loyalty-title">
+
+      {/* --- FIDÉLITÉ --- */}
+      <section className="contenu etroit centre">
+        <div className="fidelite">
+          <h2 className="dore fidelite-accroche">
+            ✦ VOTRE FIDÉLITÉ SE SAVOURE ✦
+          </h2>
+          <h3 className="fidelite-titre">
             Parce que chaque tasse compte, rejoignez le Cercle Cafthé.
           </h3>
-          <div className="loyalty-perk">
-            <strong>100 points</strong>
-            <span> offerts à l'inscription</span>
-          </div>
-          <div className="loyalty-perk">
-            <strong>1 point</strong>
-            <span> par euro dépensé</span>
-          </div>
-          <div className="loyalty-perk">
-            <p> Inscrivez vous pour découvrir notre programme </p>
-          </div>
+          <p>
+            <strong>100 points</strong> offerts à l'inscription
+          </p>
+          <p>
+            <strong>1 point</strong> par euro dépensé
+          </p>
+          <p>Inscrivez vous pour découvrir notre programme</p>
+          <button
+            className="bouton bouton-principal"
+            onClick={() => navigate(user ? "/profile" : "/login")}
+          >
+            INSCRIPTION / CONNEXION
+          </button>
         </div>
-        <button
-          className="btn-dark-green"
-          onClick={() => (user ? navigate("/profile") : navigate("/login"))}
-        >
-          INSCRIPTION
-        </button>
       </section>
 
-      <section className="section-padding">
-        <div className="section-header-flex">
-          <h2 className="section-title">Vos Favoris</h2>
-          <span className="link-view-all">Vos commandes</span>
+      {/* --- FAVORIS --- */}
+      <section className="zone-produits contenu">
+        <div className="entete-section">
+          <h2 className="titre">Vos Favoris</h2>
+          <Link to="/profile" className="lien">
+            Vos commandes
+          </Link>
         </div>
-        <p className="section-subtitle">
+        <p className="texte discret">
           Les produits que vous commandez le plus souvent.
         </p>
-
         <FavoriteProducts />
       </section>
     </div>

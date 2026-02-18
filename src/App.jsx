@@ -16,7 +16,10 @@ import Shop from "./components/Shop.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import NotFound from "./pages/NotFound.jsx";
-
+import Paiement from "./pages/Chekout.jsx";
+import Retour from "./pages/Retour.jsx";
+import Livraison from "./pages/Livraison.jsx";
+import Contact from "./pages/Contact.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -37,6 +40,10 @@ function App() {
               <Route path="a-propos" element={<AboutPage />} />
               <Route path="shop" element={<Shop />} />
               <Route path="*" element={<NotFound />} />
+              <Route path="paiement" element={<Paiement />} />
+              <Route path="retour" element={<Retour />} />
+              <Route path="livraison" element={<Livraison />} />
+              <Route path="contact" element={<Contact />} />
             </Route>
           </Routes>
         </BrowserRouter>

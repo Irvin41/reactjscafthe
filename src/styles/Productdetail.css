@@ -1,44 +1,37 @@
-
-
-/* ─── Page ──────────────────────────────────────────────────────────────────── */
-
-.pd-page {
+/* ─── Page ──────────────────────────────────────────────────────── */
+.detail-page {
     min-height: 50vh;
     background-color: var(--color-bg);
     padding: 3rem 0 5rem;
 }
 
-.pd-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
+.detail-wrapper {
     padding: 0 2rem;
 }
 
-/* ─── Spinner ───────────────────────────────────────────────────────────────── */
-
-.pd-spinner-wrap {
+/* ─── Spinner ───────────────────────────────────────────────────── */
+.detail-chargement {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 5rem 0;
 }
 
-.pd-spinner {
+.detail-spinner {
     width: 3rem;
     height: 3rem;
     border: 0.3rem solid var(--color-gold);
     border-right-color: transparent;
     border-radius: 50%;
-    animation: pd-spin 0.75s linear infinite;
+    animation: detail-rotation 0.75s linear infinite;
 }
 
-@keyframes pd-spin {
+@keyframes detail-rotation {
     to { transform: rotate(360deg); }
 }
 
-/* ─── Erreur ────────────────────────────────────────────────────────────────── */
-
-.pd-error {
+/* ─── Erreur ────────────────────────────────────────────────────── */
+.detail-erreur {
     background: #ffeaea;
     border-radius: 12px;
     padding: 2rem;
@@ -46,20 +39,8 @@
     color: #d32f2f;
 }
 
-.pd-btn-back {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.6rem 1.5rem;
-    background: var(--color-gold);
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-/* ─── Container principal ───────────────────────────────────────────────────── */
-
-.pd-container {
+/* ─── Carte principale ──────────────────────────────────────────── */
+.detail-carte {
     display: flex;
     flex-direction: row;
     gap: 3rem;
@@ -67,12 +48,11 @@
     border-radius: 20px;
     padding: 3rem;
     box-shadow: var(--shadow-card);
-    animation: pd-fadeIn 0.4s ease-out;
+    animation: detail-apparition 0.4s ease-out;
 }
 
-/* ─── Colonne gauche : image ────────────────────────────────────────────────── */
-
-.pd-col-left {
+/* ─── Colonne gauche : image ────────────────────────────────────── */
+.detail-col-gauche {
     flex: 0 0 auto;
     width: 45%;
     display: flex;
@@ -80,7 +60,7 @@
     align-items: center;
 }
 
-.pd-image-wrap {
+.detail-image-boite {
     position: relative;
     width: 380px;
     height: 380px;
@@ -89,7 +69,7 @@
     background: #f5f5f5;
 }
 
-.pd-image {
+.detail-image {
     width: 115%;
     height: 115%;
     object-fit: cover;
@@ -97,7 +77,7 @@
     display: block;
 }
 
-.pd-badge {
+.detail-pastille {
     position: absolute;
     top: 16px;
     left: 16px;
@@ -114,9 +94,8 @@
     z-index: 1;
 }
 
-/* ─── Colonne droite : infos ────────────────────────────────────────────────── */
-
-.pd-col-right {
+/* ─── Colonne droite : infos ────────────────────────────────────── */
+.detail-col-droite {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -124,76 +103,19 @@
     gap: 1.25rem;
 }
 
-/* Avis */
-.pd-reviews {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.pd-stars {
-    color: var(--color-gold);
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-}
-
-.pd-reviews-link {
-    color: var(--color-muted);
-    font-size: 0.875rem;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-/* Titre */
-.pd-title {
-    font-family: var(--font-brand);
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--color-text);
-    line-height: 1.2;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 0;
-}
-
 /* Prix */
-.pd-price-row {
+.detail-prix-ligne {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.pd-price {
-    font-family: var(--font-body);
+.detail-prix {
     font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-text);
 }
 
-.pd-stock {
-    background: #1d5b45;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.pd-stock--out { background: #d32f2f; }
-.pd-stock--low { background: #e67e22; }
-
-/* Description courte */
-.pd-description {
-    color: var(--color-muted);
-    line-height: 1.8;
-    font-size: 0.95rem;
-    margin: 0;
-}
-
-/* Origine */
-.pd-origin {
+/* Bloc info (origine, extras) */
+.detail-bloc-info {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -202,7 +124,7 @@
     border-radius: 10px;
 }
 
-.pd-origin-label {
+.detail-label {
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -210,47 +132,38 @@
     color: var(--color-muted);
 }
 
-.pd-origin-value {
+.detail-valeur {
     font-family: var(--font-body);
-    font-size: .9rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--color-text);
 }
 
-.pd-extra {
+.detail-extras {
     gap: 0.6rem;
 }
 
-.pd-extra-row {
+.detail-extra-ligne {
     display: flex;
     align-items: center;
     gap: 0.35rem;
     flex-wrap: wrap;
 }
 
-.pd-extra-key {
-    font-size: .9rem;
+.detail-extra-cle {
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-text);
 }
 
-/* ─── Sélecteur de poids ────────────────────────────────────────────────────── */
-
-.pd-poids-selector {
+/* ─── Sélecteur poids / quantité ────────────────────────────────── */
+.detail-selecteur {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
 }
 
-.pd-poids-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-muted);
-}
-
-.pd-poids-row {
+.detail-selecteur-col {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -259,7 +172,7 @@
     flex-direction: column;
 }
 
-.pd-poids-options {
+.detail-poids-options {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -267,7 +180,7 @@
     justify-content: center;
 }
 
-.pd-poids-btn {
+.detail-poids-bouton {
     padding: 0 1rem;
     height: 48px;
     border: 1.5px solid var(--color-line);
@@ -280,29 +193,20 @@
     transition: var(--transition);
 }
 
-.pd-poids-btn:hover {
+.detail-poids-bouton:hover {
     border-color: var(--color-gold);
     color: var(--color-gold);
 }
 
-.pd-poids-btn--active {
+.detail-poids-bouton--actif {
     background: var(--color-gold);
     border-color: var(--color-gold);
     color: white;
     font-weight: 700;
 }
 
-/* ─── Sélecteur quantité +/- ────────────────────────────────────────────────── */
-
-.pd-qty-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    flex-direction: column;
-}
-
-.pd-qty-selector {
+/* Quantité +/- */
+.detail-quantite {
     display: flex;
     align-items: center;
     border: 1px solid var(--color-line);
@@ -311,7 +215,7 @@
     background: white;
 }
 
-.pd-qty-btn {
+.detail-quantite-bouton {
     width: 44px;
     height: 48px;
     border: none;
@@ -325,14 +229,17 @@
     justify-content: center;
 }
 
-.pd-qty-btn:hover:not(:disabled) {
+.detail-quantite-bouton:hover:not(:disabled) {
     background: var(--color-bg);
     color: var(--color-text);
 }
 
-.pd-qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.detail-quantite-bouton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
 
-.pd-qty-input {
+.detail-quantite-input {
     width: 56px;
     height: 48px;
     text-align: center;
@@ -347,48 +254,20 @@
     -moz-appearance: textfield;
 }
 
-.pd-qty-input::-webkit-outer-spin-button,
-.pd-qty-input::-webkit-inner-spin-button {
+.detail-quantite-input::-webkit-outer-spin-button,
+.detail-quantite-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* ─── Bouton panier ─────────────────────────────────────────────────────────── */
-
-.pd-cart-btn {
-    flex: 0 0 auto;
-    min-width: 180px;
-    height: 48px;
-    background: var(--color-gold);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    padding-left: 16px;
-    padding-right: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+/* Bouton ajouté (état vert) */
+.bouton-ajoute {
+    background: var(--color-green) !important;
+    color: white !important;
 }
 
-.pd-cart-btn:hover:not(:disabled) {
-    background: #b38e45;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(200, 164, 87, 0.4);
-}
-
-.pd-cart-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.pd-cart-btn--added   { background: var(--color-green); }
-
-/* ─── Livraison ─────────────────────────────────────────────────────────────── */
-
-.pd-delivery {
+/* ─── Livraison ─────────────────────────────────────────────────── */
+.detail-livraison {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -397,39 +276,32 @@
     border-radius: 10px;
 }
 
-.pd-delivery-icon {
+.detail-livraison-icone {
     font-size: 1.4rem;
     color: var(--color-green);
     flex-shrink: 0;
 }
 
-.pd-delivery-title {
+.detail-livraison-titre {
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
 }
 
-.pd-delivery-sub {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-    margin: 0;
-}
-
-/* ─── Description détaillée ─────────────────────────────────────────────────── */
-
-.pd-detail-section {
+/* ─── Description détaillée ─────────────────────────────────────── */
+.detail-description-bloc {
     margin-top: 2rem;
 }
 
-.pd-detail-card {
+.detail-description-carte {
     background: var(--color-surface);
     border-radius: 20px;
     padding: 2.5rem;
     box-shadow: var(--shadow-card);
 }
 
-.pd-detail-title {
+.detail-description-titre {
     font-family: var(--font-title);
     font-size: 1.75rem;
     font-weight: 600;
@@ -440,15 +312,17 @@
     gap: 0.6rem;
 }
 
-.pd-detail-title i { color: var(--color-gold); }
+.detail-description-titre i {
+    color: var(--color-gold);
+}
 
-.pd-detail-content {
+.detail-description-contenu {
     color: var(--color-muted);
     line-height: 1.8;
     font-size: 0.95rem;
 }
 
-.pd-detail-heading {
+.detail-description-entete {
     font-family: var(--font-title);
     font-weight: 700;
     color: var(--color-text);
@@ -459,60 +333,49 @@
     border-bottom: 2px solid var(--color-line);
 }
 
-.pd-detail-text    { margin-bottom: 0.5rem; }
-.pd-detail-spacer  { margin-bottom: 1.5rem; }
+.detail-description-espace {
+    margin-bottom: 1.5rem;
+}
 
-/* ─── Responsive ────────────────────────────────────────────────────────────── */
-
+/* ─── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-    .pd-image-wrap {
+    .detail-image-boite {
         width: 320px;
         height: 320px;
     }
 }
 
 @media (max-width: 768px) {
-    .pd-container {
+    .detail-carte {
         flex-direction: column;
         padding: 1.5rem;
         gap: 2rem;
     }
 
-    .pd-col-left {
+    .detail-col-gauche {
         width: 100%;
     }
 
-    .pd-image-wrap {
+    .detail-image-boite {
         width: 280px;
         height: 280px;
     }
 
-    .pd-title {
-        font-size: 1.75rem;
-    }
-
-    .pd-poids-row {
-        flex-direction: column;
+    .detail-selecteur-col {
         align-items: stretch;
     }
 
-    .pd-poids-options {
+    .detail-poids-options {
         justify-content: center;
     }
 
-    .pd-qty-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .pd-detail-card {
+    .detail-description-carte {
         padding: 1.5rem;
     }
 }
 
-/* ─── Animation ─────────────────────────────────────────────────────────────── */
-
-@keyframes pd-fadeIn {
+/* ─── Animation ─────────────────────────────────────────────────── */
+@keyframes detail-apparition {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }

@@ -10,14 +10,11 @@ const NotFound = () => {
           <h1 className="titre">Page Introuvable</h1>
         </header>
 
-        <div className="trait"></div>
-
         <p className="texte centre discret etroit">
           L'adresse que vous tentez de consulter n'est plus disponible ou a été
           déplacée. Nous vous invitons à poursuivre votre expérience au sein de
           notre maison en retournant vers nos collections d'exception.
         </p>
-
         <nav>
           <Link
             title="Retour à l'accueil"

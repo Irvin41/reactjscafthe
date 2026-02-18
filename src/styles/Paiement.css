@@ -1,0 +1,178 @@
+/* --- Mise en page globale --- */
+.page.etroit {
+  padding: clamp(20px, 5vh, 74px) 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-paiement {
+  width: min(960px, 92vw);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 48px;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.18);
+  margin-bottom: 50px;
+  width: 100%;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Section 1 & 2 : Une seule colonne  */
+.corps-panier,
+.auth-form.une-colonne {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.panier-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+
+.recap-final-tva {
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-brand);
+  font-size: .9rem;
+}
+.ligne-total-ttc {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  color: var(--color-green); /
+  margin: 3rem;
+}
+
+.entete-adresse {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/*  Section 3 : Deux colonnes pour les choix  */
+.grille-choix-paiement {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.grille-choix-adresse {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.titre-choix {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: var(--color-green);
+}
+
+.bouton-choix {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.bouton-choix.actif {
+  border-color: var(--color-green); /* Utilisation de l'or pour la sélection */
+  border-width: 2px;
+  background: color-mix(in srgb, var(--color-green-soft), transparent 70%);
+}
+
+.info-transport {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.info-transport strong {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.info-transport small {
+  color: var(--color-muted);
+}
+
+/*  Choix tps & Validation  */
+.zone-validation {
+  margin-top: 40px;
+  padding-top: 25px;
+  border-top: 2px solid var(--color-line);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.total-final {
+  font-family: var(--font-title);
+  font-size: 2.4rem;
+  color: var(--color-green);
+  margin: 15px 0;
+}
+
+.recap-final-ligne {
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-brand);
+  font-size: 1rem;
+}
+
+/* Bouton Principal  */
+.bouton.bouton-principal {
+  width: 100%;
+  max-width: 550px;
+  font-family: var(--font-brand);
+}
+.message-info-livraison {
+  font-size: .9rem;
+  margin-top: 10px;
+  color: var(--color-gold);
+  font-style: italic;
+  text-align: left;
+
+/*  Mobile  */
+@media (max-width: 768px) {
+  .grille-choix-paiement {
+    grid-template-columns: 1fr; /* Passage en une seule colonne sur mobile */
+  }
+
+  .auth-card.section-paiement {
+    padding: 30px 20px; /* Réduction des marges internes */
+  }
+
+  .grille-choix-adresse {
+    grid-template-columns: 1fr; /* Champs nom/prénom l'un sous l'autre */
+  }
+}
+}

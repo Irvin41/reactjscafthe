@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import { formatStock, formatText } from "../utils/formatters";
-import "../styles/Productdetail.css";
+import "../styles/ProductDetail.css";
 
 const CATEGORIES_POIDS = [
   "Cafe_grains",
@@ -108,22 +108,24 @@ const ProductCard = ({ produit, onAddToCart }) => {
   };
 
   return (
-    <article className="product-item-card product-item-card--column">
-      <h3 className="prod-name prod-name--top">{produit.nom_article}</h3>
+    <article className="carte-produit carte-produit--colonne">
+      <h3 className="produit-nom produit-nom--haut">{produit.nom_article}</h3>
 
       <Link
         to={`/produit/${produit.id_article}`}
-        className="product-image-link"
+        className="produit-image-lien"
         title={`Voir le produit ${produit.nom_article}`}
       >
-        <div className="pd-image-wrap">
+        <div className="detail-image-boite">
           {produit.categorie && (
-            <div className="pd-badge">{formatText(produit.categorie)}</div>
+            <div className="detail-pastille">
+              {formatText(produit.categorie)}
+            </div>
           )}
           <img
             src={imageUrl}
             alt={produit.nom_article}
-            className="pd-image"
+            className="detail-image"
             onError={(e) => {
               e.target.src =
                 "https://placehold.co/600x600?text=Image+non+disponible";
@@ -132,22 +134,22 @@ const ProductCard = ({ produit, onAddToCart }) => {
         </div>
       </Link>
 
-      <p className="prod-desc-short prod-desc-short--column">
+      <p className="produit-desc produit-desc--colonne">
         {produit.description || "Description indisponible."}
       </p>
 
-      <div className="prod-info-block">
-        <div className="prod-footer-row">
-          <span className="prod-price">
+      <div className="produit-infos">
+        <div className="produit-pied">
+          <span className="produit-prix">
             {String(prixAffiche).replace(".", ",")} €
           </span>
           {produit.stock !== undefined && produit.stock !== null && (
             <span
-              className={`prod-stock ${
+              className={`produit-stock ${
                 produit.stock === 0
-                  ? "prod-stock--out"
+                  ? "produit-stock--rupture"
                   : produit.stock < 50
-                    ? "prod-stock--low"
+                    ? "produit-stock--bas"
                     : ""
               }`}
             >
@@ -157,21 +159,21 @@ const ProductCard = ({ produit, onAddToCart }) => {
         </div>
 
         {produit.origine && (
-          <div className="prod-origin-box">
-            <span className="prod-origin-label">ORIGINE</span>
-            <span className="prod-origin-value">{produit.origine}</span>
+          <div className="produit-origine-boite">
+            <span className="produit-origine-label">ORIGINE</span>
+            <span className="produit-origine-valeur">{produit.origine}</span>
           </div>
         )}
 
         {afficherPoids && (
-          <div className="prod-poids-selector">
-            <span className="prod-poids-label">QUANTITÉ</span>
-            <div className="prod-poids-options">
+          <div className="produit-poids">
+            <span className="produit-poids-label">QUANTITÉ</span>
+            <div className="produit-poids-options">
               {poidsDisponibles.map((poids) => (
                 <button
                   key={poids}
                   type="button"
-                  className={`prod-poids-btn ${selectedPoids === poids ? "prod-poids-btn--active" : ""}`}
+                  className={`produit-poids-bouton ${selectedPoids === poids ? "produit-poids-bouton--actif" : ""}`}
                   onClick={() => setSelectedPoids(poids)}
                 >
                   {poids}
@@ -182,19 +184,19 @@ const ProductCard = ({ produit, onAddToCart }) => {
         )}
 
         {!afficherPoids && (
-          <div className="prod-poids-selector">
-            <span className="prod-poids-label">QUANTITÉ</span>
-            <div className="prod-qty-selector">
+          <div className="produit-poids">
+            <span className="produit-poids-label">QUANTITÉ</span>
+            <div className="produit-quantite">
               <button
                 type="button"
-                className="prod-qty-btn"
+                className="produit-quantite-bouton"
                 onClick={decreaseQuantity}
                 disabled={quantity <= 1}
               >
                 −
               </button>
               <input
-                className="prod-qty-input"
+                className="produit-quantite-input"
                 type="number"
                 min="1"
                 max={maxStock}
@@ -225,7 +227,7 @@ const ProductCard = ({ produit, onAddToCart }) => {
               />
               <button
                 type="button"
-                className="prod-qty-btn"
+                className="produit-quantite-bouton"
                 onClick={increaseQuantity}
                 disabled={quantity >= maxStock}
               >
@@ -235,10 +237,10 @@ const ProductCard = ({ produit, onAddToCart }) => {
           </div>
         )}
 
-        <div className="prod-actions prod-actions--stack">
+        <div className="produit-actions--pile">
           <button
             type="button"
-            className={`pd-cart-btn  ${isAdding ? "adding" : ""}`}
+            className={`bouton bouton-principal ${isAdding ? "bouton-ajoute" : ""}`}
             onClick={handleAddToCart}
             disabled={produit.stock === 0}
           >

@@ -12,7 +12,8 @@
 
 .orders-page-header {
     display: flex;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
     gap: 1.5rem;
     margin-bottom: 32px;
 }
@@ -90,11 +91,11 @@
 
 .orders-page-filters button + button { margin-left: 22px; }
 
-.orders-page-filters button:hover { color: #5f5f5d; }
+.orders-page-filters button:hover { color: var(--color-green); }
 
 .orders-page-filters button.is-active {
-    color: #212120;
-    border-bottom: 2px solid #212120;
+    color: var(--color-green);
+    border-bottom: 2px solid var(--color-green);
 }
 
 .filter-count {
@@ -108,8 +109,8 @@
 }
 
 .orders-page-filters button.is-active .filter-count {
-    background: #212120;
-    color: #fff;
+    background: var(--color-green);
+    color: #fff3e0;
 }
 
 /* ─── État vide / chargement ──────────────────────────────────────────── */

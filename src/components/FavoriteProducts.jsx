@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ProductCard from "./ProductCard.jsx";
-import "../styles/BestSellers.css";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -11,7 +10,7 @@ const FavoriteProducts = () => {
     isAuthenticated,
     loading: authLoading,
   } = useContext(AuthContext);
-  const id = user?.id_client || user?.id; // supporte les deux formats
+  const id = user?.id_client || user?.id;
 
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,16 +64,16 @@ const FavoriteProducts = () => {
 
   if (authLoading || isLoading)
     return (
-      <div className="message-container">
+      <div className="centre bloc">
         <p>Chargement de vos favoris...</p>
       </div>
     );
 
   if (!isAuthenticated)
     return (
-      <div className="message-container">
-        <h3 className="message-title">Connectez-vous pour voir vos favoris</h3>
-        <p className="message-text">
+      <div className="centre bloc">
+        <h3>Connectez-vous pour voir vos favoris</h3>
+        <p className="texte discret">
           Vos produits préférés s'afficheront ici après connexion
         </p>
       </div>
@@ -82,11 +81,11 @@ const FavoriteProducts = () => {
 
   if (error)
     return (
-      <div className="message-container">
-        <h3 className="message-title">Une erreur est survenue</h3>
-        <p className="message-text">{error}</p>
+      <div className="centre bloc">
+        <h3>Une erreur est survenue</h3>
+        <p className="texte discret">{error}</p>
         <button
-          className="btn-view-details"
+          className="bouton bouton-secondaire"
           onClick={() => window.location.reload()}
         >
           Réessayer
@@ -96,16 +95,16 @@ const FavoriteProducts = () => {
 
   if (favorites.length === 0)
     return (
-      <div className="message-container">
-        <h3 className="message-title">Vous n'avez pas encore de commandes</h3>
-        <p className="message-text">
+      <div className="centre bloc">
+        <h3>Vous n'avez pas encore de commandes</h3>
+        <p className="texte discret">
           Vos 3 produits les plus commandés apparaîtront ici !
         </p>
       </div>
     );
 
   return (
-    <div className="products-layout-grid">
+    <div className="grille-produits">
       {favorites.map((article) => (
         <ProductCard key={article.id_article} produit={article} />
       ))}

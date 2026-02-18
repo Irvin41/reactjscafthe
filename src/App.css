@@ -21,7 +21,7 @@
   --transition: all 0.25s ease;
 }
 
-/* ─── Reset ─────────────────────────────────────────────────── */
+/*  Reset  */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -65,14 +65,33 @@ h5,
 h6 {
   font-family: var(--font-title);
 }
-
+ul {
+    list-style: none;
+}
 button,
 input,
 textarea,
 select {
   font: inherit;
 }
+.lien {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-green);
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .1px;
+  transition: var(--transition);
+  cursor: pointer;
+  text-decoration: none;
+}
 
+.lien:hover {
+  color: var(--color-green-soft);
+}
 /* Utilitaires */
 .contenu {
   width: min(var(--content-width), 92vw);
@@ -97,13 +116,10 @@ select {
 }
 
 .etroit {
-  max-width: 600px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.aere {
-  margin-top: 100px;
+  align-items: center;
 }
 
 .sr-only {
@@ -120,12 +136,14 @@ select {
 /* Boutons */
 .bouton {
   display: inline-flex;
+  width: fit-content;
+  font-family: var(--font-brand);
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
   transition: var(--transition);
-  padding: 15px 40px;
+  padding: 15px 20px;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 700;
@@ -162,7 +180,6 @@ select {
 }
 
 .bouton-tertiaire:hover {
-  background: #A0A09F;
   color: #1B4D3E;
 }
 
@@ -181,6 +198,13 @@ select {
   margin: 40px auto;
   padding: 0 20px;
   line-height: 1.8;
+}
+.gros-titre {
+  font: var(--font-brand);
+  font-size: clamp(1.9rem, 3.8vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
 }
 
 .titre {
@@ -212,10 +236,6 @@ select {
 .texte {
   margin-bottom: 20px;
   text-align: justify;
-}
-
-.bloc {
-  margin-bottom: 60px;
 }
 
 .trait {
@@ -259,7 +279,6 @@ select {
 
 .auth-card {
   width: min(960px, 92vw);
-  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
   background: #ffffff;
@@ -334,21 +353,6 @@ select {
   margin-top: 14px;
   font-size: 13px;
   color: #6f6f6f;
-}
-
-.auth-link {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: var(--color-green);
-  text-decoration: none;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.auth-link:hover {
-  color: var(--color-gold);
 }
 
 /* Footer */
@@ -448,6 +452,7 @@ select {
   .site-footer-grid {
     grid-template-columns: 1fr;
     gap: 24px;
+    align-content: center;
   }
 
   .footer-brand p {
@@ -459,10 +464,6 @@ select {
   .page {
     margin: 20px;
     padding: 24px;
-  }
-
-  .aere {
-    margin-top: 60px;
   }
 
   .titre {

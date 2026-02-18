@@ -1,0 +1,90 @@
+/* Limiter la largeur pour la lecture */
+.max-600 {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.lien-contact {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-green);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: .1px;
+    transition: var(--transition);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.lien-contact:hover {
+    color: var(--color-green-soft);
+}
+.section-contact {
+    padding: 40px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.label-contact {
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.contact-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: var(--color-surface);
+    font-family: var(--font-body);
+    transition: border-color 0.3s ease;
+}
+
+.contact-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+}
+
+.contact-input.textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.checkbox-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.checkbox-container input {
+    margin-top: 5px;
+}
+
+.msg-success {
+    color: var(--color-green);
+    font-weight: 700;
+    background: rgba(27, 77, 62, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+}
+.sav-info{
+    margin-top: 5rem;
+}
+
+@media (max-width: 768px) {
+    .section-contact {
+        padding: 20px;
+    }
+}

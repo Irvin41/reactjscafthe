@@ -108,7 +108,7 @@ const CartDrawer = () => {
               className="checkout-btn"
               onClick={() => {
                 closeCart();
-                navigate("/checkout");
+                navigate("/paiement");
               }}
             >
               Valider la commande

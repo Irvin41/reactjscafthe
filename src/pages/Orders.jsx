@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Orders.css";
 
 const API = import.meta.env.VITE_API_URL;
@@ -77,9 +77,6 @@ const Orders = () => {
     <main className="orders-page">
       {/* ── Header ── */}
       <div className="orders-page-header">
-        <button className="orders-back" onClick={() => navigate("/profile")}>
-          ← Retour au profil
-        </button>
         <div>
           <h1>MES COMMANDES</h1>
           <p>
@@ -87,6 +84,9 @@ const Orders = () => {
             total
           </p>
         </div>
+        <Link to="/profile" className="lien">
+          Retour au profil
+        </Link>
       </div>
 
       {/* ── Carte principale ── */}

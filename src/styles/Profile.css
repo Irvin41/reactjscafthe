@@ -1,13 +1,13 @@
-.profile-page {
+.page-profil {
   width: min(1200px, 92vw);
   margin: 46px auto 110px;
   display: grid;
   gap: 72px;
 }
 
-.profile-card,
-.orders-card,
-.tiers-card {
+.carte-profil,
+.carte-commandes,
+.carte-paliers {
   background: #f8f8f7;
   border-radius: 14px;
   box-shadow: var(--shadow-card);
@@ -15,32 +15,32 @@
   border: 1px solid #e3e3e2;
 }
 
-.profile-head {
+.profil-entete {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 20px;
 }
 
-.profile-head h1 {
+.profil-entete h1 {
   font-family: var(--font-title);
   font-size: clamp(1.95rem, 3vw, 2.6rem);
   line-height: 1.1;
 }
 
-.profile-head p {
+.profil-entete p {
   letter-spacing: 0.12em;
   font-size: 0.66rem;
   color: #8f8f8d;
   margin-top: 3px;
 }
 
-.profile-head-actions {
+.profil-entete-actions {
   display: flex;
   gap: 8px;
 }
 
-.profile-head-actions button {
+.profil-entete-actions button {
   width: 34px;
   height: 34px;
   border-radius: 11px;
@@ -50,16 +50,21 @@
   cursor: pointer;
 }
 
-.profile-tabs {
+/* ─── Onglets ────────────────────────────────────────────────────────── */
+
+.profil-onglets {
   display: flex;
-  gap: 28px;
+  gap: 20px;
   align-items: center;
   border-bottom: 1px solid #d7d7d6;
   padding-bottom: 10px;
   margin-bottom: 28px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
 
-.profile-tabs span {
+.profil-onglets span {
   font-size: 0.71rem;
   letter-spacing: 0.14em;
   color: #b0b0ae;
@@ -70,55 +75,105 @@
   border-bottom: 2px solid transparent;
 }
 
-.profile-tabs span.is-active {
+.profil-onglets span.actif {
   color: #1e5d49 !important;
   border-bottom: 2px solid #1e5d49;
 }
 
-.profile-grid {
+.profil-onglets--fixe {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f8f8f7;
+  padding: 20px 0 10px;
+  margin-bottom: 28px;
+}
+
+.profil-onglets--fixe span:hover {
+  color: #212120;
+}
+
+/*  Grille profil  */
+
+.profil-grille {
   display: grid;
   grid-template-columns: 1.35fr 0.6fr;
   gap: 34px;
 }
 
-.profile-main {
+.profil-principal {
   display: grid;
   gap: 28px;
 }
 
-.profile-section h2 {
+.profil-section h2 {
   font-size: 1.07rem;
   margin-bottom: 16px;
 }
 
-.section-title-row {
+.profil-titre-section {
+  font-size: 1.07rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #212120;
+}
+
+.ligne-titre {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 12px;
 }
 
-.section-title-row button {
+/*  Boutons action  */
+
+.ligne-titre button,
+.boutons-edition button,
+.lien-action {
+  background: none;
   border: none;
-  background: transparent;
-  letter-spacing: 0.12em;
-  font-size: 0.66rem;
-  color: #5f5f5d;
-  font-weight: 700;
+  padding: 0;
+  margin: 0;
+  color: var(--color-green);
+  text-decoration: none;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
 }
 
-.field-grid {
+.ligne-titre button:hover,
+.boutons-edition button:hover,
+.lien-action:hover {
+  color: var(--color-green-soft);
+}
+
+.boutons-edition {
+  display: flex;
+  gap: 8px;
+}
+
+.boutons-edition .annuler {
+  color: darkred;
+}
+
+.boutons-edition .annuler:hover {
+  color: red;
+}
+
+/*  Champs  */
+
+.grille-champs {
   display: grid;
   gap: 10px;
 }
 
-.field-grid.two-col {
+.grille-champs.deux-colonnes {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 18px;
 }
 
-.field-grid label {
+.grille-champs label {
   font-size: .8rem;
   letter-spacing: 0.12em;
   color: #a1a19f;
@@ -127,10 +182,10 @@
   gap: 6px;
 }
 
-.field-grid input {
+.grille-champs input {
   width: 100%;
   font-size: 14px;
-  font-height: 500;
+  font-weight: 500;
   border: 1px solid #ececeb;
   border-radius: 10px;
   height: 40px;
@@ -139,18 +194,20 @@
   color: #4a4a49;
 }
 
-.profile-side {
+/*  Sidebar  */
+
+.profil-lateral {
   display: grid;
   gap: 18px;
   align-content: start;
 }
 
-.add-payment-card h3 {
+.ajout-paiement h3 {
   font-size: 0.95rem;
   margin-bottom: 18px;
 }
 
-.add-payment-card button {
+.ajout-paiement button {
   width: 92px;
   height: 70px;
   font-size: 3.2rem;
@@ -162,9 +219,9 @@
   cursor: pointer;
 }
 
-/* ─── Encart fidélité ───────────────────────────────────────────────── */
+/*  Encart fidélité  */
 
-.loyalty-mini-card {
+.carte-fidelite-mini {
   background: #1e5d49;
   color: #f4f8f5;
   border-radius: 14px;
@@ -173,7 +230,7 @@
   overflow: hidden;
 }
 
-.loyalty-mini-card::after {
+.carte-fidelite-mini::after {
   content: "";
   position: absolute;
   width: 88px;
@@ -184,19 +241,18 @@
   background: #114336;
 }
 
-.loyalty-mini-card p {
+.carte-fidelite-mini p {
   font-size: 0.62rem;
   letter-spacing: 0.14em;
 }
 
-.loyalty-mini-card strong {
+.carte-fidelite-mini strong {
   font-size: 3rem;
   line-height: 1;
   display: block;
   margin: 6px 0 8px;
 }
 
-/* Numéro de fidélité — taille réduite pour afficher le code complet */
 .fidelite-numero {
   font-size: 1.1rem !important;
   letter-spacing: 0.18em;
@@ -205,7 +261,7 @@
   margin: 8px 0 10px !important;
 }
 
-.loyalty-mini-card small {
+.carte-fidelite-mini small {
   display: block;
   max-width: 210px;
   font-size: 0.72rem;
@@ -213,8 +269,8 @@
   margin-bottom: 12px;
 }
 
-.loyalty-mini-card button,
-.favorites-mini button {
+.carte-fidelite-mini button,
+.favoris-mini button {
   border: none;
   border-radius: 999px;
   background: #fff;
@@ -227,45 +283,44 @@
   cursor: pointer;
 }
 
-/* ─── Favoris ───────────────────────────────────────────────────────── */
+/* Favoris  */
 
-.favorites-mini h4 {
+.favoris-mini h4 {
   font-size: 0.68rem;
   letter-spacing: 0.13em;
   color: #7f7f7d;
   margin-bottom: 12px;
 }
 
-.favorites-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.cartes-favoris {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
-/* Forcer les ProductCard à prendre toute la largeur dans la sidebar */
-.favorites-cards > * {
+.cartes-favoris > * {
   width: 100% !important;
 }
 
-/* ─── Commandes ─────────────────────────────────────────────────────── */
+/*  Commandes  */
 
-.orders-header {
+.commandes-entete {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 18px;
 }
 
-.orders-header h2 {
+.commandes-entete h2 {
   font-size: 1.05rem;
 }
 
-.orders-header div {
+.commandes-entete div {
   display: flex;
   gap: 6px;
 }
 
-.orders-header button {
+.commandes-entete button {
   border: 1px solid #e3e3e2;
   border-radius: 8px;
   background: #fff;
@@ -276,56 +331,59 @@
   cursor: pointer;
 }
 
-.orders-header button.is-active {
+.commandes-entete button.actif {
   color: #222221;
 }
 
-.orders-list {
+.liste-commandes {
   display: grid;
   gap: 10px;
 }
 
-.order-item {
+.commande-item {
   border: 1px solid #dfdfde;
   border-radius: 14px;
   background: #fbfbfa;
+  display: block;
 }
 
-.order-item--clickable {
+.commande-item--cliquable {
   cursor: pointer;
   transition: box-shadow 0.2s, border-color 0.2s;
+  text-decoration: none;
+  color: inherit;
 }
 
-.order-item--clickable:hover {
+.commande-item--cliquable:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   border-color: #c8c8c7;
 }
 
-.order-head {
+.commande-entete {
   display: flex;
   justify-content: space-between;
   gap: 16px;
   padding: 14px 14px 10px;
 }
 
-.order-head p {
+.commande-entete p {
   font-size: 0.7rem;
   color: #949492;
   letter-spacing: 0.08em;
 }
 
-.order-head strong {
+.commande-entete strong {
   font-size: 1rem;
   color: #222221;
 }
 
-.order-meta {
+.commande-meta {
   display: flex;
   align-items: center;
   gap: 26px;
 }
 
-.order-meta button {
+.commande-meta button {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -334,17 +392,17 @@
   cursor: pointer;
 }
 
-.order-arrow {
+.commande-fleche {
   font-size: 1.1rem;
   color: #b0b0ae;
 }
 
-.status-shipping  { color: #d5912b; font-weight: 700; }
-.status-delivered { color: #199b5f; font-weight: 700; }
-.status-pending   { color: #8c0606; font-weight: 700; }
-.status-prepared  { color: #181d4d; font-weight: 700; }
+.statut-expedition  { color: #d5912b; font-weight: 700; }
+.statut-livre       { color: #199b5f; font-weight: 700; }
+.statut-attente     { color: #8c0606; font-weight: 700; }
+.statut-prepare     { color: #181d4d; font-weight: 700; }
 
-.order-products {
+.commande-produits {
   border-top: 1px solid #ebebea;
   display: flex;
   gap: 10px;
@@ -352,7 +410,7 @@
   flex-wrap: wrap;
 }
 
-.order-products span {
+.commande-produits span {
   border: 1px solid #e5e5e4;
   border-radius: 8px;
   padding: 6px 9px;
@@ -361,137 +419,80 @@
   color: #666664;
 }
 
-/* ─── Boutons voir tout ─────────────────────────────────────────────── */
+/* Alertes  */
 
-.btn-voir-tout {
-  border: 1px solid #1e5d49;
-  border-radius: 8px;
-  background: transparent;
-  color: #1e5d49;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.45rem 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.btn-voir-tout:hover { background: #1e5d49; color: white; }
-
-.btn-voir-tout--block {
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin-top: 0.5rem;
-  border-radius: 10px;
-  padding: 0.75rem;
-}
-
-/* ─── Édition profil ────────────────────────────────────────────────── */
-
-.edit-btns { display: flex; gap: 8px; }
-
-.btn-save {
-  color: #1e5d49;
-  font-weight: 700;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-}
-
-.btn-cancel {
-  color: #b0b0ae;
-  font-weight: 700;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-}
-
-/* ─── Alertes ───────────────────────────────────────────────────────── */
-
-.profile-loading {
+.profil-chargement {
   text-align: center;
   color: #8f8f8d;
   font-size: 0.9rem;
   padding: 4rem 0;
 }
 
-.profile-empty {
+.profil-vide {
   color: #8f8f8d;
   font-size: 0.82rem;
   padding: 0.5rem 0;
   margin: 0;
 }
 
-.profile-alert {
+.profil-alerte {
   border-radius: 8px;
   padding: 0.6rem 0.9rem;
   font-size: 0.82rem;
   font-weight: 700;
 }
 
-.profile-alert--ok  { color: #199b5f; background: #e8f5e9; }
-.profile-alert--err { color: #c0392b; background: #ffeaea; }
+.profil-alerte--ok  { color: #199b5f; background: #e8f5e9; }
+.profil-alerte--err { color: #c0392b; background: #ffeaea; }
 
-.tiers-grid {
+/* Paliers  */
+
+.grille-paliers {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
-.tier-item {
+.palier {
   border: 1px solid #ececeb;
   border-radius: 20px;
   background: #f5f5f4;
   min-height: 156px;
   padding: 18px 16px;
   transition: all 0.4s ease;
-  opacity: 0.7; /* Légèrement effacé si pas actif */
+  opacity: 0.7;
 }
 
-/* --- État Actif Général --- */
-.tier-item.is-active {
+.palier.actif {
   opacity: 1;
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
   background: #ffffff;
 }
 
-/* --- Couleurs Spécifiques (Actives) --- */
-
-/* BRONZE */
-.tier-bronze.is-active {
+.palier-bronze.actif {
   border: 2px solid #cd7f32;
 }
-.tier-bronze.is-active h3 { color: #cd7f32; }
-.tier-bronze.is-active .tier-badge { background: #cd7f32; }
+.palier-bronze.actif h3 { color: #cd7f32; }
+.palier-bronze.actif .palier-badge { background: #cd7f32; }
 
-/* ARGENT */
-.tier-argent.is-active {
+.palier-argent.actif {
   border: 2px solid #a9a9a9;
 }
-.tier-argent.is-active h3 { color: #808080; }
-.tier-argent.is-active .tier-badge { background: #808080; }
+.palier-argent.actif h3 { color: #808080; }
+.palier-argent.actif .palier-badge { background: #808080; }
 
-/* OR */
-.tier-or.is-active {
+.palier-or.actif {
   border: 2px solid #d4af37;
   background: linear-gradient(to bottom, #ffffff, #fffdf0);
 }
-.tier-or.is-active h3 { color: #c5a028; }
-.tier-or.is-active .tier-badge { background: #d4af37; }
+.palier-or.actif h3 { color: #c5a028; }
+.palier-or.actif .palier-badge { background: #d4af37; }
 
-/* --- Éléments internes --- */
-
-.tier-badge {
+.palier-badge {
   display: inline-block;
   border-radius: 999px;
-  background: #b0b0ae; /* Couleur par défaut */
+  background: #b0b0ae;
   color: #fff;
   font-size: 0.55rem;
   letter-spacing: 0.14em;
@@ -500,103 +501,73 @@
   font-weight: 700;
 }
 
-.tier-item h3 {
+.palier h3 {
   font-size: 2rem;
   margin: 8px 0 2px;
   font-family: var(--font-title);
-  color: #444; /* Gris foncé par défaut */
+  color: #444;
 }
 
-.tier-item p {
+.palier p {
   color: #8c8c8a;
   font-size: 0.72rem;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
-.tier-item ul {
+.palier ul {
   list-style: none;
   display: grid;
   gap: 8px;
   padding: 0;
 }
 
-.tier-item li {
+.palier li {
   font-size: 0.78rem;
   color: #595958;
   display: flex;
   align-items: center;
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────── */
+/* Responsive  */
 
 @media (max-width: 1020px) {
-  .profile-card,
-  .orders-card,
-  .tiers-card {
+  .carte-profil,
+  .carte-commandes,
+  .carte-paliers {
     padding: 26px 20px;
-  }
-
-  .profile-grid {
-    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 760px) {
-  .profile-page {
+  .page-profil {
     margin-top: 22px;
     gap: 40px;
   }
 
-  .profile-tabs {
-    gap: 12px;
-    flex-wrap: wrap;
+  .carte-profil,
+  .carte-commandes,
+  .carte-paliers {
+    padding: 26px 20px;
   }
 
-  .field-grid.two-col,
-  .tiers-grid {
+  .profil-grille {
     grid-template-columns: 1fr;
   }
 
-  .order-head,
-  .order-meta,
-  .orders-header {
+  .grille-champs.deux-colonnes,
+  .grille-paliers {
+    grid-template-columns: 1fr;
+  }
+
+  .cartes-favoris {
+    grid-template-columns: 1fr;
+  }
+
+  .commande-entete,
+  .commande-meta,
+  .commandes-entete {
     flex-direction: column;
     align-items: flex-start;
   }
-}
-
-/* Titre de section principale */
-.profile-section-heading {
-  font-size: 1.07rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #212120;
-}
-
-/* Favoris en grille sous les tiers */
-.favorites-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-@media (max-width: 760px) {
-  .favorites-cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ─── Onglets sticky ─────────────────────────────────────────────────── */
-.profile-tabs--sticky {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #f8f8f7;
-  padding: 20px 0 10px;
-  margin-bottom: 28px;
-}
-
-.profile-tabs--sticky span:hover {
-  color: #212120;
 }

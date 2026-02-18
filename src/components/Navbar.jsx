@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom"; // On utilise NavLink pour le statut "active"
 import { useCart } from "../context/CartContext.jsx";
 import logo from "../assets/logo-cafthe.png";
 import CartDrawer from "./CartDrawer.jsx";
@@ -39,39 +39,41 @@ const Navbar = () => {
               <span aria-hidden="true" />
             </button>
 
+            {/* --- NAVIGATION PRINCIPALE (Ceux qui seront soulignés) --- */}
             <ul
               id="main-nav-menu"
               className={`nav-menu ${isMenuOpen ? "is-open" : ""}`}
               role="menubar"
             >
               <li role="none">
-                <Link to="/cafes" role="menuitem" onClick={closeMenu}>
+                <NavLink to="/cafes" role="menuitem" onClick={closeMenu}>
                   Cafés
-                </Link>
+                </NavLink>
               </li>
               <li role="none">
-                <Link to="/thes" role="menuitem" onClick={closeMenu}>
+                <NavLink to="/thes" role="menuitem" onClick={closeMenu}>
                   Thés
-                </Link>
+                </NavLink>
               </li>
               <li role="none">
-                <Link to="/accessoires" role="menuitem" onClick={closeMenu}>
+                <NavLink to="/accessoires" role="menuitem" onClick={closeMenu}>
                   Accessoires
-                </Link>
+                </NavLink>
               </li>
               <li role="none">
-                <Link to="/coffrets" role="menuitem" onClick={closeMenu}>
+                <NavLink to="/coffrets" role="menuitem" onClick={closeMenu}>
                   Coffrets
-                </Link>
+                </NavLink>
               </li>
               <li role="none">
-                <Link to="/a-propos" role="menuitem" onClick={closeMenu}>
+                <NavLink to="/a-propos" role="menuitem" onClick={closeMenu}>
                   À Propos
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
 
+          {/* --- ACTIONS UTILISATEUR (Ceux qui ne seront PAS soulignés) --- */}
           <div
             className={`nav-actions ${isMenuOpen ? "is-open" : ""}`}
             role="group"
@@ -94,7 +96,6 @@ const Navbar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
-                focusable="false"
               >
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -105,7 +106,7 @@ const Navbar = () => {
               className="cart-btn-nav"
               type="button"
               onClick={toggleCart}
-              aria-label={`Mon panier${itemCount > 0 ? `, ${itemCount} article${itemCount > 1 ? "s" : ""}` : ", vide"}`}
+              aria-label="Mon panier"
             >
               Mon Panier
               {itemCount > 0 && (
@@ -116,11 +117,7 @@ const Navbar = () => {
             </button>
 
             {isAuthenticated ? (
-              <div
-                className="user-logged"
-                role="group"
-                aria-label="Compte utilisateur"
-              >
+              <div className="user-logged" role="group">
                 <Link
                   to="/profile"
                   className="account-link"
@@ -149,13 +146,11 @@ const Navbar = () => {
             className="nav-overlay"
             role="presentation"
             onClick={closeMenu}
-            onKeyDown={(e) => e.key === "Escape" && closeMenu()}
           />
         )}
       </nav>
 
       <SearchBandeau isOpen={searchOpen} onClose={closeSearch} />
-
       <CartDrawer />
     </header>
   );
