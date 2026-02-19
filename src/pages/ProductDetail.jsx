@@ -17,7 +17,7 @@ const CATEGORIES_POIDS = [
 
 const getPoidsByCategorie = (categorie) => {
   if (!categorie) return [];
-  if (categorie.startsWith("Cafe")) return ["100g", "200g", "250g", "500g"];
+  if (categorie.startsWith("Cafe")) return ["100g", "250g", "500g"];
   if (categorie === "Matcha") return ["30g", "100g", "200g"];
   return ["50g", "100g", "200g", "20 sachets"];
 };
@@ -202,7 +202,7 @@ const ProductDetail = () => {
 
           {/* ── Colonne droite : infos ── */}
           <div className="detail-col-droite">
-            <h1 className="gros-titre">{produit.nom_article}</h1>
+            <h1>{produit.nom_article}</h1>
 
             <div className="detail-prix-ligne">
               <span className="produit-prix detail-prix">

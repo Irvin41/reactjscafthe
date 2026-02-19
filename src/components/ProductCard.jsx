@@ -140,7 +140,7 @@ const ProductCard = ({ produit, onAddToCart }) => {
 
       <div className="produit-infos">
         <div className="produit-pied">
-          <span className="produit-prix">
+          <span className="detail-prix">
             {String(prixAffiche).replace(".", ",")} €
           </span>
           {produit.stock !== undefined && produit.stock !== null && (

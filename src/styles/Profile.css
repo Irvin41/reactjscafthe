@@ -8,7 +8,7 @@
 .carte-profil,
 .carte-commandes,
 .carte-paliers {
-  background: #f8f8f7;
+  background: var(--color-surface);
   border-radius: 14px;
   box-shadow: var(--shadow-card);
   padding: 34px 48px;
@@ -45,7 +45,6 @@
   height: 34px;
   border-radius: 11px;
   border: 1px solid #e2e2e1;
-  background: #efefee;
   color: #676766;
   cursor: pointer;
 }
@@ -62,36 +61,36 @@
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
+
 }
 
 .profil-onglets span {
   font-size: 0.71rem;
-  letter-spacing: 0.14em;
-  color: #b0b0ae;
+  color: var(--color-text);
+  letter-spacing: 0.2rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   padding-bottom: 8px;
   border-bottom: 2px solid transparent;
 }
+.profil-onglets span:hover {
+  color: var(--color-nav-active);
+}
 
 .profil-onglets span.actif {
-  color: #1e5d49 !important;
-  border-bottom: 2px solid #1e5d49;
+  border-bottom: 2px solid var(--color-nav-active);
+  color: var(--color-nav-active)
 }
 
 .profil-onglets--fixe {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #f8f8f7;
   padding: 20px 0 10px;
   margin-bottom: 28px;
 }
 
-.profil-onglets--fixe span:hover {
-  color: #212120;
-}
 
 /*  Grille profil  */
 
@@ -132,16 +131,20 @@
 .lien-action {
   background: none;
   border: none;
-  padding: 0;
-  margin: 0;
-  color: var(--color-green);
+  color: var(--color-bouton-edit);
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
   font-size: 0.68rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+}
+.boutons-edition .annuler {
+  color: darkred;
 }
 
+.boutons-edition .annuler:hover {
+  color: red;
+}
 .ligne-titre button:hover,
 .boutons-edition button:hover,
 .lien-action:hover {
@@ -153,13 +156,7 @@
   gap: 8px;
 }
 
-.boutons-edition .annuler {
-  color: darkred;
-}
 
-.boutons-edition .annuler:hover {
-  color: red;
-}
 
 /*  Champs  */
 

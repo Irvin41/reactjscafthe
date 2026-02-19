@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════
-   CartDrawer.css — Tiroir panier latéral
-   ═══════════════════════════════════════════════════════════════ */
+
 
 /* ─── Overlay fond sombre ───────────────────────────────────── */
 .cart-overlay {
@@ -55,6 +53,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--color-surface);
+    color: var(--color-text);
 }
 
 .drawer-header h3 {
@@ -68,6 +68,8 @@
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;
+    background-color: var(--color-surface);
+    color: red;
 }
 
 /* ── Contenu scrollable ── */
@@ -76,6 +78,8 @@
     padding-top: 18px;
     padding-bottom: 18px;
     overflow-y: auto;
+    background-color: var(--color-surface);
+    color: var(--color-text);
 }
 
 /* ─── Articles ──────────────────────────────────────────────── */
@@ -103,6 +107,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+
 }
 
 .qty-picker button {
@@ -126,6 +131,8 @@
     background: #fbfbfb;
     padding-top: 18px;
     padding-bottom: 22px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
 }
 
 .total-box {

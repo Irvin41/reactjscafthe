@@ -216,15 +216,17 @@ const Paiement = () => {
         <div className="grille-choix-paiement">
           <div className="colonne-choix">
             <h3 className="titre-choix">Paiement</h3>
-            {["Espece", "Carte Bancaire", "Paypal"].map((mode) => (
-              <button
-                key={mode}
-                className={`bouton-choix ${modePaiement === mode ? "actif" : ""}`}
-                onClick={() => setModePaiement(mode)}
-              >
-                <strong>{mode}</strong>
-              </button>
-            ))}
+            {["Paiement au comptoir", "Carte Bancaire", "Paypal"].map(
+              (mode) => (
+                <button
+                  key={mode}
+                  className={`bouton-choix ${modePaiement === mode ? "actif" : ""}`}
+                  onClick={() => setModePaiement(mode)}
+                >
+                  <strong>{mode}</strong>
+                </button>
+              ),
+            )}
           </div>
 
           <div className="colonne-choix">

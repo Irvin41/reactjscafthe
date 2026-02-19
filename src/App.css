@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&,family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 :root {
   --color-bg: #D8D7D7;
   --color-surface: #ffffff;
+  --color-prix: var(--color-green);
   --color-text: black;
   --color-muted: #666666;
   --color-gold: #C4A052;
@@ -10,17 +11,33 @@
   --color-green: #1B4D3E;
   --color-green-soft: #7BA88B;
   --color-line: #dddddb;
+  --color-bouton-edit: var(--color-green);
+  --color-badge-bg: var(--color-green);
+  --color-nav-active: var(--color-green);
   --shadow-card: 0 14px 28px rgba(0, 0, 0, 0.12);
 
-  --font-brand: 'Cinzel', serif;
-  --font-title: 'Cormorant Garamond', serif;
+  --font-title: 'Cinzel', serif;
+  --font-brand: 'Cormorant Garamond', serif;
   --font-body: 'Arial', sans-serif;
 
   --content-width: 1240px;
   --page-width: 900px;
   --transition: all 0.25s ease;
 }
-
+/*  Valeurs pour le Mode Sombre */
+[data-theme='dark'] {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-prix: var(--color-green-soft);
+  --color-bouton-edit: var(--color-green-soft);
+  --color-text: #f5f5f5;
+  --color-muted: #a0a0a0;
+  --color-line: #333333;
+  --color-badge-bg: var(--color-gold);
+  --color-nav-active:var(--color-gold-soft);
+  --color-search-bandeau: var(--color-gold-soft);
+  --shadow-card: 0 14px 28px rgba(0, 0, 0, 0.5);
+}
 /*  Reset  */
 * {
   box-sizing: border-box;
@@ -55,7 +72,8 @@ h6 {
 }
 
 h1 {
-  font-family: var(--font-brand);
+  font-family: var(--font-title);
+  font-weight: normal;
 }
 
 h2,
@@ -63,7 +81,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-title);
+  font-family: var(--font-brand);
+  font-weight: normal;
 }
 ul {
     list-style: none;
@@ -77,13 +96,12 @@ select {
 .lien {
   background: none;
   border: none;
-  padding: 0;
-  color: var(--color-green);
-  font-weight: 600;
+  color: var(--color-nav-active);
+  font-weight: 500;
   cursor: pointer;
   text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: .1px;
+  font-size: 14px;
+  letter-spacing: .1rem;
   transition: var(--transition);
   cursor: pointer;
   text-decoration: none;
@@ -200,7 +218,7 @@ select {
   line-height: 1.8;
 }
 .gros-titre {
-  font: var(--font-brand);
+  font: var(--font-band);
   font-size: clamp(1.9rem, 3.8vw, 3.1rem);
   line-height: 1.1;
   letter-spacing: 0.02em;
@@ -274,17 +292,18 @@ select {
   align-items: center;
   justify-content: center;
   padding: 60px 20px 90px;
-  background: radial-gradient(circle at top, #f6f3ef 0%, #eeece8 60%, #e7e5e2 100%);
+  background: var(--color-surface);
 }
 
 .auth-card {
   width: min(960px, 92vw);
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
-  background: #ffffff;
+  background: var(--color-surface);
   border-radius: 18px;
   padding: 40px 48px;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), box-shadow var(--transition);
 }
 
 .auth-card-single {
@@ -314,8 +333,9 @@ select {
   border: 1px solid #e4e4e4;
   padding: 0 16px;
   font-size: 14px;
-  background: #fafafa;
+  background: var(--color-surface);
   transition: var(--transition);
+
 }
 
 .auth-form input:focus {
@@ -439,9 +459,7 @@ select {
   text-transform: uppercase;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Responsive
-   ═══════════════════════════════════════════════════════════════ */
+/* Responsive */
 @media (max-width: 840px) {
   .auth-card {
     grid-template-columns: 1fr;

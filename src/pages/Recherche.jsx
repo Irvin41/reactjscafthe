@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import "../styles/Home.css";
-import "../styles/BestSellers.css";
 import "../styles/CategoryPage.css";
 
 const normalize = (v) =>
@@ -11,7 +10,8 @@ const normalize = (v) =>
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 
-const PRODUCTS_PER_PAGE = 9;
+// Alignement sur 6 produits par page comme sur la page Café
+const PRODUCTS_PER_PAGE = 6;
 
 const Recherche = () => {
   const location = useLocation();
@@ -85,8 +85,9 @@ const Recherche = () => {
   );
 
   return (
-    <div className="cat-page">
-      <section className="cat-hero">
+    // Ajout de la classe "cat-page--cafes" (ou équivalent) pour hériter des styles de grille
+    <div className="cat-page cat-page--recherche">
+      <section className="cat-hero section-padding">
         <div className="cat-hero-inner">
           <p className="cat-eyebrow">RÉSULTATS DE RECHERCHE</p>
           <h1 className="section-title">
@@ -116,8 +117,8 @@ const Recherche = () => {
             </p>
             <button
               type="button"
-              className="cat-filter-btn is-active"
-              style={{ marginTop: "16px" }}
+              className="bouton-principal" /* Utilisation de ta classe de bouton globale */
+              style={{ marginTop: "24px" }}
               onClick={() => navigate("/")}
             >
               Retour à l'accueil
@@ -127,7 +128,8 @@ const Recherche = () => {
 
         {!isLoading && results.length > 0 && (
           <>
-            <div className="products-layout-grid">
+            {/* Utilisation de la même classe "grille-produits" que dans Cafes.jsx */}
+            <div className="grille-produits">
               {paginatedArticles.map((article) => (
                 <ProductCard key={article.id_article} produit={article} />
               ))}

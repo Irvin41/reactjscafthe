@@ -82,7 +82,7 @@
   font-family: var(--font-title);
   font-size: 1.4rem;
   margin-bottom: 15px;
-  color: var(--color-green);
+  color: var(--color-nav-active);
 }
 
 .bouton-choix {
@@ -95,6 +95,7 @@
   border-radius: 12px;
   border: 1px solid var(--color-line);
   background: var(--color-surface);
+  color: var(--color-prix);
   cursor: pointer;
   transition: var(--transition);
   box-sizing: border-box;
@@ -135,7 +136,7 @@
 .total-final {
   font-family: var(--font-title);
   font-size: 2.4rem;
-  color: var(--color-green);
+  color: var(--color-prix);
   margin: 15px 0;
 }
 

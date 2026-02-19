@@ -279,7 +279,7 @@ const Profile = () => {
                       {saving ? "…" : "ENREGISTRER"}
                     </button>
                     <button
-                      type="button"
+                      type="bouton-cancel"
                       className="annuler"
                       onClick={handleCancel}
                     >
