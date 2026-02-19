@@ -60,7 +60,7 @@ const Accessoires = () => {
       try {
         setError(null);
         const baseUrl = import.meta.env.VITE_API_URL;
-        const endpoints = [`${baseUrl}/api/articles`, `${baseUrl}/api/article`];
+        const endpoints = [`${baseUrl}/api/articles`];
         const allItems = [];
         let hasSuccessfulResponse = false;
 

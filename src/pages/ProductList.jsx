@@ -13,7 +13,7 @@ const ProductList = () => {
         setError(null);
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/article`,
+          `${import.meta.env.VITE_API_URL}/api/articles`,
         );
 
         if (!response.ok) {
@@ -21,7 +21,7 @@ const ProductList = () => {
         }
 
         const data = await response.json();
-        setProduits(data.article);
+        setProduits(data.articles ?? data.article ?? []);
       } catch (err) {
         console.error("Erreur lors du chargement des produits :", err);
         setError("Impossible de charger les produits");

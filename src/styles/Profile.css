@@ -17,8 +17,8 @@
 
 .profil-entete {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -47,6 +47,11 @@
   border: 1px solid #e2e2e1;
   color: #676766;
   cursor: pointer;
+}
+.input-verrouille {
+  background: var(--color-muted);
+  cursor: not-allowed;
+  color: var(--color-muted);
 }
 
 /* ─── Onglets ────────────────────────────────────────────────────────── */
@@ -215,71 +220,6 @@
   background: #f8f8f7;
   cursor: pointer;
 }
-
-/*  Encart fidélité  */
-
-.carte-fidelite-mini {
-  background: #1e5d49;
-  color: #f4f8f5;
-  border-radius: 14px;
-  padding: 16px 16px 14px;
-  position: relative;
-  overflow: hidden;
-}
-
-.carte-fidelite-mini::after {
-  content: "";
-  position: absolute;
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  right: -38px;
-  top: -38px;
-  background: #114336;
-}
-
-.carte-fidelite-mini p {
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-}
-
-.carte-fidelite-mini strong {
-  font-size: 3rem;
-  line-height: 1;
-  display: block;
-  margin: 6px 0 8px;
-}
-
-.fidelite-numero {
-  font-size: 1.1rem !important;
-  letter-spacing: 0.18em;
-  font-family: monospace;
-  word-break: break-all;
-  margin: 8px 0 10px !important;
-}
-
-.carte-fidelite-mini small {
-  display: block;
-  max-width: 210px;
-  font-size: 0.72rem;
-  color: #ccddcf;
-  margin-bottom: 12px;
-}
-
-.carte-fidelite-mini button,
-.favoris-mini button {
-  border: none;
-  border-radius: 999px;
-  background: #fff;
-  color: #1e5d49;
-  height: 34px;
-  padding: 0 18px;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 /* Favoris  */
 
 .favoris-mini h4 {
@@ -442,8 +382,22 @@
 .profil-alerte--ok  { color: #199b5f; background: #e8f5e9; }
 .profil-alerte--err { color: #c0392b; background: #ffeaea; }
 
-/* Paliers  */
+/* SECTION PALIERS & CARTE FIDÉLITÉ */
 
+/* 1. Base commune pour les cartes */
+.palier,
+.carte-fidelite-mini {
+  border: 1px solid #ececeb;
+  border-radius: 20px;
+  background: #f5f5f4;
+  min-height: 156px;
+  padding: 18px 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 2. Grille des paliers */
 .grille-paliers {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -451,13 +405,7 @@
 }
 
 .palier {
-  border: 1px solid #ececeb;
-  border-radius: 20px;
-  background: #f5f5f4;
-  min-height: 156px;
-  padding: 18px 16px;
-  transition: all 0.4s ease;
-  opacity: 0.7;
+  opacity: 0.7; /* Inactif par défaut */
 }
 
 .palier.actif {
@@ -467,25 +415,46 @@
   background: #ffffff;
 }
 
-.palier-bronze.actif {
-  border: 2px solid #cd7f32;
+/* 3. Styles spécifiques par niveau (Appliqués à la fois au Palier Actif et à la Mini Carte) */
+
+/* --- BRONZE --- */
+.palier-bronze.actif,
+.carte-fidelite-mini.palier-bronze {
+  border: 2px solid #cd7f32 !important;
+  background: linear-gradient(to bottom, #ffffff, #fffaf5) !important;
+  opacity: 1;
 }
-.palier-bronze.actif h3 { color: #cd7f32; }
+.palier-bronze.actif h3,
+.carte-fidelite-mini.palier-bronze .point-fidelite { color: #cd7f32; }
 .palier-bronze.actif .palier-badge { background: #cd7f32; }
+.carte-fidelite-mini.palier-bronze::after { background: #cd7f32; }
 
-.palier-argent.actif {
-  border: 2px solid #a9a9a9;
+/* --- ARGENT --- */
+.palier-argent.actif,
+.carte-fidelite-mini.palier-argent {
+  border: 2px solid #a9a9a9 !important;
+  background: linear-gradient(to bottom, #ffffff, #f8f8f8) !important;
+  opacity: 1;
 }
-.palier-argent.actif h3 { color: #808080; }
+.palier-argent.actif h3,
+.carte-fidelite-mini.palier-argent .point-fidelite { color: #808080; }
 .palier-argent.actif .palier-badge { background: #808080; }
+.carte-fidelite-mini.palier-argent::after { background: #a9a9a9; }
 
-.palier-or.actif {
-  border: 2px solid #d4af37;
-  background: linear-gradient(to bottom, #ffffff, #fffdf0);
+/* --- OR --- */
+.palier-or.actif,
+.carte-fidelite-mini.palier-or {
+  border: 2px solid #d4af37 !important;
+  background: linear-gradient(to bottom, #ffffff, #fffdf0) !important;
+  opacity: 1;
 }
-.palier-or.actif h3 { color: #c5a028; }
+.palier-or.actif h3,
+.carte-fidelite-mini.palier-or .point-fidelite { color: #c5a028; }
 .palier-or.actif .palier-badge { background: #d4af37; }
+.carte-fidelite-mini.palier-or::after { background: #d4af37; }
 
+
+/* 4. Détails internes des Paliers */
 .palier-badge {
   display: inline-block;
   border-radius: 999px;
@@ -524,6 +493,71 @@
   color: #595958;
   display: flex;
   align-items: center;
+}
+
+/* 5. Détails de la Carte de Fidélité Mini */
+.carte-fidelite-mini::after {
+  content: "";
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  right: -38px;
+  top: -38px;
+  opacity: 0.15; /* Très léger pour le design */
+  z-index: 0;
+}
+
+.carte-fidelite-mini * {
+  position: relative;
+  z-index: 1;
+}
+
+.carte-fidelite-mini p {
+  color: #8c8c8a;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  margin: 0;
+}
+
+.carte-fidelite-mini .n-fidelite {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.carte-fidelite-mini .point-fidelite {
+  font-family: var(--font-title);
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 5px 0;
+  line-height: 1;
+}
+
+.carte-fidelite-mini .mini-palier {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  margin-top: 10px;
+  color: #8c8c8a;
+}
+
+.carte-fidelite-mini button {
+  margin-top: 15px;
+  border: none;
+  border-radius: 999px;
+  background: #1e5d49; /* Vert foncé pro */
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.carte-fidelite-mini button:hover {
+  transform: scale(1.05);
 }
 
 /* Responsive  */

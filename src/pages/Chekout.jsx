@@ -3,6 +3,7 @@ import { useCart } from "../context/CartContext.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { formatPrice } from "../utils/formatters";
 import "../styles/Paiement.css";
+import "../styles/Contact.css";
 import { Link } from "react-router-dom";
 
 const Paiement = () => {
@@ -11,7 +12,7 @@ const Paiement = () => {
 
   // États pour la gestion de l'édition locale
   const [editing, setEditing] = useState(false);
-  const [hasModified, setHasModified] = useState(false); // État pour l'astérisque permanent
+  const [hasModified, setHasModified] = useState(false);
   const [profilCommande, setProfilCommande] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -19,32 +20,48 @@ const Paiement = () => {
   const [modeLivraison, setModeLivraison] = useState("retrait");
   const [modePaiement, setModePaiement] = useState("CARTE");
 
+  // Sécurité sur l'ID client
   const idClient = user?.id_client || user?.id;
   const API = import.meta.env.VITE_API_URL;
 
-  // Récupération initiale des données client
+  // Récupération des données client
   useEffect(() => {
-    if (!idClient) return;
+    // Si l'utilisateur n'est pas encore chargé dans le context, on attend.
+    if (!idClient) {
+      console.log("Paiement: En attente de l'ID utilisateur...");
+      return;
+    }
+
+    console.log("Paiement: Récupération des données pour l'ID", idClient);
+
     fetch(`${API}/api/client/${idClient}`, { credentials: "include" })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok)
+          throw new Error("Erreur lors de la récupération du profil");
+        return res.json();
+      })
       .then((data) => {
-        const initialData = data.client || data;
+        // Log de diagnostic : Vérifie ici si les clés (nom, prenom, etc.)
+        // correspondent à celles de ta base de données
+        console.log("Données reçues de l'API :", data);
+
+        const initialData = data.client || data || {};
+
+        // On initialise les deux états avec les données reçues
         setProfilCommande(initialData);
         setFormData(initialData);
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error("Erreur API Paiement:", err);
+      });
   }, [idClient, API]);
 
-  /**
-   * Synthèse financière basée sur ta logique de CartDrawer
-   * Récupère le taux_tva et le prix_ht directement de la BDD
-   */
+  // Calcul financier
   const calculFinancier = cart.reduce(
     (acc, item) => {
       const tauxTVA = parseFloat(item.taux_tva) || 5.5;
       const prixHTUnitaire = parseFloat(item.prix_ht) || 0;
       const quantite = parseInt(item.quantity) || 0;
-
       const montantTVAUnitaire = (prixHTUnitaire * tauxTVA) / 100;
 
       if (tauxTVA === 20) {
@@ -57,11 +74,10 @@ const Paiement = () => {
     { tva55: 0, tva20: 0 },
   );
 
-  // Validation des modifications (uniquement pour cette commande)
   const handleSaveLocal = () => {
     setProfilCommande(formData);
     setEditing(false);
-    setHasModified(true); // Active l'affichage permanent du message d'info
+    setHasModified(true);
   };
 
   const handleCancelLocal = () => {
@@ -71,7 +87,7 @@ const Paiement = () => {
 
   const handleChange = (field, value) => {
     setFormData((p) => ({ ...p, [field]: value }));
-    if (!hasModified) setHasModified(true); // Affiche le message dès la première frappe
+    if (!hasModified) setHasModified(true);
   };
 
   const SEUIL_GRATUIT = 45;
@@ -95,7 +111,7 @@ const Paiement = () => {
           {cart.map((item) => (
             <div key={item.id} className="panier-item">
               <span className="discret">
-                {item.quantity}x {item.name}
+                {item.quantity}x {item.name || item.nom}
               </span>
               <span className="item-prix">
                 {formatPrice(item.price * item.quantity)}
@@ -116,13 +132,12 @@ const Paiement = () => {
                 <span>{formatPrice(calculFinancier.tva20)}</span>
               </div>
             )}
-
             <div className="total-final centre">
               <span>Total : </span>
               <span>{formatPrice(cartTotal)}</span>
             </div>
             <p className="message-info-livraison centre">
-              Livraison gratuite à partir de 45€ d'achat.
+              Livraison gratuite à partir de {formatPrice(SEUIL_GRATUIT)}.
             </p>
           </div>
           <div className="centre action-retour">
@@ -133,10 +148,10 @@ const Paiement = () => {
         </div>
       </section>
 
-      {/* SECTION 2 : COORDONNÉES DE LIVRAISON */}
+      {/* SECTION 2 : COORDONNÉES */}
       <section className="auth-card section-paiement">
         <div className="entete-adresse">
-          <h2 className="sous-titre">COORDONÉES</h2>
+          <h2 className="sous-titre">COORDONNÉES</h2>
           {!editing ? (
             <button
               type="button"
@@ -200,17 +215,22 @@ const Paiement = () => {
               onChange={(e) => handleChange("ville", e.target.value)}
             />
           </div>
-
-          {/* Message informatif conditionnel */}
           {(editing || hasModified) && (
-            <p className="message-info-livraison">
-              * Ces modifications s'appliquent uniquement à cette livraison.
-            </p>
+            <div className="checkbox-container">
+              <input type="checkbox" id="privacy" required />
+              <label htmlFor="privacy" className="auth-switch">
+                J'accepte que mes données soient utilisées pour le traitement de
+                ma demande conformément à la politique de confidentialité.
+              </label>
+              <p className="message-info-livraison">
+                * Modifications uniquement pour cette commande.
+              </p>
+            </div>
           )}
         </div>
       </section>
 
-      {/* SECTION 3 : CHOIX SERVICES & PAIEMENT */}
+      {/* SECTION 3 : LIVRAISON & PAIEMENT */}
       <section className="auth-card section-paiement">
         <h2 className="sous-titre">LIVRAISON & PAIEMENT</h2>
         <div className="grille-choix-paiement">
@@ -283,9 +303,8 @@ const Paiement = () => {
             <span>Frais de port</span>
             <span>{fraisPort === 0 ? "OFFERT" : formatPrice(fraisPort)}</span>
           </div>
-
           <div className="total-final">
-            Total avec frais de port : {formatPrice(totalFinal)}
+            Total avec frais : {formatPrice(totalFinal)}
           </div>
           <button className="bouton bouton-principal large">
             PAYER MA COMMANDE

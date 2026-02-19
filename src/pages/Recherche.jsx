@@ -38,7 +38,7 @@ const Recherche = () => {
     const fetchArticles = async () => {
       try {
         const baseUrl = import.meta.env.VITE_API_URL;
-        const endpoints = [`${baseUrl}/api/articles`, `${baseUrl}/api/article`];
+        const endpoints = [`${baseUrl}/api/articles`];
         const allItems = [];
 
         for (const endpoint of endpoints) {

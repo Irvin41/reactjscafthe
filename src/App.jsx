@@ -20,10 +20,11 @@ import Paiement from "./pages/Chekout.jsx";
 import Retour from "./pages/Retour.jsx";
 import Livraison from "./pages/Livraison.jsx";
 import Contact from "./pages/Contact.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -35,6 +36,7 @@ function App() {
               <Route path="accessoires" element={<Accessoires />} />
               <Route path="coffrets" element={<Coffrets />} />
               <Route path="login" element={<Login />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="profile" element={<Profile />} />
               <Route path="commandes" element={<Orders />} />
               <Route path="a-propos" element={<AboutPage />} />
@@ -47,8 +49,8 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-      </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CartProvider>
   );
 }
 

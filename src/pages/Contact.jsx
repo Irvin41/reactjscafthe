@@ -6,7 +6,6 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ici tu ajouteras ton appel API vers ton backend
     setStatus("Merci ! Votre message a été envoyé avec succès.");
   };
 
