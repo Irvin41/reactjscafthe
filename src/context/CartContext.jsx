@@ -1,6 +1,14 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 
 const CartContext = createContext();
+const API = import.meta.env.VITE_API_URL;
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
@@ -10,14 +18,44 @@ export const CartProvider = ({ children }) => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // ── Référence pour le timer de debounce ──────────────────────────────
+  const saveTimer = useRef(null);
+
+  // ── Sauvegarde localStorage ──────────────────────────────────────────
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  // ── Sauvegarde serveur (debounce 800ms) ──────────────────────────────
+  // On ne sauvegarde que si l'utilisateur est connecté (cookie présent).
+  // Si la requête renvoie 401/403, on ignore silencieusement.
+  const saveCartToServer = useCallback((items) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+
+    saveTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`${API}/api/cart/save`, {
+          method: "POST",
+          credentials: "include", // envoie le cookie JWT
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cartItems: items }),
+        });
+
+        // 401 / 403 = non connecté → pas une erreur à signaler
+        if (!res.ok && res.status !== 401 && res.status !== 403) {
+          console.warn("Sauvegarde panier échouée :", res.status);
+        }
+      } catch (err) {
+        // Pas de connexion réseau, on ignore
+        console.warn("Sauvegarde panier : pas de réseau", err.message);
+      }
+    }, 800);
+  }, []);
+
+  // ── Normalisation produit ────────────────────────────────────────────
   const normalizeProduct = (product) => {
     if (!product) return null;
 
-    // ID: priorité à id_article (BDD), puis fallback
     const id =
       product.id_article ??
       product.id ??
@@ -25,7 +63,6 @@ export const CartProvider = ({ children }) => {
       product.slug ??
       product.nom_article;
 
-    // NOM: priorité à nom_article (BDD)
     const name =
       product.nom_article ??
       product.name ??
@@ -33,14 +70,11 @@ export const CartProvider = ({ children }) => {
       product.title ??
       "Produit";
 
-    // PRIX: priorité à prix_ttc (BDD), puis prix_ht
     const price =
       product.prix_ttc ?? product.prix_ht ?? product.price ?? product.prix ?? 0;
 
-    // STOCK (optionnel mais important pour la gestion)
     const stock = product.stock ?? null;
 
-    // IMAGE: gestion du champ image de la BDD
     const rawImage = product.image ?? product.imageUrl ?? null;
     const image =
       typeof rawImage === "string" && rawImage.length > 0
@@ -48,77 +82,81 @@ export const CartProvider = ({ children }) => {
           rawImage.startsWith("/") ||
           rawImage.startsWith("data:")
           ? rawImage
-          : `${import.meta.env.VITE_API_URL}/images/${rawImage}`
+          : `${API}/images/${rawImage}`
         : null;
 
-    return {
-      ...product,
-      id,
-      name,
-      price,
-      image,
-      stock,
-    };
+    return { ...product, id, name, price, image, stock };
   };
 
+  // ── Ajout au panier ──────────────────────────────────────────────────
   const addToCart = (product) => {
     const normalized = normalizeProduct(product);
     if (!normalized?.id) return;
 
-    // Vérifier le stock disponible avant d'ajouter
     if (normalized.stock !== null && normalized.stock <= 0) {
       console.warn("Produit en rupture de stock");
       return;
     }
 
     setCart((prevCart) => {
-      const existingProduct = prevCart.find(
-        (item) => item.id === normalized.id,
-      );
+      const existing = prevCart.find((item) => item.id === normalized.id);
+      let newCart;
 
-      if (existingProduct) {
-        // Vérifier si on peut augmenter la quantité
-        const newQuantity = existingProduct.quantity + 1;
+      if (existing) {
+        const newQuantity = existing.quantity + 1;
         if (normalized.stock !== null && newQuantity > normalized.stock) {
           console.warn("Stock insuffisant");
           return prevCart;
         }
-
-        return prevCart.map((item) =>
+        newCart = prevCart.map((item) =>
           item.id === normalized.id ? { ...item, quantity: newQuantity } : item,
         );
+      } else {
+        newCart = [...prevCart, { ...normalized, quantity: 1 }];
       }
 
-      return [...prevCart, { ...normalized, quantity: 1 }];
+      saveCartToServer(newCart); // ← sauvegarde après chaque ajout
+      return newCart;
     });
+
     setIsCartOpen(true);
   };
 
+  // ── Suppression ──────────────────────────────────────────────────────
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCart((prevCart) => {
+      const newCart = prevCart.filter((item) => item.id !== productId);
+      saveCartToServer(newCart); // ← sauvegarde après suppression
+      return newCart;
+    });
   };
 
+  // ── Mise à jour quantité ─────────────────────────────────────────────
   const updateQuantity = (productId, amount) => {
-    setCart((prevCart) =>
-      prevCart.map((item) => {
-        if (item.id === productId) {
-          const newQuantity = Math.max(1, item.quantity + amount);
+    setCart((prevCart) => {
+      const newCart = prevCart.map((item) => {
+        if (item.id !== productId) return item;
 
-          // Vérifier le stock si disponible
-          if (item.stock !== null && newQuantity > item.stock) {
-            console.warn("Stock insuffisant");
-            return item;
-          }
-
-          return { ...item, quantity: newQuantity };
+        const newQuantity = Math.max(1, item.quantity + amount);
+        if (item.stock !== null && newQuantity > item.stock) {
+          console.warn("Stock insuffisant");
+          return item;
         }
-        return item;
-      }),
-    );
+        return { ...item, quantity: newQuantity };
+      });
+
+      saveCartToServer(newCart); // ← sauvegarde après mise à jour
+      return newCart;
+    });
   };
 
-  const clearCart = () => setCart([]);
-  const toggleCart = () => setIsCartOpen(!isCartOpen);
+  // ── Vider le panier ──────────────────────────────────────────────────
+  const clearCart = () => {
+    setCart([]);
+    saveCartToServer([]); // ← vide aussi côté serveur
+  };
+
+  const toggleCart = () => setIsCartOpen((prev) => !prev);
   const closeCart = () => setIsCartOpen(false);
 
   const itemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -148,7 +186,6 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Export nommé du hook
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
@@ -157,5 +194,4 @@ export const useCart = () => {
   return context;
 };
 
-// Export par défaut du hook
 export default useCart;

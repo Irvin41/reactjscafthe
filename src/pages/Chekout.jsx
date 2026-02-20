@@ -108,16 +108,19 @@ const Paiement = () => {
       <section className="auth-card section-paiement">
         <h2 className="sous-titre">VOTRE PANIER</h2>
         <div className="corps-panier">
-          {cart.map((item) => (
-            <div key={item.id} className="panier-item">
-              <span className="discret">
-                {item.quantity}x {item.name || item.nom}
-              </span>
-              <span className="item-prix">
-                {formatPrice(item.price * item.quantity)}
-              </span>
-            </div>
-          ))}
+          {cart.map((item, index) => {
+            const itemKey = item.id ?? item.id_article ?? index;
+            return (
+              <div key={itemKey} className="panier-item">
+                <span className="discret">
+                  {item.quantity}x {item.name ?? item.nom_article ?? item.nom}
+                </span>
+                <span className="item-prix">
+                  {formatPrice((item.price ?? item.prix_ttc) * item.quantity)}
+                </span>
+              </div>
+            );
+          })}
 
           <div className="recap-details">
             {calculFinancier.tva55 > 0 && (

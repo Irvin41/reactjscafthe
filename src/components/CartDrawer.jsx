@@ -15,19 +15,12 @@ const CartDrawer = () => {
   } = useCart();
   const navigate = useNavigate();
 
-  /**
-   * Calcul de la synthèse financière (HT et TVA)
-   * On utilise parseFloat pour transformer les chaînes SQL en nombres évitant ainsi le NaN
-   */
   const calculFinancier = cart.reduce(
     (acc, item) => {
-      // Dans votre BDD, vous avez prix_ht et taux_tva
-      // Si vous stockez le prix TTC ajusté dans item.price :
       const prixTTCUnitaire = parseFloat(item.price) || 0;
-      const tauxTVA = parseFloat(item.taux_tva) || 5.5; // Valeur par défaut 5.5%
+      const tauxTVA = parseFloat(item.taux_tva) || 5.5;
       const quantite = parseInt(item.quantity) || 0;
 
-      // Formule mathématique pour retrouver le HT à partir du TTC : HT = TTC / (1 + Taux)
       const prixHTUnitaire = prixTTCUnitaire / (1 + tauxTVA / 100);
       const montantTVAUnitaire = prixTTCUnitaire - prixHTUnitaire;
 
@@ -45,7 +38,7 @@ const CartDrawer = () => {
       <div
         className={`cart-overlay ${isCartOpen ? "active" : ""}`}
         onClick={closeCart}
-      ></div>
+      />
 
       {/* Le bandeau qui glisse de la droite */}
       <aside className={`cart-drawer ${isCartOpen ? "open" : ""}`}>
@@ -60,29 +53,36 @@ const CartDrawer = () => {
           {cart.length === 0 ? (
             <p className="empty-cart">Votre panier est vide.</p>
           ) : (
-            cart.map((item) => (
-              <div key={item.id} className="drawer-item">
-                <div className="item-details">
-                  <p className="item-name">{item.name}</p>
-                  <p className="item-price">{formatPrice(item.price)}</p>
-                  <div className="qty-picker">
-                    <button onClick={() => updateQuantity(item.id, -1)}>
-                      -
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, 1)}>
-                      +
-                    </button>
+            cart.map((item, index) => {
+              // Clé robuste : id normalisé → id_article → index en dernier recours
+              const itemKey = item.id ?? item.id_article ?? index;
+
+              return (
+                <div key={itemKey} className="drawer-item">
+                  <div className="item-details">
+                    <p className="item-name">{item.name ?? item.nom_article}</p>
+                    <p className="item-price">
+                      {formatPrice(item.price ?? item.prix_ttc)}
+                    </p>
+                    <div className="qty-picker">
+                      <button onClick={() => updateQuantity(itemKey, -1)}>
+                        −
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQuantity(itemKey, 1)}>
+                        +
+                      </button>
+                    </div>
                   </div>
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeFromCart(itemKey)}
+                  >
+                    ❌
+                  </button>
                 </div>
-                <button
-                  className="remove-btn"
-                  onClick={() => removeFromCart(item.id)}
-                >
-                  ❌
-                </button>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
