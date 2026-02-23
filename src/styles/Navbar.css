@@ -1,6 +1,68 @@
-/*
-   Navbar.css — Navigation principale */
+/* Navbar.css — Navigation principale */
+/* 1. Le conteneur */
+.switch-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+}
 
+/* 2. Structure affinée (hauteur réduite de 26px à 16px) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px; /* Largeur réduite aussi */
+  height: 16px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* 4. La glissière */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--color-green);
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+/* 5. Le bouton rond (plus petit et bien centré) */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px; /* Taille réduite */
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* 6. État ACTIVÉ */
+input:checked + .slider {
+  background-color: var(--color-gold);
+}
+
+/* 7. Déplacement ajusté à la nouvelle largeur */
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+/* texte du mode CLAIRE / SOMBRE */
+.mode-light {
+  color: var(--color-green);
+  font-family: var(--font-brand);
+}
+/* Style pour le texte "Sombre" en doré */
+.mode-dark {
+  color: var(--color-gold);
+  font-family: var(--font-brand);
+}
 /*  Barre sticky */
 .navbar {
   position: sticky;
@@ -68,7 +130,7 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: clamp(10px, 1.8vw, 24px);
+  gap: 20px;
 }
 
 .user-logged {

@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { NavLink, Link } from "react-router-dom"; // On utilise NavLink pour le statut "active"
+import { NavLink, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import logo from "../assets/logo-cafthe.png";
 import CartDrawer from "./CartDrawer.jsx";
 import SearchBandeau from "../pages/SearchBandeau.jsx";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
@@ -39,7 +40,6 @@ const Navbar = () => {
               <span aria-hidden="true" />
             </button>
 
-            {/* --- NAVIGATION PRINCIPALE (Ceux qui seront soulignés) --- */}
             <ul
               id="main-nav-menu"
               className={`nav-menu ${isMenuOpen ? "is-open" : ""}`}
@@ -73,7 +73,6 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* --- ACTIONS UTILISATEUR (Ceux qui ne seront PAS soulignés) --- */}
           <div
             className={`nav-actions ${isMenuOpen ? "is-open" : ""}`}
             role="group"
@@ -138,6 +137,9 @@ const Navbar = () => {
                 Mon Compte
               </Link>
             )}
+
+            {/* --- LE SWITCH EST MAINTENANT TOUT À DROITE --- */}
+            <ThemeToggle />
           </div>
         </div>
 

@@ -3,8 +3,6 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useCallback,
-  useRef,
 } from "react";
 
 const CartContext = createContext();
@@ -18,39 +16,10 @@ export const CartProvider = ({ children }) => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // ── Référence pour le timer de debounce ──────────────────────────────
-  const saveTimer = useRef(null);
-
   // ── Sauvegarde localStorage ──────────────────────────────────────────
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-
-  // ── Sauvegarde serveur (debounce 800ms) ──────────────────────────────
-  // On ne sauvegarde que si l'utilisateur est connecté (cookie présent).
-  // Si la requête renvoie 401/403, on ignore silencieusement.
-  const saveCartToServer = useCallback((items) => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-
-    saveTimer.current = setTimeout(async () => {
-      try {
-        const res = await fetch(`${API}/api/cart/save`, {
-          method: "POST",
-          credentials: "include", // envoie le cookie JWT
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cartItems: items }),
-        });
-
-        // 401 / 403 = non connecté → pas une erreur à signaler
-        if (!res.ok && res.status !== 401 && res.status !== 403) {
-          console.warn("Sauvegarde panier échouée :", res.status);
-        }
-      } catch (err) {
-        // Pas de connexion réseau, on ignore
-        console.warn("Sauvegarde panier : pas de réseau", err.message);
-      }
-    }, 800);
-  }, []);
 
   // ── Normalisation produit ────────────────────────────────────────────
   const normalizeProduct = (product) => {
@@ -115,7 +84,6 @@ export const CartProvider = ({ children }) => {
         newCart = [...prevCart, { ...normalized, quantity: 1 }];
       }
 
-      saveCartToServer(newCart); // ← sauvegarde après chaque ajout
       return newCart;
     });
 
@@ -124,11 +92,7 @@ export const CartProvider = ({ children }) => {
 
   // ── Suppression ──────────────────────────────────────────────────────
   const removeFromCart = (productId) => {
-    setCart((prevCart) => {
-      const newCart = prevCart.filter((item) => item.id !== productId);
-      saveCartToServer(newCart); // ← sauvegarde après suppression
-      return newCart;
-    });
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
   // ── Mise à jour quantité ─────────────────────────────────────────────
@@ -145,7 +109,6 @@ export const CartProvider = ({ children }) => {
         return { ...item, quantity: newQuantity };
       });
 
-      saveCartToServer(newCart); // ← sauvegarde après mise à jour
       return newCart;
     });
   };
@@ -153,7 +116,6 @@ export const CartProvider = ({ children }) => {
   // ── Vider le panier ──────────────────────────────────────────────────
   const clearCart = () => {
     setCart([]);
-    saveCartToServer([]); // ← vide aussi côté serveur
   };
 
   const toggleCart = () => setIsCartOpen((prev) => !prev);

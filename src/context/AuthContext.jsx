@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { useCart } from "./CartContext.jsx";
 
 // On exporte le contexte
@@ -10,30 +10,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   // Récupération des outils du panier
-  const { setCart, clearCart } = useCart();
-
-  // On utilise useCallback pour éviter des boucles infinies de rendu
-  const fetchUserCart = useCallback(async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
-        method: "GET",
-        credentials: "include", // Envoie les cookies (token) au serveur
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // data.items vient de ton backend (panier/cartRouter)
-        if (data && data.items) {
-          setCart(data.items);
-        }
-      }
-    } catch (error) {
-      console.error("Erreur récupération panier:", error);
-    }
-  }, [setCart]);
+  const { clearCart } = useCart();
 
   // Vérification de la session au montage
   useEffect(() => {
@@ -47,8 +24,6 @@ export function AuthProvider({ children }) {
         if (response.ok) {
           const data = await response.json();
           setUser(data.client);
-          // Si connecté, on va chercher le panier
-          await fetchUserCart();
         }
       } catch (error) {
         console.error("Erreur vérification session:", error);
@@ -58,11 +33,10 @@ export function AuthProvider({ children }) {
     };
 
     checkSession();
-  }, [fetchUserCart]);
+  }, []);
 
   const login = async (userData) => {
     setUser(userData);
-    await fetchUserCart();
   };
 
   const logout = async () => {
