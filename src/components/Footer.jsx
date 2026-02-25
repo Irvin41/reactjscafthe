@@ -14,10 +14,6 @@ const Footer = () => {
           >
             <img src={logo} alt="CAF'THÉ" />
           </Link>
-          <p>
-            L'excellence du the et du cafe premium, sourcee de maniere ethique
-            et durable.
-          </p>
         </div>
 
         <div className="footer-col">
@@ -69,9 +65,25 @@ const Footer = () => {
           </form>
         </div>
       </div>
-      <p className="footer-bottom">
-        © {new Date().getFullYear()} CAFTHE • ARTISANS DU GOUT
-      </p>
+      <div className="site-footer-grid footer-bottom">
+        <ul className="footer-row">
+          <li>© {new Date().getFullYear()} CAFTHE • ARTISANS DU GOUT</li>
+        </ul>
+        <ul className="footer-row">
+          <li>
+            <Link className="lien" to="/cgv">
+              {" "}
+              CGV{" "}
+            </Link>
+          </li>
+          <li>
+            <Link className="lien" to="/mentions-legales">
+              {" "}
+              mentions légales{" "}
+            </Link>
+          </li>
+        </ul>
+      </div>
     </footer>
   );
 };

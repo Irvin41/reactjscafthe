@@ -1,13 +1,11 @@
-
-
-/* ─── Overlay fond sombre ───────────────────────────────────── */
+/* ─── Overlay fond sombre  */
 .cart-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.35);
     opacity: 0;
     visibility: hidden;
-    pointer-events: none;          /* ← ajoute ça */
+    pointer-events: none;
     transition: opacity 0.25s ease;
     z-index: 1990;
 }
@@ -15,10 +13,10 @@
 .cart-overlay.active {
     opacity: 1;
     visibility: visible;
-    pointer-events: auto;          /* ← et ça */
+    pointer-events: auto;
 }
 
-/* ─── Tiroir ────────────────────────────────────────────────── */
+/* ─── Tiroir  */
 .cart-drawer {
     position: fixed;
     top: 0;
@@ -37,7 +35,7 @@
     right: 0;
 }
 
-/* ─── Zones internes ────────────────────────────────────────── */
+/* ─── Zones internes  */
 .drawer-header,
 .drawer-content,
 .drawer-footer {
@@ -82,7 +80,7 @@
     color: var(--color-text);
 }
 
-/* ─── Articles ──────────────────────────────────────────────── */
+/* ─── Articles  */
 .drawer-item {
     display: flex;
     justify-content: space-between;
@@ -102,12 +100,11 @@
     margin: 4px 0;
 }
 
-/* ─── Sélecteur de quantité ─────────────────────────────────── */
+/* ─── Sélecteur de quantité ─ */
 .qty-picker {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-
 }
 
 .qty-picker button {
@@ -158,3 +155,154 @@
 .checkout-btn:hover {
     background: #174f3b;
 }
+
+/*  BANNIÈRE FIDÉLITÉ */
+
+.drawer-loyalty-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    padding: 12px 20px 12px 26px;
+    border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-body);
+    overflow: hidden;
+}
+.palier-nom{
+    font-family: var(--font-brand);
+    font-size: x-large;
+}
+/* Barre colorée à gauche */
+.drawer-loyalty-banner::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 0 3px 3px 0;
+}
+
+/* Fond teinté très léger */
+.drawer-loyalty-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.drawer-loyalty-text strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.drawer-loyalty-savings {
+    display: block;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 2px;
+    opacity: 0.85;
+}
+
+
+.drawer-loyalty-badge {
+    z-index: 1;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    border: 1.5px solid currentColor;
+    opacity: 0.85;
+}
+
+/* ── Bronze ── */
+.drawer-loyalty-banner.palier-bronze { color: #8B5E2A; }
+.drawer-loyalty-banner.palier-bronze::before { background: linear-gradient(180deg, #cd7f32, #a0522d); }
+.drawer-loyalty-banner.palier-bronze::after  { background: #cd7f32; }
+
+/* ── Argent ── */
+.drawer-loyalty-banner.palier-argent { color: #5a5a6e; }
+.drawer-loyalty-banner.palier-argent::before { background: linear-gradient(180deg, #c0c0c0, #909090); }
+.drawer-loyalty-banner.palier-argent::after  { background: #a8a9ad; }
+
+/* ── Or ── */
+.drawer-loyalty-banner.palier-or { color: #7a5a10; }
+.drawer-loyalty-banner.palier-or::before { background: linear-gradient(180deg, var(--color-gold), #a07820); }
+.drawer-loyalty-banner.palier-or::after  { background: var(--color-gold); }
+
+/* ── Dark mode ── */
+[data-theme='dark'] .drawer-loyalty-banner.palier-bronze { color: #e8a060; }
+[data-theme='dark'] .drawer-loyalty-banner.palier-argent { color: #c0c0c0; }
+[data-theme='dark'] .drawer-loyalty-banner.palier-or     { color: var(--color-gold-soft); }
+
+/*  Prix barrés  */
+.item-price-original {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin-right: 4px;
+    text-decoration: line-through;
+}
+
+.item-price-reduced {
+    font-weight: 700;
+    color: var(--color-green);
+}
+
+.item-price-label {
+    font-style: italic;
+    font-size: 0.75rem;
+    margin-left: 4px;
+    opacity: 0.85;
+}
+
+.item-price-label.palier-bronze { color: #cd7f32; }
+.item-price-label.palier-argent { color: #909090; }
+.item-price-label.palier-or     { color: var(--color-gold); }
+
+/* Badge échantillon  */
+.drawer-sample-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    vertical-align: middle;
+    background: var(--color-green);
+    color: #fff;
+}
+
+/* Récap footer  */
+.tax-summary {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--color-muted);
+}
+
+.summary-line--savings {
+    font-weight: 600;
+    padding-top: 6px;
+    margin-top: 2px;
+    border-top: 1px dashed var(--color-line);
+}
+
+.summary-line--savings.palier-bronze { color: #cd7f32; }
+.summary-line--savings.palier-argent { color: #909090; }
+.summary-line--savings.palier-or     { color: var(--color-gold); }

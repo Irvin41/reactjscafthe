@@ -21,10 +21,15 @@ import Retour from "./pages/Retour.jsx";
 import Livraison from "./pages/Livraison.jsx";
 import Contact from "./pages/Contact.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import CGV from "./pages/CGV.jsx";
+import MentionsLegales from "./pages/MentionsLegales.jsx";
+import Confirmation from "./pages/Confirmation.jsx";
+import LoyaltySync from "./components/LoyaltySync.jsx";
 function App() {
   return (
-    <CartProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <CartProvider>
+        <LoyaltySync />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -46,11 +51,14 @@ function App() {
               <Route path="retour" element={<Retour />} />
               <Route path="livraison" element={<Livraison />} />
               <Route path="contact" element={<Contact />} />
+              <Route path="cgv" element={<CGV />} />
+              <Route path="mentions-legales" element={<MentionsLegales />} />
+              <Route path="confirmation" element={<Confirmation />} />
             </Route>
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
-    </CartProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

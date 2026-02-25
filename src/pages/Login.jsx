@@ -51,7 +51,7 @@ const Login = () => {
       }
 
       login(data.client);
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       console.error("Erreur lors de la connexion: ", error);
       setErrorMsg("Une erreur s'est produite lors de la connexion");
@@ -235,17 +235,10 @@ const Login = () => {
                 />
 
                 {/* Lien mot de passe oublié */}
-                <div
-                  style={{
-                    textAlign: "right",
-                    marginTop: "-10px",
-                    marginBottom: "15px",
-                  }}
-                >
+                <div>
                   <button
                     type="button"
                     className="lien"
-                    style={{ fontSize: "0.85rem" }}
                     onClick={() => {
                       setErrorMsg("");
                       setShowForgot(true);

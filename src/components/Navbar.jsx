@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import logo from "../assets/logo-cafthe.png";
 import CartDrawer from "./CartDrawer.jsx";
@@ -9,9 +9,9 @@ import ThemeToggle from "./ThemeToggle.jsx";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { isAuthenticated, logout, user } = useContext(AuthContext);
   const { itemCount, toggleCart } = useCart();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -125,9 +125,12 @@ const Navbar = () => {
                   {user?.prenom ?? "Mon profil"}
                 </Link>
                 <button
-                  className="account-link-red"
+                  className="cart-btn-nav account-link-red"
                   type="button"
-                  onClick={logout}
+                  onClick={async () => {
+                    await logout();
+                    navigate("/");
+                  }}
                 >
                   Déconnexion
                 </button>
@@ -138,7 +141,6 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* --- LE SWITCH EST MAINTENANT TOUT À DROITE --- */}
             <ThemeToggle />
           </div>
         </div>

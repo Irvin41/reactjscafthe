@@ -1,19 +1,8 @@
-/*
-   Navbar.css — Navigation principale */
-
-/*  Barre sticky */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1100;
-  background: var(--color-bg);
-  padding: 14px 4vw;
-}
+/* Navigation principale */
 
 /* Conteneur flex  */
 .nav-container {
-  width: min(var(--content-width), 100%);
-  margin: 0 auto;
+  padding: 14px 4vw;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,7 +67,6 @@
 }
 
 .account-link,
-.account-link-red,
 .cart-btn-nav {
   border: none;
   background: none;
@@ -92,16 +80,9 @@
   position: relative;
   transition: color 0.2s ease;
 }
-
 .account-link:hover,
 .cart-btn-nav:hover {
   color: var(--color-nav-active);
-}
-
-.account-link-red {
-  color: darkred;
-  padding-left: 1rem;
-
 }
 
 .account-link-red:hover {
@@ -255,7 +236,7 @@ input:checked + .slider:before {
     left: 0;
     right: 0;
     z-index: 1120;
-    background: #fff;
+    background: var(--color-surface);
     border: 1px solid #e8e8e8;
     border-radius: 14px;
     padding: 14px 16px;
@@ -281,7 +262,7 @@ input:checked + .slider:before {
     left: 0;
     right: 0;
     z-index: 1120;
-    background: #fff;
+    background: var(--color-surface);
     border: 1px solid #e8e8e8;
     border-radius: 14px;
     padding: 12px 16px;
@@ -309,14 +290,31 @@ input:checked + .slider:before {
 
 /* ─── Responsive ≤ 520 px ───────────────────────────────────── */
 @media (max-width: 520px) {
-  .nav-actions {
+  .nav-actions,
+  .user-logged{
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
     top: calc(100% + 244px);
   }
-
   .logo img {
     height: 40px;
   }
+  .account-link-red{
+    color: red;
+  }
+/*le Switch qui devient symbole */
+  .mode-light,
+  .mode-dark {
+    font-size: 0;
+  }
+  .mode-light::before {
+    content: "☀️";
+    font-size: 1.2rem;
+  }
+  .mode-dark::before {
+    content: "🌙";
+    font-size: 1.2rem;
+  }
+
 }

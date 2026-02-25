@@ -8,23 +8,31 @@ const API = import.meta.env.VITE_API_URL;
 const paliers = [
   {
     name: "Bronze",
-    points: "0-200 PTS",
+    points: "0-300 PTS",
     perks: ["-5% sur les accessoires"],
     min: 0,
-    max: 200,
+    max: 300,
   },
   {
     name: "Argent",
-    points: "201-600 PTS",
-    perks: ["Livraison gratuite", "Échantillons offerts"],
-    min: 201,
-    max: 600,
+    points: "301-500 PTS",
+    perks: [
+      "-5% sur les accessoires",
+      "Livraison gratuite en point relais",
+      "Échantillons offerts",
+    ],
+    min: 301,
+    max: 500,
   },
   {
     name: "Or",
-    points: "601+ PTS",
-    perks: ["-15% toute l'année", "Accès avant-premières"],
-    min: 601,
+    points: "501+ PTS",
+    perks: [
+      "Échantillons offerts",
+      "-15% sur tout le site",
+      "Livraison Gratuite",
+    ],
+    min: 501,
     max: Infinity,
   },
 ];
@@ -42,6 +50,114 @@ const classeStatut = (statut = "") => {
   return "";
 };
 
+/* ── Icône œil ouvert ── */
+const IconeOeil = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+/* ── Icône œil barré ── */
+const IconeOeilBarre = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
+);
+
+/* ── Champ mot de passe avec œil + indicateur rouge/vert ── */
+const ChampPassword = ({
+  label,
+  field,
+  editing,
+  formData,
+  onChange,
+  placeholder = "",
+  /* si renseigné, compare la valeur de CE champ avec le champ `compareField` */
+  compareField = null,
+}) => {
+  const [visible, setVisible] = useState(false);
+
+  const valeur = formData?.[field] ?? "";
+  const valeurCompare = compareField ? (formData?.[compareField] ?? "") : null;
+
+  /* couleur uniquement si on compare (champ "confirmer") et qu'il y a une saisie */
+  const match =
+    compareField !== null && valeur.length > 0
+      ? valeur === valeurCompare
+      : null;
+
+  const couleurBord =
+    match === true ? "#4caf50" : match === false ? "#e53935" : undefined;
+
+  return (
+    <label>
+      {label}
+      <div style={{ position: "relative" }}>
+        <input
+          type={visible ? "text" : "password"}
+          placeholder={placeholder}
+          value={valeur}
+          readOnly={!editing}
+          onChange={(e) => onChange(field, e.target.value)}
+          style={{
+            paddingRight: "2.4rem",
+            ...(couleurBord && {
+              borderColor: couleurBord,
+              boxShadow: `0 0 0 1px ${couleurBord}`,
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }),
+          }}
+        />
+        {editing && (
+          <button
+            type="button"
+            onClick={() => setVisible((v) => !v)}
+            tabIndex={-1}
+            aria-label={
+              visible ? "Masquer le mot de passe" : "Afficher le mot de passe"
+            }
+            className="btn-oeil"
+          >
+            {visible ? <IconeOeilBarre /> : <IconeOeil />}
+          </button>
+        )}
+      </div>
+
+      {/* Message indicateur sous le champ "confirmer" */}
+      {match !== null && valeur.length > 0 && (
+        <span
+          className={`indicateur-mdp ${match ? "indicateur-mdp--ok" : "indicateur-mdp--err"}`}
+        >
+          {match
+            ? "✓ Les mots de passe correspondent"
+            : "✗ Les mots de passe sont différents"}
+        </span>
+      )}
+    </label>
+  );
+};
+
 const Champ = ({
   label,
   field,
@@ -50,11 +166,13 @@ const Champ = ({
   formData,
   onChange,
   forceReadOnly = false,
+  placeholder = "text",
 }) => (
   <label>
     {label}
     <input
       type={type}
+      placeholder={placeholder}
       value={formData?.[field] ?? ""}
       readOnly={!editing || forceReadOnly}
       className={forceReadOnly ? "input-verrouille" : ""}
@@ -77,6 +195,8 @@ const Profile = () => {
 
   const [editInfos, setEditInfos] = useState(false);
   const [editPass, setEditPass] = useState(false);
+  const [checkPass, setCheckPass] = useState(false);
+  const [checkPassError, setCheckPassError] = useState(null);
   const [editAddr, setEditAddr] = useState(false);
 
   const [formData, setFormData] = useState({});
@@ -110,6 +230,24 @@ const Profile = () => {
       </span>
     </div>
   );
+
+  const verifierAncienMdp = async () => {
+    setCheckPassError(null);
+    try {
+      const res = await fetch(`${API}/api/client/check-password`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mot_de_passe_actuel: formData.mot_de_passe_actuel,
+        }),
+      });
+      if (!res.ok) throw new Error("Mot de passe incorrect.");
+      setCheckPass(true);
+    } catch (err) {
+      setCheckPassError(err.message);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -170,6 +308,8 @@ const Profile = () => {
     setFormData({ ...profil });
     sectionSetter(false);
     setSaveError(null);
+    setCheckPass(false);
+    setCheckPassError(null);
   };
 
   const handleChange = (field, value) =>
@@ -188,7 +328,7 @@ const Profile = () => {
     <main className="page-profil">
       <div className="profil-entete">
         <h1>Bonjour, {profil?.prenom || user?.prenom}.</h1>
-        <p>
+        <p aria-label="date-d-inscription">
           MEMBRE DEPUIS{" "}
           {profil?.date_inscription
             ? new Date(profil.date_inscription)
@@ -200,6 +340,7 @@ const Profile = () => {
             : "—"}
         </p>
       </div>
+
       {/* SECTION 1 : MON PROFIL */}
       <section className="carte-profil" ref={refProfil}>
         {renderOnglets("MON PROFIL")}
@@ -216,9 +357,10 @@ const Profile = () => {
               </div>
             )}
 
+            {/* Informations personnelles */}
             <article className="profil-section">
               <div className="ligne-titre">
-                <h2>INFORMATIONS PERSONNELLES</h2>
+                <h2 className="sous-titre">INFORMATIONS PERSONNELLES</h2>
                 {!editInfos ? (
                   <button type="button" onClick={() => setEditInfos(true)}>
                     MODIFIER
@@ -233,7 +375,7 @@ const Profile = () => {
                       {saving ? "..." : "ENREGISTRER"}
                     </button>
                     <button
-                      type="bouton-cancel"
+                      type="button"
                       className="annuler"
                       onClick={() => handleCancel(setEditInfos)}
                     >
@@ -277,9 +419,10 @@ const Profile = () => {
               </div>
             </article>
 
+            {/* Mot de passe */}
             <article className="profil-section">
               <div className="ligne-titre">
-                <h2>MOT DE PASSE</h2>
+                <h2 className="sous-titre">MOT DE PASSE</h2>
                 {!editPass ? (
                   <button type="button" onClick={() => setEditPass(true)}>
                     MODIFIER
@@ -303,37 +446,39 @@ const Profile = () => {
                   </div>
                 )}
               </div>
-              <div className="grille-champs deux-colonnes">
-                <label>
-                  NOUVEAU MOT DE PASSE
-                  <input
-                    type="password"
-                    placeholder={editPass ? "Nouveau mot de passe" : "••••••••"}
-                    readOnly={!editPass}
-                    value={formData.mot_de_passe || ""}
-                    onChange={(e) =>
-                      handleChange("mot_de_passe", e.target.value)
-                    }
-                  />
-                </label>
-                <label>
-                  CONFIRMER
-                  <input
-                    type="password"
-                    placeholder={editPass ? "Confirmer" : "••••••••"}
-                    readOnly={!editPass}
-                    value={formData.mot_de_passe_confirm || ""}
-                    onChange={(e) =>
-                      handleChange("mot_de_passe_confirm", e.target.value)
-                    }
-                  />
-                </label>
+              <div className="grille-champs trois-colonnes">
+                <ChampPassword
+                  label="ANCIEN MOT DE PASSE"
+                  field="mot_de_passe_actuel"
+                  placeholder="votre mot de passe"
+                  editing={editPass}
+                  formData={formData}
+                  onChange={handleChange}
+                />
+                <Champ
+                  label="NOUVEAU MOT DE PASSE"
+                  field="mot_de_passe"
+                  placeholder="nouveau mot de passe"
+                  editing={editPass}
+                  formData={formData}
+                  onChange={handleChange}
+                />
+                <Champ
+                  label="CONFIRMER"
+                  field="mot_de_passe_confirm"
+                  placeholder="confirmer nouveau mot de passe"
+                  editing={editPass}
+                  formData={formData}
+                  onChange={handleChange}
+                  compareField="mot_de_passe"
+                />
               </div>
             </article>
 
+            {/* Adresse de livraison */}
             <article className="profil-section">
               <div className="ligne-titre">
-                <h2>ADRESSE DE LIVRAISON</h2>
+                <h2 className="sous-titre">ADRESSE DE LIVRAISON</h2>
                 {!editAddr ? (
                   <button type="button" onClick={() => setEditAddr(true)}>
                     MODIFIER
@@ -385,14 +530,14 @@ const Profile = () => {
             </article>
           </div>
 
-          {/* carte fidelité-mini */}
+          {/* Carte fidélité mini */}
           <aside className="profil-lateral">
             <article
               className={`carte-fidelite-mini palier-${paliers[indexPalier]?.name.toLowerCase()}`}
             >
               <p>POINTS FIDÉLITÉ</p>
-              <p className="n-fidelite"> N° {profil?.numero_fidelite ?? "—"}</p>
-              <p className="point-fidelite">{points} points</p>
+              <p className="n-fidelite">N° {profil?.numero_fidelite ?? "—"}</p>
+              <h2 className="point-fidelite">{points} points</h2>
               <p className="mini-palier">
                 {palierSuivant
                   ? `Plus que ${palierSuivant.min - points} pts avant le niveau ${palierSuivant.name}`
@@ -406,8 +551,8 @@ const Profile = () => {
       {/* SECTION 2 : MES COMMANDES */}
       <section className="carte-profil" ref={refCommandes}>
         {renderOnglets("MES COMMANDES")}
-        <div className="ligne-titre" style={{ marginBottom: "24px" }}>
-          <h2 className="profil-titre-section">MES COMMANDES</h2>
+        <div className="ligne-titre">
+          <h2 className="profil-titre-section sous-titre">MES COMMANDES</h2>
           <Link to="/commandes" className="lien">
             Historique complet →
           </Link>
@@ -461,14 +606,15 @@ const Profile = () => {
       {/* SECTION 3 : PROGRAMME FIDÉLITÉ */}
       <section className="carte-profil" ref={refFidelite}>
         {renderOnglets("PROGRAMME FIDELITE")}
-        <h2 className="profil-titre-section" style={{ marginBottom: "24px" }}>
-          PROGRAMME FIDÉLITÉ
-        </h2>
+        <h2 className="profil-titre-section sous-titre">PROGRAMME FIDÉLITÉ</h2>
+
         <div className="grille-paliers">
           {paliers.map((palier, i) => (
             <article
               key={palier.name}
-              className={`palier palier-${palier.name.toLowerCase()} ${i === indexPalier ? "actif" : ""}`}
+              className={`palier palier-${palier.name.toLowerCase()} ${
+                i === indexPalier ? "actif" : ""
+              }`}
             >
               {i === indexPalier && (
                 <span className="palier-badge">VOTRE NIVEAU</span>

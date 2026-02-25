@@ -1,12 +1,11 @@
 /* --- Mise en page globale --- */
-.page.etroit {
+.page{
   padding: clamp(20px, 5vh, 74px) 20px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .section-paiement {
-  width: min(960px, 92vw);
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
   background: #ffffff;
@@ -45,8 +44,8 @@
   max-width: 550px;
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-brand);
-  font-size: .9rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
 }
 .ligne-total-ttc {
   display: flex;
@@ -74,7 +73,7 @@
 
 .grille-choix-adresse {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -135,7 +134,7 @@
 
 .total-final {
   font-family: var(--font-title);
-  font-size: 2.4rem;
+  font-size: 2rem;
   color: var(--color-prix);
   margin: 15px 0;
 }
@@ -145,7 +144,7 @@
   max-width: 550px;
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-brand);
+  font-family: var(--font-body);
   font-size: 1rem;
 }
 
@@ -164,16 +163,13 @@
 
 /*  Mobile  */
 @media (max-width: 768px) {
-  .grille-choix-paiement {
+  .grille-choix-paiement,
+  .grille-choix-adresse{
     grid-template-columns: 1fr; /* Passage en une seule colonne sur mobile */
   }
 
   .auth-card.section-paiement {
     padding: 30px 20px; /* Réduction des marges internes */
-  }
-
-  .grille-choix-adresse {
-    grid-template-columns: 1fr; /* Champs nom/prénom l'un sous l'autre */
   }
 }
 }

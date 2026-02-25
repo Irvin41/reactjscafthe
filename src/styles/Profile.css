@@ -30,9 +30,9 @@
 
 .profil-entete p {
   letter-spacing: 0.12em;
-  font-size: 0.66rem;
-  color: #8f8f8d;
-  margin-top: 3px;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  margin-top: .5rem;
 }
 
 .profil-entete-actions {
@@ -54,9 +54,10 @@
   color: var(--color-muted);
 }
 
-/* ─── Onglets ────────────────────────────────────────────────────────── */
+/* Onglets */
 
 .profil-onglets {
+  flex-wrap: wrap;
   display: flex;
   gap: 20px;
   align-items: center;
@@ -106,8 +107,8 @@
 }
 
 .profil-principal {
-  display: grid;
-  gap: 28px;
+  display: flex;
+  flex-direction: column;
 }
 
 .profil-section h2 {
@@ -128,6 +129,40 @@
   align-items: baseline;
   gap: 12px;
 }
+/*  Input — focus  */
+
+.grille-champs input:focus {
+  outline: none;
+  border:none ;
+}
+
+/*  Bouton œil (ChampPassword)  */
+
+.btn-oeil {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
+/* Indicateur correspondance mot de passe  */
+
+.indicateur-mdp {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.indicateur-mdp--ok  { color: #4caf50; }
+.indicateur-mdp--err { color: #e53935; }
 
 /*  Boutons action  */
 
@@ -161,8 +196,6 @@
   gap: 8px;
 }
 
-
-
 /*  Champs  */
 
 .grille-champs {
@@ -175,10 +208,15 @@
   column-gap: 18px;
 }
 
+.grille-champs.trois-colonnes {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 18px;
+}
+
 .grille-champs label {
   font-size: .8rem;
   letter-spacing: 0.12em;
-  color: #a1a19f;
+  color: var(--color-label);
   font-weight: 700;
   display: grid;
   gap: 6px;
@@ -201,24 +239,8 @@
 .profil-lateral {
   display: grid;
   gap: 18px;
+  margin-top: 5rem;
   align-content: start;
-}
-
-.ajout-paiement h3 {
-  font-size: 0.95rem;
-  margin-bottom: 18px;
-}
-
-.ajout-paiement button {
-  width: 92px;
-  height: 70px;
-  font-size: 3.2rem;
-  line-height: 1;
-  color: #1e5d49;
-  border: 6px solid #1e5d49;
-  border-radius: 10px;
-  background: #f8f8f7;
-  cursor: pointer;
 }
 /* Favoris  */
 
@@ -402,6 +424,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  margin-bottom: 2rem;
 }
 
 .palier {
@@ -494,7 +517,11 @@
   display: flex;
   align-items: center;
 }
+.infos-avantages{
+  font-family: var(--font-body);
+  font-style: italic;
 
+}
 /* 5. Détails de la Carte de Fidélité Mini */
 .carte-fidelite-mini::after {
   content: "";
@@ -504,7 +531,7 @@
   border-radius: 50%;
   right: -38px;
   top: -38px;
-  opacity: 0.15; /* Très léger pour le design */
+  opacity: 0.15;
   z-index: 0;
 }
 
@@ -521,7 +548,7 @@
 }
 
 .carte-fidelite-mini .n-fidelite {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   opacity: 0.8;
   margin-bottom: 10px;
 }
@@ -536,7 +563,8 @@
 }
 
 .carte-fidelite-mini .mini-palier {
-  font-size: 0.65rem;
+  font-size: 0.8rem;
+  font-weight: bolder;
   text-transform: uppercase;
   margin-top: 10px;
   color: #8c8c8a;
@@ -546,8 +574,7 @@
   margin-top: 15px;
   border: none;
   border-radius: 999px;
-  background: #1e5d49; /* Vert foncé pro */
-  color: #fff;
+  background: #1e5d49;
   padding: 8px 16px;
   font-size: 0.65rem;
   letter-spacing: 0.05em;
@@ -568,6 +595,11 @@
   .carte-paliers {
     padding: 26px 20px;
   }
+  .grille-champs.deux-colonnes,
+  .grille-champs.trois-colonnes
+  {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {
@@ -587,6 +619,7 @@
   }
 
   .grille-champs.deux-colonnes,
+  .grille-champs.trois-colonnes,
   .grille-paliers {
     grid-template-columns: 1fr;
   }

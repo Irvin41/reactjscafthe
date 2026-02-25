@@ -53,7 +53,7 @@
 /* ─── Carte principale ───────────────────────────────────────────────── */
 
 .orders-main-card {
-    background: #f8f8f7;
+    background: var(--color-surface);
     border-radius: 14px;
     box-shadow: var(--shadow-card);
     padding: 34px 48px;
@@ -66,7 +66,6 @@
     display: flex;
     gap: 6px;
     align-items: center;
-    border-bottom: 1px solid #d7d7d6;
     padding-bottom: 10px;
     margin-bottom: 28px;
 }
@@ -91,11 +90,11 @@
 
 .orders-page-filters button + button { margin-left: 22px; }
 
-.orders-page-filters button:hover { color: var(--color-green); }
+.orders-page-filters button:hover { color: var(--color-prix); }
 
 .orders-page-filters button.is-active {
-    color: var(--color-green);
-    border-bottom: 2px solid var(--color-green);
+    color: var(--color-prix);
+    border-bottom: 2px solid var(--color-prix);
 }
 
 .filter-count {
@@ -109,11 +108,11 @@
 }
 
 .orders-page-filters button.is-active .filter-count {
-    background: var(--color-green);
+    background: var(--color-prix);
     color: #fff3e0;
 }
 
-/* ─── État vide / chargement ──────────────────────────────────────────── */
+/* État vide / chargement  */
 
 .orders-loading,
 .orders-empty {
@@ -156,6 +155,7 @@
 .order-full-head {
     display: flex;
     justify-content: space-between;
+    background: #efefee;
     align-items: center;
     padding: 14px 14px 10px;
     cursor: pointer;
@@ -170,7 +170,9 @@
     flex-direction: column;
     gap: 2px;
 }
-
+.order-ref{
+    font-family: var(--color-text);
+}
 .order-full-date {
     font-size: 0.7rem;
     color: #949492;

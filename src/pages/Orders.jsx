@@ -144,7 +144,7 @@ const Orders = () => {
                           },
                         )}
                       </span>
-                      <strong>
+                      <strong className="order-ref">
                         ORD-{String(order.id_commande).padStart(6, "0")}
                       </strong>
                     </div>
@@ -288,7 +288,6 @@ const Orders = () => {
           </div>
         )}
       </div>
-      {/* /.orders-main-card */}
     </main>
   );
 };

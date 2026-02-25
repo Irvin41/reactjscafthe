@@ -13,15 +13,14 @@ const Home = () => {
 
   return (
     <div className="accueil">
-      {/* --- HERO --- */}
       <section className="hero contenu">
         <div className="hero-contenu">
           <img src={logo} alt="CAF'THÉ" className="hero-logo" />
           <h1 className="titre">L'ESSENCE DU THÉ ET DU CAFÉ</h1>
-          <p className="texte discret">
+          <h2 className="centre discret">
             Découvrez notre sélection exclusive de thés et cafés sourcés
             directement auprès des producteurs.
-          </p>
+          </h2>
         </div>
         <picture className="hero-image">
           <img
@@ -40,13 +39,10 @@ const Home = () => {
             Voir tout les produits
           </Link>
         </div>
-        <p className="texte discret">
-          Les produits préférés de notre communauté.
-        </p>
         <BestSellers />
       </section>
 
-      {/* --- FIDÉLITÉ --- */}
+      {/*  FIDÉLITÉ  */}
       <section className="contenu etroit centre">
         <div className="fidelite">
           <h2 className="dore fidelite-accroche">

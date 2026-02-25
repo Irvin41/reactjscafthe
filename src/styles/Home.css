@@ -4,18 +4,15 @@
 
 /* Hero  */
 .hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: clamp(24px, 4vw, 70px);
-  padding: clamp(30px, 5vw, 70px) 0 44px;
-}
-
-.hero-contenu {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(24px, 4vw, px);
+  padding: clamp(30px, 5vw, 70px) 0 44px;
+  margin-bottom: 2rem;
+}
+.hero > * {
+  flex: 1 1 0;
 }
 
 .hero-logo {
@@ -41,9 +38,8 @@
 
 .entete-section {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
 }
 
 .titre-section {
@@ -57,6 +53,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 22px;
+  margin-top: 2rem;
 }
 
 /* Carte produit */
@@ -414,7 +411,7 @@
   transform: scale(1.1);
 }
 
-/* ─── Fidélité ──────────────────────────────────────────────────── */
+/* Fidélité */
 .fidelite-accroche {
   font-size: 2rem;
   font-family: var(--font-title);
@@ -438,10 +435,8 @@
   gap: 1.5rem;
   margin: 70px auto 50px auto;
   align-items: center;
-  padding: 3rem 2rem;
-  max-width: 800px;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 16px;
+  padding: 5rem 2rem;
+  border: 3px solid var(--color-gold);
 }
 
 .fidelite p strong {
@@ -459,16 +454,12 @@
 
 
 /* ─── Responsive ────────────────────────────────────────────────── */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .hero {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
     gap: 32px;
     padding-top: 32px;
-  }
-
-  .hero-contenu {
-    align-items: center;
-    text-align: center;
   }
 
   .hero-image {
@@ -480,9 +471,7 @@
     max-width: 480px;
     width: 100%;
   }
-}
 
-@media (max-width: 640px) {
   .grille-produits {
     grid-template-columns: 1fr;
   }
@@ -492,9 +481,6 @@
     align-items: flex-start;
     gap: 8px;
   }
-
-
-
   .produit-nom {
     font-size: 1.1rem;
   }

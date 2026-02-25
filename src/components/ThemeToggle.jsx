@@ -15,7 +15,7 @@ const ThemeToggle = () => {
 
   return (
     <div className="switch-container">
-      <label className="switch">
+      <label className="switch" aria-label="switch-mode-sombre">
         <input
           type="checkbox"
           checked={isDark}
