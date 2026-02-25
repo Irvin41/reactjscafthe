@@ -3,6 +3,103 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Contact.css";
 
+/* ── Icône œil ouvert ── */
+const IconeOeil = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+/* ── Icône œil barré ── */
+const IconeOeilBarre = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
+);
+
+/* ── Champ mot de passe avec œil + indicateur rouge/vert ── */
+const ChampPassword = ({
+  id,
+  value,
+  onChange,
+  placeholder = "",
+  compareValue = null,
+}) => {
+  const [visible, setVisible] = useState(false);
+
+  const match =
+    compareValue !== null && value.length > 0 ? value === compareValue : null;
+
+  const couleurBord =
+    match === true ? "#4caf50" : match === false ? "#e53935" : undefined;
+
+  return (
+    <>
+      <div style={{ position: "relative" }}>
+        <input
+          id={id}
+          type={visible ? "text" : "password"}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required
+          style={{
+            width: "100%",
+            paddingRight: "2.4rem",
+            ...(couleurBord && {
+              borderColor: couleurBord,
+              boxShadow: `0 0 0 1px ${couleurBord}`,
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }),
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => setVisible((v) => !v)}
+          tabIndex={-1}
+          aria-label={
+            visible ? "Masquer le mot de passe" : "Afficher le mot de passe"
+          }
+          className="btn-oeil"
+        >
+          {visible ? <IconeOeilBarre /> : <IconeOeil />}
+        </button>
+      </div>
+
+      {match !== null && value.length > 0 && (
+        <span
+          className={`indicateur-mdp ${match ? "indicateur-mdp--ok" : "indicateur-mdp--err"}`}
+        >
+          {match
+            ? "✓ Les mots de passe correspondent"
+            : "✗ Les mots de passe sont différents"}
+        </span>
+      )}
+    </>
+  );
+};
+
 const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -10,15 +107,13 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [motDePasse2, setMotDePasse2] = useState("");
   const [motDePasse3, setMotDePasse3] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState(""); // Pour confirmer l'envoi du mail
+  const [successMsg, setSuccessMsg] = useState("");
   const [showRegister, setShowRegister] = useState(false);
-  const [showForgot, setShowForgot] = useState(false); // État pour la vue "Mot de passe oublié"
+  const [showForgot, setShowForgot] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -71,7 +166,7 @@ const Login = () => {
       return;
     }
 
-    if (!firstName || !lastName || !registerEmail || !motDePasse2) {
+    if (!registerEmail || !motDePasse2) {
       setErrorMsg("Tous les champs sont requis");
       setLoading(false);
       return;
@@ -85,8 +180,6 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
-            prenom: firstName,
-            nom: lastName,
             email: registerEmail,
             mot_de_passe: motDePasse2,
           }),
@@ -110,7 +203,6 @@ const Login = () => {
     }
   };
 
-  // Nouvelle fonction pour gérer l'envoi du mail de récupération
   const handleForgotSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
@@ -123,7 +215,7 @@ const Login = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }), // Utilise l'email saisi dans le champ de login
+          body: JSON.stringify({ email }),
         },
       );
 
@@ -150,7 +242,6 @@ const Login = () => {
         {/* ── Connexion / Mot de passe oublié ── */}
         <section className="auth-panel auth-connexion">
           {showForgot ? (
-            /* VUE : RÉCUPÉRATION MOT DE PASSE */
             <>
               <h2>Récupération</h2>
               <p className="auth-subtitle">
@@ -206,7 +297,6 @@ const Login = () => {
               </p>
             </>
           ) : (
-            /* VUE : CONNEXION STANDARD */
             <>
               <h2>Déjà client</h2>
               <form onSubmit={handleSubmit} className="auth-form">
@@ -225,16 +315,13 @@ const Login = () => {
                 <label className="sr-only" htmlFor="password">
                   Mot de passe
                 </label>
-                <input
+                <ChampPassword
                   id="password"
-                  type="password"
                   value={motDePasse}
-                  required
                   placeholder="Mot de passe"
                   onChange={(e) => setMotDePasse(e.target.value)}
                 />
 
-                {/* Lien mot de passe oublié */}
                 <div>
                   <button
                     type="button"
@@ -301,25 +388,22 @@ const Login = () => {
             <label className="sr-only" htmlFor="registerPassword">
               Mot de passe
             </label>
-            <input
+            <ChampPassword
               id="registerPassword"
-              type="password"
               value={motDePasse2}
               placeholder="Mot de passe"
               onChange={(e) => setMotDePasse2(e.target.value)}
-              required
             />
 
             <label className="sr-only" htmlFor="registerPassword2">
               Confirmer
             </label>
-            <input
+            <ChampPassword
               id="registerPassword2"
-              type="password"
               value={motDePasse3}
               placeholder="Confirmer votre mot de passe"
               onChange={(e) => setMotDePasse3(e.target.value)}
-              required
+              compareValue={motDePasse2}
             />
 
             {errorMsg && showRegister && (

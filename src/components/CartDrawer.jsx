@@ -88,23 +88,22 @@ const CartDrawer = () => {
                   <div className="item-details">
                     <p className="item-name">{item.name ?? item.nom_article}</p>
                     <p className="item-price">{item.poids}</p>
-                    <p className="item-price">
-                      {item.isSample ? (
-                        "Gratuit"
-                      ) : (
-                        <>
-                          {formatPrice(item.finalPrice ?? item.price)}
-                          {isAuthenticated &&
-                            item.originalPrice !== item.finalPrice && (
-                              <small
-                                className={`item-price-label palier-${palier?.name.toLowerCase()}`}
-                              >
-                                &nbsp;Offre fidélité
-                              </small>
-                            )}
-                        </>
-                      )}
-                    </p>
+
+                    {item.isSample ? (
+                      "Gratuit"
+                    ) : (
+                      <>
+                        {formatPrice(item.finalPrice ?? item.price)}
+                        {isAuthenticated &&
+                          item.originalPrice !== item.finalPrice && (
+                            <small
+                              className={`item-price-label palier-${palier?.name.toLowerCase()}`}
+                            >
+                              &nbsp;Offre fidélité
+                            </small>
+                          )}
+                      </>
+                    )}
 
                     {/* Quantité — masquée pour l'échantillon */}
                     {!item.isSample && (

@@ -282,7 +282,16 @@
 
 .order-detail-articles li:last-child { border-bottom: none; }
 
-.article-name  { flex: 1; font-size: 0.82rem; color: #3a3a39; }
+.article-desc{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.article-name  {
+    font-size: 0.82rem;
+    color: #3a3a39;
+}
 
 .article-qty {
     font-size: 0.68rem;

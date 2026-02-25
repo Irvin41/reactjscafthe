@@ -4,7 +4,12 @@
   width: 100%;
   box-sizing: border-box;
 }
+.bouton-choix.disable {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 
+}
 .section-paiement {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
@@ -19,7 +24,10 @@
   margin-right: auto;
   box-sizing: border-box;
 }
-
+.remise-fidelite{
+  color: var(--color-prix);
+  font-weight: 600;
+}
 /* Section 1 & 2 : Une seule colonne  */
 .corps-panier,
 .auth-form.une-colonne {
@@ -161,6 +169,11 @@
   font-style: italic;
   text-align: left;
 
+  .bouton-choix.désactive {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 /*  Mobile  */
 @media (max-width: 768px) {
   .grille-choix-paiement,

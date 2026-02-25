@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Link } from "react-router-dom";
 import "../styles/Profile.css";
+import "../styles/Orders.css";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -50,6 +51,26 @@ const classeStatut = (statut = "") => {
   return "";
 };
 
+const statusClass = (statut = "") => {
+  const s = statut.toUpperCase();
+  if (s.includes("LIVRE")) return "status-delivered";
+  if (s.includes("EXPED")) return "status-shipping";
+  if (s.includes("PREPAR")) return "status-prepared";
+  if (s.includes("VALID")) return "status-validated";
+  if (s.includes("ATTENTE")) return "status-pending";
+  return "";
+};
+
+const statusLabel = (statut = "") => {
+  const s = statut.toUpperCase();
+  if (s.includes("LIVRE")) return "Livré";
+  if (s.includes("EXPED")) return "Expédié";
+  if (s.includes("PREPAR")) return "En préparation";
+  if (s.includes("VALID")) return "Validée";
+  if (s.includes("ATTENTE")) return "En attente";
+  return statut;
+};
+
 /* ── Icône œil ouvert ── */
 const IconeOeil = () => (
   <svg
@@ -93,7 +114,6 @@ const ChampPassword = ({
   formData,
   onChange,
   placeholder = "",
-  /* si renseigné, compare la valeur de CE champ avec le champ `compareField` */
   compareField = null,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -166,7 +186,7 @@ const Champ = ({
   formData,
   onChange,
   forceReadOnly = false,
-  placeholder = "text",
+  placeholder = "exemple",
 }) => (
   <label>
     {label}
@@ -198,11 +218,13 @@ const Profile = () => {
   const [checkPass, setCheckPass] = useState(false);
   const [checkPassError, setCheckPassError] = useState(null);
   const [editAddr, setEditAddr] = useState(false);
+  const [editAddr_fact, setEditAddr_fact] = useState(false);
 
   const [formData, setFormData] = useState({});
   const [saving, setSaving] = useState(false);
   const [saveOk, setSaveOk] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [expanded, setExpanded] = useState(null);
 
   const scrollVers = (ref) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -391,6 +413,7 @@ const Profile = () => {
                   editing={editInfos}
                   formData={formData}
                   onChange={handleChange}
+                  placeholder="prénom"
                 />
                 <Champ
                   label="NOM"
@@ -398,6 +421,7 @@ const Profile = () => {
                   editing={editInfos}
                   formData={formData}
                   onChange={handleChange}
+                  placeholder="nom"
                 />
                 <Champ
                   label="EMAIL"
@@ -415,6 +439,7 @@ const Profile = () => {
                   editing={editInfos}
                   formData={formData}
                   onChange={handleChange}
+                  placeholder="01 23 45 67 89"
                 />
               </div>
             </article>
@@ -509,6 +534,7 @@ const Profile = () => {
                   editing={editAddr}
                   formData={formData}
                   onChange={handleChange}
+                  placeholder="rue"
                 />
                 <div className="grille-champs deux-colonnes">
                   <Champ
@@ -517,6 +543,7 @@ const Profile = () => {
                     editing={editAddr}
                     formData={formData}
                     onChange={handleChange}
+                    placeholder="code postal"
                   />
                   <Champ
                     label="VILLE"
@@ -524,6 +551,66 @@ const Profile = () => {
                     editing={editAddr}
                     formData={formData}
                     onChange={handleChange}
+                    placeholder="ville"
+                  />
+                </div>
+              </div>
+              {/* Adresse de facturation */}
+              <article className="profil-section">
+                <div className="ligne-titre">
+                  <h2 className="sous-titre">ADRESSE DE FACTURATION</h2>
+                  {!editAddr_fact ? (
+                    <button
+                      type="button"
+                      onClick={() => setEditAddr_fact(true)}
+                    >
+                      MODIFIER
+                    </button>
+                  ) : (
+                    <div className="boutons-edition">
+                      <button
+                        type="button"
+                        onClick={() => handleSave(setEditAddr_fact)}
+                        disabled={saving}
+                      >
+                        {saving ? "..." : "ENREGISTRER"}
+                      </button>
+                      <button
+                        type="button"
+                        className="annuler"
+                        onClick={() => handleCancel(setEditAddr_fact)}
+                      >
+                        ANNULER
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </article>
+              <div className="grille-champs">
+                <Champ
+                  label="RUE"
+                  field="adresse_facturation"
+                  editing={editAddr_fact}
+                  formData={formData}
+                  onChange={handleChange}
+                  placeholder="rue"
+                />
+                <div className="grille-champs deux-colonnes">
+                  <Champ
+                    label="CODE POSTAL"
+                    field="code_postal_facturation"
+                    editing={editAddr_fact}
+                    formData={formData}
+                    onChange={handleChange}
+                    placeholder="code postal"
+                  />
+                  <Champ
+                    label="VILLE"
+                    field="ville_facturation"
+                    editing={editAddr_fact}
+                    formData={formData}
+                    onChange={handleChange}
+                    placeholder="ville"
                   />
                 </div>
               </div>
@@ -540,7 +627,7 @@ const Profile = () => {
               <h2 className="point-fidelite">{points} points</h2>
               <p className="mini-palier">
                 {palierSuivant
-                  ? `Plus que ${palierSuivant.min - points} pts avant le niveau ${palierSuivant.name}`
+                  ? `Plus que ${palierSuivant.min - points} points avant le niveau ${palierSuivant.name}`
                   : `Vous êtes au niveau ${paliers[indexPalier].name}`}
               </p>
             </article>
@@ -560,45 +647,180 @@ const Profile = () => {
         {commandes.length === 0 ? (
           <p className="profil-vide">Aucune commande pour l'instant</p>
         ) : (
-          <div className="liste-commandes">
-            {commandes.slice(0, 3).map((order) => (
-              <Link
-                key={order.id_commande}
-                to="/commandes"
-                className="commande-item commande-item--cliquable"
-              >
-                <div className="commande-entete">
-                  <div>
-                    <p>
-                      {new Date(order.date_commande).toLocaleDateString(
-                        "fr-FR",
-                      )}
-                    </p>
-                    <strong>
-                      ORD-{String(order.id_commande).padStart(6, "0")}
-                    </strong>
-                  </div>
-                  <div className="commande-meta">
-                    <p>
-                      STATUT{" "}
-                      <span className={classeStatut(order.statut)}>
-                        {order.statut}
+          <div className="orders-full-list">
+            {commandes.slice(0, 3).map((order) => {
+              const isOpen = expanded === order.id_commande;
+              return (
+                <article
+                  key={order.id_commande}
+                  className={`order-full-item ${isOpen ? "is-open" : ""}`}
+                >
+                  {/* ── Ligne cliquable ── */}
+                  <div
+                    className="order-full-head"
+                    onClick={() =>
+                      setExpanded(isOpen ? null : order.id_commande)
+                    }
+                  >
+                    <div className="order-full-ref">
+                      <span className="order-full-date">
+                        {new Date(order.date_commande).toLocaleDateString(
+                          "fr-FR",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          },
+                        )}
                       </span>
-                    </p>
-                    <p>
-                      TOTAL{" "}
-                      <strong>
+                      <strong className="order-ref">
+                        ORD-{String(order.id_commande).padStart(6, "0")}
+                      </strong>
+                    </div>
+
+                    {/* Miniatures — max 3 */}
+                    {order.articles?.length > 0 && (
+                      <div className="order-head-thumbs">
+                        {order.articles.slice(0, 3).map((a, i) =>
+                          a.image ? (
+                            <img
+                              key={i}
+                              src={`${API}/images/${a.image}`}
+                              alt={a.nom_article}
+                              className="order-thumb"
+                              onError={(e) => {
+                                e.target.style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div
+                              key={i}
+                              className="order-thumb order-thumb--placeholder"
+                            >
+                              <span>{a.nom_article?.[0] ?? "?"}</span>
+                            </div>
+                          ),
+                        )}
+                        {order.articles.length > 3 && (
+                          <div className="order-thumb order-thumb--more">
+                            +{order.articles.length - 3}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="order-full-meta">
+                      <span
+                        className={`order-status-badge ${statusClass(order.statut)}`}
+                      >
+                        {statusLabel(order.statut)}
+                      </span>
+                      <span className="order-full-total">
                         {Number(order.total_ttc || order.TOTAL || 0)
                           .toFixed(2)
                           .replace(".", ",")}{" "}
                         €
-                      </strong>
-                    </p>
-                    <span className="commande-fleche">›</span>
+                      </span>
+                      <span
+                        className={`order-chevron ${isOpen ? "is-open" : ""}`}
+                      >
+                        ›
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+
+                  {/* ── Accordéon détail ── */}
+                  {isOpen && (
+                    <div className="order-full-detail">
+                      <div className="order-detail-grid">
+                        {/* Articles */}
+                        <div className="order-detail-articles">
+                          <h4>ARTICLES</h4>
+                          {order.articles?.length > 0 ? (
+                            <ul>
+                              {order.articles.map((a, i) => (
+                                <li key={i}>
+                                  <div className="article-thumb-wrap">
+                                    {a.image ? (
+                                      <img
+                                        src={`${API}/images/${a.image}`}
+                                        alt={a.nom_article}
+                                        className="article-thumb"
+                                        onError={(e) => {
+                                          e.target.parentNode.innerHTML = `<div class="article-thumb article-thumb--placeholder"><span>${a.nom_article?.[0] ?? "?"}</span></div>`;
+                                        }}
+                                      />
+                                    ) : (
+                                      <div className="article-thumb article-thumb--placeholder">
+                                        <span>{a.nom_article?.[0] ?? "?"}</span>
+                                        <span>{a.poids ?? "?"}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="article-desc">
+                                    <span className="article-name">
+                                      {a.nom_article}
+                                    </span>
+                                    <span className="article-name">
+                                      {a.poids}
+                                    </span>
+                                    <div>
+                                      {a.quantite > 1 && (
+                                        <span className="article-qty">
+                                          ×{a.quantite}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="orders-empty-small">
+                              Détail non disponible
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Récap */}
+                        <div className="order-detail-recap">
+                          <h4>RÉCAPITULATIF</h4>
+                          <div className="recap-row">
+                            <span>Référence</span>
+                            <strong>
+                              ORD-{String(order.id_commande).padStart(6, "0")}
+                            </strong>
+                          </div>
+                          <div className="recap-row">
+                            <span>Date</span>
+                            <strong>
+                              {new Date(order.date_commande).toLocaleDateString(
+                                "fr-FR",
+                              )}
+                            </strong>
+                          </div>
+                          <div className="recap-row">
+                            <span>Statut</span>
+                            <strong className={statusClass(order.statut)}>
+                              {statusLabel(order.statut)}
+                            </strong>
+                          </div>
+                          <div className="recap-row recap-total">
+                            <span>Total</span>
+                            <strong>
+                              {Number(order.total_ttc || order.TOTAL || 0)
+                                .toFixed(2)
+                                .replace(".", ",")}{" "}
+                              €
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

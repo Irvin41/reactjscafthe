@@ -48,6 +48,7 @@ const Orders = () => {
       .then((r) => r.json())
       .then((d) => {
         const data = d.commandes || d;
+        console.log("Premier article :", data[0]?.articles[0]);
         setCommandes(Array.isArray(data) ? data : []);
       })
       .catch(console.error)
@@ -149,10 +150,10 @@ const Orders = () => {
                       </strong>
                     </div>
 
-                    {/* Miniatures dans la ligne — max 4 */}
+                    {/* Miniatures dans la ligne — max 3 */}
                     {order.articles?.length > 0 && (
                       <div className="order-head-thumbs">
-                        {order.articles.slice(0, 4).map((a, i) =>
+                        {order.articles.slice(0, 3).map((a, i) =>
                           a.image ? (
                             <img
                               key={i}
@@ -225,17 +226,25 @@ const Orders = () => {
                                     ) : (
                                       <div className="article-thumb article-thumb--placeholder">
                                         <span>{a.nom_article?.[0] ?? "?"}</span>
+                                        <span>{a.poids ?? "?"}</span>
                                       </div>
                                     )}
                                   </div>
-                                  <span className="article-name">
-                                    {a.nom_article}
-                                  </span>
-                                  {a.quantite > 1 && (
-                                    <span className="article-qty">
-                                      ×{a.quantite}
+                                  <div className="article-desc">
+                                    <span className="article-name">
+                                      {a.nom_article}
                                     </span>
-                                  )}
+                                    <span className="article-name">
+                                      {a.poids}
+                                    </span>
+                                    <div>
+                                      {a.quantite > 1 && (
+                                        <span className="article-qty">
+                                          ×{a.quantite}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
                                 </li>
                               ))}
                             </ul>

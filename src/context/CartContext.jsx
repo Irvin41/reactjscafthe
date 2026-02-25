@@ -127,10 +127,13 @@ export const CartProvider = ({ children }) => {
           : `${API}/images/${rawImage}`
         : null;
 
-    return { ...product, id, name, price, image, stock };
+    const poids =
+      product.poids ?? product.poids_article ?? product.poid_article ?? null;
+
+    return { ...product, id, name, price, image, stock, poids };
   };
 
-  // ── Ajout au panier ─────────────────────────────────────────────────────
+  // ── Ajout au panier
   const addToCart = (product) => {
     const normalized = normalizeProduct(product);
     if (!normalized?.id) return;

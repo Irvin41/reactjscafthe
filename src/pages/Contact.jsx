@@ -74,7 +74,7 @@ const Contact = () => {
           {/* CASE À COCHER CGU */}
           <div className="checkbox-container">
             <input type="checkbox" id="privacy" required />
-            <label htmlFor="privacy" className="discret">
+            <label htmlFor="privacy" className="auth-switch">
               J'accepte que mes données soient utilisées pour le traitement de
               ma demande conformément à la politique de confidentialité.
             </label>

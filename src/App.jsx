@@ -16,7 +16,7 @@ import Shop from "./components/Shop.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import Paiement from "./pages/Chekout.jsx";
+import Paiement from "./pages/Checkout.jsx";
 import Retour from "./pages/Retour.jsx";
 import Livraison from "./pages/Livraison.jsx";
 import Contact from "./pages/Contact.jsx";
