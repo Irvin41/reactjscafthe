@@ -21,7 +21,6 @@ const CartDrawer = () => {
 
   const navigate = useNavigate();
 
-  // ── Calcul HT / TVA sur les prix après réduction ──────────────────────
   const calculFinancier = cartDisplayed.reduce(
     (acc, item) => {
       if (item.isSample) return acc;
@@ -62,15 +61,6 @@ const CartDrawer = () => {
           >
             <div>
               <p className="palier-nom">Offre fidélité : {palier.name}</p>
-              {loyaltySavings > 0 ? (
-                <small className="discret">
-                  Vous économisez {loyaltySavings.toFixed(2)} €
-                </small>
-              ) : (
-                <span className="drawer-loyalty-savings">
-                  Avantages appliqués automatiquement
-                </span>
-              )}
             </div>
           </div>
         )}
@@ -86,24 +76,21 @@ const CartDrawer = () => {
               return (
                 <div key={itemKey} className="drawer-item">
                   <div className="item-details">
-                    <p className="item-name">{item.name ?? item.nom_article}</p>
-                    <p className="item-price">{item.poids}</p>
+                    <p className="item-name">
+                      {item.name ?? item.nom_article}
+                      {item.poids && (
+                        <>
+                          {" "}
+                          <span className="item-poids">{item.poids}</span>
+                        </>
+                      )}
+                    </p>
 
-                    {item.isSample ? (
-                      "Gratuit"
-                    ) : (
-                      <>
-                        {formatPrice(item.finalPrice ?? item.price)}
-                        {isAuthenticated &&
-                          item.originalPrice !== item.finalPrice && (
-                            <small
-                              className={`item-price-label palier-${palier?.name.toLowerCase()}`}
-                            >
-                              &nbsp;Offre fidélité
-                            </small>
-                          )}
-                      </>
-                    )}
+                    <p className="item-price">
+                      {item.isSample
+                        ? "Gratuit"
+                        : formatPrice(item.originalPrice ?? item.price)}
+                    </p>
 
                     {/* Quantité — masquée pour l'échantillon */}
                     {!item.isSample && (
@@ -146,16 +133,37 @@ const CartDrawer = () => {
                 <span>Total TVA</span>
                 <span>{formatPrice(calculFinancier.totalTVA)}</span>
               </div>
-              <div className="summary-line">
+              <div
+                className="summary-line"
+                style={{ color: "var(--color-badge-bg)", fontWeight: 600 }}
+              >
                 <span>Livraison</span>
                 <span
                   style={{
-                    color: freeShipping ? "var(--color-green)" : "inherit",
+                    color: freeShipping ? "var(--color-badge-bg)" : "inherit",
                   }}
                 >
                   {freeShipping ? "Gratuite" : "Calculée à l'étape suivante"}
                 </span>
               </div>
+              {isAuthenticated && loyaltySavings > 0 && (
+                <>
+                  <div className="summary-line">
+                    <span>Total avant remise</span>
+                    <span>{formatPrice(cartTotal + loyaltySavings)}</span>
+                  </div>
+                  <div
+                    className="summary-line"
+                    style={{
+                      color: "var(--color-badge-bg)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <span>Vous économisez</span>
+                    <span>− {formatPrice(loyaltySavings)}</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="total-box">

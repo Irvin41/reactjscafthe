@@ -3,13 +3,63 @@ import { useSearchParams, Link, useLocation } from "react-router-dom";
 import "../styles/Confirmation.css";
 import { useCart } from "../context/CartContext.jsx";
 
+const API = import.meta.env.VITE_API_URL;
+
+/* ── Affichage des infos livraison ── */
+const InfosLivraison = ({ livraison }) => {
+  if (!livraison) return null;
+
+  const labels = {
+    retrait: "Retrait en boutique",
+    chronopost: "Chronopost (24-48h)",
+    colissimo: "Colissimo (3-5 jours)",
+    mondial: "Mondial Relay (48-72h)",
+  };
+
+  return (
+    <div
+      className="confirmation-recap-ligne"
+      style={{ flexDirection: "column", alignItems: "flex-start", gap: "4px" }}
+    >
+      <span className="confirmation-recap-label">Livraison</span>
+      <span className="confirmation-recap-value">
+        {labels[livraison.mode] ?? livraison.mode}
+      </span>
+
+      {/* Point Relais Mondial Relay */}
+      {livraison.mode === "mondial" && livraison.pointRelais && (
+        <span
+          className="confirmation-recap-value"
+          style={{ fontSize: "0.82rem", color: "#666" }}
+        >
+          {livraison.pointRelais.Nom} — {livraison.pointRelais.Adresse1},{" "}
+          {livraison.pointRelais.CP} {livraison.pointRelais.Ville}
+        </span>
+      )}
+
+      {/* Adresse domicile */}
+      {(livraison.mode === "chronopost" || livraison.mode === "colissimo") &&
+        livraison.adresse && (
+          <span
+            className="confirmation-recap-value"
+            style={{ fontSize: "0.82rem", color: "#666" }}
+          >
+            {livraison.adresse.prenom} {livraison.adresse.nom} —{" "}
+            {livraison.adresse.adresse}, {livraison.adresse.code_postal}{" "}
+            {livraison.adresse.ville}
+          </span>
+        )}
+    </div>
+  );
+};
+
 const Confirmation = () => {
   const [searchParams] = useSearchParams();
   const [commande, setCommande] = useState(null);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
+  const [livraisonStripe, setLivraisonStripe] = useState(null);
   const { clearCart } = useCart();
-  const API = import.meta.env.VITE_API_URL; // ✅ corrigé
   const location = useLocation();
   const state = location.state;
 
@@ -59,6 +109,7 @@ const Confirmation = () => {
               <span className="confirmation-recap-label">Paiement</span>
               <span className="confirmation-recap-value">Au comptoir</span>
             </div>
+            <InfosLivraison livraison={state.livraison} />
           </div>
 
           {state.articles?.length > 0 && (
@@ -108,6 +159,15 @@ const Confirmation = () => {
   useEffect(() => {
     const paymentIntent = searchParams.get("payment_intent");
     const redirectStatus = searchParams.get("redirect_status");
+
+    // Récupération des infos livraison sauvegardées avant le redirect Stripe
+    const livraisonSauvegardee = sessionStorage.getItem(
+      "livraison_confirmation",
+    );
+    if (livraisonSauvegardee) {
+      setLivraisonStripe(JSON.parse(livraisonSauvegardee));
+      sessionStorage.removeItem("livraison_confirmation");
+    }
 
     if (redirectStatus !== "succeeded") {
       setErreur("Le paiement a échoué ou a été annulé.");
@@ -193,10 +253,7 @@ const Confirmation = () => {
             <span className="confirmation-recap-label">Total payé</span>
             <span className="confirmation-recap-value vert">{montant} €</span>
           </div>
-          <div className="confirmation-recap-ligne">
-            <span className="confirmation-recap-label">Livraison estimée</span>
-            <span className="confirmation-recap-value">3-5 jours</span>
-          </div>
+          <InfosLivraison livraison={livraisonStripe} />
         </div>
 
         <Link

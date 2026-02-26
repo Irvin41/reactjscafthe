@@ -68,7 +68,7 @@ const Paiement = () => {
     clearCart,
   } = useCart();
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate(); // ✅ dans le composant
+  const navigate = useNavigate();
 
   const [editing, setEditing] = useState(false);
   const [hasModified, setHasModified] = useState(false);
@@ -159,7 +159,6 @@ const Paiement = () => {
           poids: item.poids ?? null,
         }));
 
-      // ── Paiement au comptoir → pas de Stripe
       if (modePaiement === "Paiement au comptoir") {
         const res = await fetch(`${API}/api/commandes`, {
           method: "POST",
@@ -182,12 +181,16 @@ const Paiement = () => {
                 poids: i.poids ?? null,
                 quantite: i.quantity,
               })),
+            livraison: {
+              mode: modeLivraison,
+              adresse: formData,
+              pointRelais: pointRelais ?? null,
+            },
           },
         });
         return;
       }
 
-      // ── Carte bancaire → Stripe
       const res = await fetch(`${API}/api/commandes/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -197,6 +200,16 @@ const Paiement = () => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
+
+      // Sauvegarde des infos livraison pour la page confirmation (Stripe redirige sans state)
+      sessionStorage.setItem(
+        "livraison_confirmation",
+        JSON.stringify({
+          mode: modeLivraison,
+          adresse: formData,
+          pointRelais: pointRelais ?? null,
+        }),
+      );
 
       setClientSecret(data.clientSecret);
     } catch (err) {
@@ -217,6 +230,9 @@ const Paiement = () => {
 
   const fraisPort = obtenirFrais();
   const totalFinal = cartTotal + fraisPort;
+
+  /* Prix brut sans remise fidélité */
+  const totalSansRemise = cartTotal + (loyaltySavings ?? 0);
 
   return (
     <main className="page etroit">
@@ -455,11 +471,13 @@ const Paiement = () => {
         )}
 
         <div className="zone-validation">
+          {/* Total sans remise fidélité */}
           <div className="recap-final-ligne">
             <span>Total panier</span>
-            <span>{formatPrice(cartTotal)}</span>
+            <span>{formatPrice(totalSansRemise)}</span>
           </div>
 
+          {/* Remise fidélité */}
           {palier && loyaltySavings > 0 && (
             <div className="recap-final-ligne">
               <span className="remise-fidelite">

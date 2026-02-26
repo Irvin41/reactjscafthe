@@ -15,7 +15,7 @@ const Home = () => {
     <div className="accueil">
       <section className="hero contenu">
         <div className="hero-contenu">
-          <img src={logo} alt="CAF'THÉ" className="hero-logo" />
+          <img src={logo} alt="logo du site" className="hero-logo" />
           <h1 className="titre">L'ESSENCE DU THÉ ET DU CAFÉ</h1>
           <h2 className="centre discret">
             Découvrez notre sélection exclusive de thés et cafés sourcés

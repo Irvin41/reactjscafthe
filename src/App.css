@@ -156,12 +156,13 @@ body {
 
   .bouton-principal {
     background: var(--color-gold);
-    color: #ffffff;
+    color: #2E1F00;
+    font-weight: 700;
   }
 
   .bouton-principal:hover {
     background: #FFD88A;
-    color: #000000;
+    color: #2E1F00;
   }
 
   .bouton-secondaire {

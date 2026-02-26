@@ -441,10 +441,11 @@
 
 .fidelite p strong {
   color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
-
 .fidelite p {
-  color: var(--color-green-soft);
+  color: #ffffff;
 }
 
 @keyframes pulse-dore {
@@ -481,6 +482,7 @@
     align-items: flex-start;
     gap: 8px;
   }
+
   .produit-nom {
     font-size: 1.1rem;
   }
