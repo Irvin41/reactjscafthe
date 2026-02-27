@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo-cafthe.png";
+import logo from "../assets/logo-cafthe.webp";
 
 const Footer = () => {
   return (

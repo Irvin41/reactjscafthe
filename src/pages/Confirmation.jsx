@@ -5,6 +5,24 @@ import { useCart } from "../context/CartContext.jsx";
 
 const API = import.meta.env.VITE_API_URL;
 
+/* ── Icône succès ── */
+const IconeSucces = () => (
+  <div className="confirmation-icon confirmation-icon--succes">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  </div>
+);
+
 /* ── Affichage des infos livraison ── */
 const InfosLivraison = ({ livraison }) => {
   if (!livraison) return null;
@@ -26,7 +44,6 @@ const InfosLivraison = ({ livraison }) => {
         {labels[livraison.mode] ?? livraison.mode}
       </span>
 
-      {/* Point Relais Mondial Relay */}
       {livraison.mode === "mondial" && livraison.pointRelais && (
         <span
           className="confirmation-recap-value"
@@ -37,7 +54,6 @@ const InfosLivraison = ({ livraison }) => {
         </span>
       )}
 
-      {/* Adresse domicile */}
       {(livraison.mode === "chronopost" || livraison.mode === "colissimo") &&
         livraison.adresse && (
           <span
@@ -53,6 +69,51 @@ const InfosLivraison = ({ livraison }) => {
   );
 };
 
+/* ── Liste articles ── */
+const ListeArticles = ({ articles }) => {
+  if (!articles?.length) return null;
+  return (
+    <ul
+      style={{
+        listStyle: "none",
+        padding: 0,
+        marginBottom: "1.5rem",
+        textAlign: "left",
+      }}
+    >
+      {articles.map((a, i) => (
+        <li
+          key={i}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0.3rem 0",
+            borderBottom: "1px solid var(--color-border, #eee)",
+          }}
+        >
+          <span>
+            {a.nom_article}
+            {a.poids ? ` — ${a.poids}` : ""}
+          </span>
+          {a.quantite > 1 && <span>×{a.quantite}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+/* ── Boutons de navigation ── */
+const BoutonsNavigation = () => (
+  <>
+    <Link to="/commandes" className="bouton bouton-secondaire confirmation-btn">
+      Voir ma commande
+    </Link>
+    <Link to="/" className="bouton bouton-tertiaire confirmation-btn">
+      Retour à l'accueil
+    </Link>
+  </>
+);
+
 const Confirmation = () => {
   const [searchParams] = useSearchParams();
   const [commande, setCommande] = useState(null);
@@ -63,26 +124,12 @@ const Confirmation = () => {
   const location = useLocation();
   const state = location.state;
 
-  // ── Mode retrait boutique → affichage direct sans Stripe
+  // ── Mode retrait boutique ──
   if (state?.mode === "comptoir") {
     return (
       <div className="confirmation-page">
         <div className="confirmation-card">
-          <div className="confirmation-icon confirmation-icon--succes">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-          </div>
-
+          <IconeSucces />
           <h2 className="confirmation-titre">Commande confirmée !</h2>
           <p className="confirmation-sous-titre">
             Rendez-vous en boutique pour récupérer vos articles et régler au
@@ -112,55 +159,77 @@ const Confirmation = () => {
             <InfosLivraison livraison={state.livraison} />
           </div>
 
-          {state.articles?.length > 0 && (
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                marginBottom: "1.5rem",
-                textAlign: "left",
-              }}
-            >
-              {state.articles.map((a, i) => (
-                <li
-                  key={i}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0.3rem 0",
-                    borderBottom: "1px solid var(--color-border, #eee)",
-                  }}
-                >
-                  <span>
-                    {a.nom_article}
-                    {a.poids ? ` — ${a.poids}` : ""}
-                  </span>
-                  {a.quantite > 1 && <span>×{a.quantite}</span>}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <Link
-            to="/commandes"
-            className="bouton bouton-secondaire confirmation-btn"
-          >
-            Voir ma commande
-          </Link>
-          <Link to="/" className="bouton bouton-tertiaire confirmation-btn">
-            Retour à l'accueil
-          </Link>
+          <ListeArticles articles={state.articles} />
+          <BoutonsNavigation />
         </div>
       </div>
     );
   }
 
-  // ── Mode Stripe (carte bancaire)
+  // ── Mode PayPal ──
+  if (state?.mode === "paypal") {
+    return (
+      <div className="confirmation-page">
+        <div className="confirmation-card">
+          <IconeSucces />
+          <h2 className="confirmation-titre">Paiement PayPal confirmé !</h2>
+          <p className="confirmation-sous-titre">
+            Merci pour votre commande. Votre paiement a bien été reçu via
+            PayPal.
+          </p>
+
+          <div className="confirmation-recap">
+            <div className="confirmation-recap-ligne">
+              <span className="confirmation-recap-label">N° de commande</span>
+              <span className="confirmation-recap-value">
+                ORD-{String(state.commande.id_commande).padStart(6, "0")}
+              </span>
+            </div>
+            <div className="confirmation-recap-ligne">
+              <span className="confirmation-recap-label">Total payé</span>
+              <span className="confirmation-recap-value vert">
+                {Number(state.commande.total_ttc || 0)
+                  .toFixed(2)
+                  .replace(".", ",")}{" "}
+                €
+              </span>
+            </div>
+            <div className="confirmation-recap-ligne">
+              <span className="confirmation-recap-label">Paiement</span>
+              <span className="confirmation-recap-value">PayPal</span>
+            </div>
+            <InfosLivraison livraison={state.livraison} />
+          </div>
+
+          <ListeArticles articles={state.articles} />
+
+          <BoutonsNavigation />
+
+          <p className="confirmation-email discret">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              style={{ marginRight: "6px", verticalAlign: "middle" }}
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M2 7l10 7 10-7" />
+            </svg>
+            Email de confirmation envoyé
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Mode Stripe (carte bancaire) ──
   useEffect(() => {
     const paymentIntent = searchParams.get("payment_intent");
     const redirectStatus = searchParams.get("redirect_status");
 
-    // Récupération des infos livraison sauvegardées avant le redirect Stripe
     const livraisonSauvegardee = sessionStorage.getItem(
       "livraison_confirmation",
     );
@@ -224,20 +293,7 @@ const Confirmation = () => {
   return (
     <div className="confirmation-page">
       <div className="confirmation-card">
-        <div className="confirmation-icon confirmation-icon--succes">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
-        </div>
+        <IconeSucces />
 
         <h2 className="confirmation-titre">Commande validée !</h2>
         <p className="confirmation-sous-titre">
@@ -253,18 +309,14 @@ const Confirmation = () => {
             <span className="confirmation-recap-label">Total payé</span>
             <span className="confirmation-recap-value vert">{montant} €</span>
           </div>
+          <div className="confirmation-recap-ligne">
+            <span className="confirmation-recap-label">Paiement</span>
+            <span className="confirmation-recap-value">Carte bancaire</span>
+          </div>
           <InfosLivraison livraison={livraisonStripe} />
         </div>
 
-        <Link
-          to="/commandes"
-          className="bouton bouton-secondaire confirmation-btn"
-        >
-          Voir ma commande
-        </Link>
-        <Link to="/" className="bouton bouton-tertiaire confirmation-btn">
-          Retour à l'accueil
-        </Link>
+        <BoutonsNavigation />
 
         <p className="confirmation-email discret">
           <svg

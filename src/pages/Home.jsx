@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "../styles/Home.css";
-import logo from "../assets/logo.png";
-import heroBox from "../assets/box-cafthe.png";
+import logo from "../assets/logo.webp";
+import heroBox from "../assets/box-cafthe.webp";
 import BestSellers from "../components/BestSellers.jsx";
 import FavoriteProducts from "../components/FavoriteProducts.jsx";
 import { useNavigate, Link } from "react-router-dom";

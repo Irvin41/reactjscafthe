@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
-import logo from "../assets/logo-cafthe.png";
+import logo from "../assets/logo-cafthe.webp";
 import CartDrawer from "./CartDrawer.jsx";
 import SearchBandeau from "../pages/SearchBandeau.jsx";
 import ThemeToggle from "./ThemeToggle.jsx";

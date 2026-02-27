@@ -13,9 +13,11 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
+// ── Formulaire Carte Bancaire (Stripe) ──
 const FormulaireCB = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -57,6 +59,39 @@ const FormulaireCB = () => {
   );
 };
 
+// ── Formulaire PayPal ──
+const FormulairePayPal = ({ montant, onSuccess, onError }) => {
+  return (
+    <div className="auth-card section-paiement">
+      <h2 className="sous-titre">PAIEMENT PAYPAL</h2>
+      <PayPalButtons
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: montant.toFixed(2),
+                  currency_code: "EUR",
+                },
+              },
+            ],
+          });
+        }}
+        onApprove={(data, actions) => {
+          return actions.order.capture().then((details) => {
+            onSuccess(details);
+          });
+        }}
+        onError={(err) => {
+          console.error("Erreur PayPal :", err);
+          onError("Une erreur est survenue avec PayPal.");
+        }}
+      />
+    </div>
+  );
+};
+
+// ── Page Paiement ──
 const Paiement = () => {
   const {
     cartDisplayed,
@@ -145,19 +180,30 @@ const Paiement = () => {
     if (!hasModified) setHasModified(true);
   };
 
+  // ── Articles formatés (réutilisé dans plusieurs handlers) ──
+  const getArticles = () =>
+    cartDisplayed
+      .filter((item) => !item.isSample)
+      .map((item) => ({
+        id_article: item.id_article ?? String(item.id).split("_")[0],
+        quantite: item.quantity,
+        prix_ttc: item.finalPrice ?? item.price ?? item.prix_ttc,
+        poids: item.poids ?? null,
+      }));
+
+  const getLivraisonState = () => ({
+    mode: modeLivraison,
+    adresse: formData,
+    pointRelais: pointRelais ?? null,
+  });
+
+  // ── Handler : Paiement au comptoir & Stripe ──
   const handlePayer = async () => {
     setLoadingPaiement(true);
     setErreurPaiement(null);
 
     try {
-      const articles = cartDisplayed
-        .filter((item) => !item.isSample)
-        .map((item) => ({
-          id_article: item.id_article ?? String(item.id).split("_")[0],
-          quantite: item.quantity,
-          prix_ttc: item.finalPrice ?? item.price ?? item.prix_ttc,
-          poids: item.poids ?? null,
-        }));
+      const articles = getArticles();
 
       if (modePaiement === "Paiement au comptoir") {
         const res = await fetch(`${API}/api/commandes`, {
@@ -181,16 +227,13 @@ const Paiement = () => {
                 poids: i.poids ?? null,
                 quantite: i.quantity,
               })),
-            livraison: {
-              mode: modeLivraison,
-              adresse: formData,
-              pointRelais: pointRelais ?? null,
-            },
+            livraison: getLivraisonState(),
           },
         });
         return;
       }
 
+      // Stripe
       const res = await fetch(`${API}/api/commandes/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -201,17 +244,57 @@ const Paiement = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      // Sauvegarde des infos livraison pour la page confirmation (Stripe redirige sans state)
       sessionStorage.setItem(
         "livraison_confirmation",
-        JSON.stringify({
-          mode: modeLivraison,
-          adresse: formData,
-          pointRelais: pointRelais ?? null,
-        }),
+        JSON.stringify(getLivraisonState()),
       );
 
       setClientSecret(data.clientSecret);
+    } catch (err) {
+      setErreurPaiement(err.message);
+    } finally {
+      setLoadingPaiement(false);
+    }
+  };
+
+  // ── Handler : PayPal success ──
+  const handlePaypalSuccess = async (details) => {
+    setLoadingPaiement(true);
+    setErreurPaiement(null);
+
+    try {
+      const articles = getArticles();
+
+      const res = await fetch(`${API}/api/commandes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          id_client: idClient,
+          articles,
+          paypal: true,
+          paypal_order_id: details.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      clearCart();
+      navigate("/confirmation", {
+        state: {
+          mode: "paypal",
+          commande: data.commande,
+          articles: cartDisplayed
+            .filter((i) => !i.isSample)
+            .map((i) => ({
+              nom_article: i.name ?? i.nom_article,
+              poids: i.poids ?? null,
+              quantite: i.quantity,
+            })),
+          livraison: getLivraisonState(),
+        },
+      });
     } catch (err) {
       setErreurPaiement(err.message);
     } finally {
@@ -230,8 +313,6 @@ const Paiement = () => {
 
   const fraisPort = obtenirFrais();
   const totalFinal = cartTotal + fraisPort;
-
-  /* Prix brut sans remise fidélité */
   const totalSansRemise = cartTotal + (loyaltySavings ?? 0);
 
   return (
@@ -404,6 +485,8 @@ const Paiement = () => {
                   className={`bouton-choix ${modePaiement === mode ? "actif" : ""}`}
                   onClick={() => {
                     setModePaiement(mode);
+                    setClientSecret(null);
+                    setErreurPaiement(null);
                     if (mode === "Paiement au comptoir") {
                       changerLivraison("retrait");
                     }
@@ -471,13 +554,11 @@ const Paiement = () => {
         )}
 
         <div className="zone-validation">
-          {/* Total sans remise fidélité */}
           <div className="recap-final-ligne">
             <span>Total panier</span>
             <span>{formatPrice(totalSansRemise)}</span>
           </div>
 
-          {/* Remise fidélité */}
           {palier && loyaltySavings > 0 && (
             <div className="recap-final-ligne">
               <span className="remise-fidelite">
@@ -501,7 +582,8 @@ const Paiement = () => {
 
           {erreurPaiement && <p style={{ color: "red" }}>{erreurPaiement}</p>}
 
-          {!clientSecret && (
+          {/* Bouton principal — masqué si PayPal sélectionné ou si clientSecret Stripe présent */}
+          {!clientSecret && modePaiement !== "Paypal" && (
             <button
               className="bouton bouton-principal large"
               onClick={handlePayer}
@@ -512,10 +594,27 @@ const Paiement = () => {
           )}
         </div>
 
+        {/* ── Stripe ── */}
         {clientSecret && modePaiement === "Carte Bancaire" && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>
             <FormulaireCB />
           </Elements>
+        )}
+
+        {/* ── PayPal ── */}
+        {modePaiement === "Paypal" && (
+          <PayPalScriptProvider
+            options={{
+              "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+              currency: "EUR",
+            }}
+          >
+            <FormulairePayPal
+              montant={totalFinal}
+              onSuccess={handlePaypalSuccess}
+              onError={(msg) => setErreurPaiement(msg)}
+            />
+          </PayPalScriptProvider>
         )}
       </section>
     </main>
