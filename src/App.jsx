@@ -26,6 +26,7 @@ import MentionsLegales from "./pages/MentionsLegales.jsx";
 import Confirmation from "./pages/Confirmation.jsx";
 import LoyaltySync from "./components/LoyaltySync.jsx";
 import MapSite from "./pages/Mapsite.jsx";
+import FacturePage from "./pages/FacturePage";
 
 function App() {
   return (
@@ -56,7 +57,8 @@ function App() {
               <Route path="cgv" element={<CGV />} />
               <Route path="mentions-legales" element={<MentionsLegales />} />
               <Route path="confirmation" element={<Confirmation />} />
-              <Route path="plan-du-site" element={<MapSite />} />;
+              <Route path="plan-du-site" element={<MapSite />} />; import
+              <Route path="/facture/:idCommande" element={<FacturePage />} />
             </Route>
           </Routes>
         </BrowserRouter>
