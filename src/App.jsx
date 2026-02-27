@@ -57,7 +57,7 @@ function App() {
               <Route path="cgv" element={<CGV />} />
               <Route path="mentions-legales" element={<MentionsLegales />} />
               <Route path="confirmation" element={<Confirmation />} />
-              <Route path="plan-du-site" element={<MapSite />} />; import
+              <Route path="plan-du-site" element={<MapSite />} />;
               <Route path="/facture/:idCommande" element={<FacturePage />} />
             </Route>
           </Routes>

@@ -1,10 +1,11 @@
-// components/FactureDocument.jsx
-
 import React from "react";
 import "../styles/Facture.css";
 
-function FactureDocument({ facture, lignes }) {
+function FactureDocument({ facture, lignes, logoBase64 }) {
   const numeroFormate = String(facture.NUMERO_FACTURE).padStart(6, "0");
+  const remise = parseFloat(facture.remise_fidelite) || 0;
+  const totalTTC = parseFloat(facture.MONTANT_TTC);
+  const totalAvantRemise = totalTTC + remise;
 
   return (
     <div className="page">
@@ -16,7 +17,7 @@ function FactureDocument({ facture, lignes }) {
       <div className="header">
         <div>
           <picture>
-            <img src="http://localhost:3001/logo.png" alt="logo" />
+            <img className="logo" src={logoBase64} alt="logo" />
           </picture>
         </div>
         <div className="titre-facture">FACTURE</div>
@@ -25,7 +26,8 @@ function FactureDocument({ facture, lignes }) {
       {/* Meta */}
       <div className="meta">
         <span>
-          <strong>DATE :</strong> {facture.DATE_FACTURE}
+          <strong>DATE :</strong>{" "}
+          {new Date(facture.DATE_FACTURE).toLocaleDateString("fr-FR")}
         </span>
         <span>FACTURE N° : {numeroFormate}</span>
       </div>
@@ -41,7 +43,7 @@ function FactureDocument({ facture, lignes }) {
             <br />
             123 Rue du Café
             <br />
-            41000 BLois
+            41000 Blois
           </p>
         </div>
         <div className="partie partie-droite">
@@ -63,6 +65,7 @@ function FactureDocument({ facture, lignes }) {
             <td>Description :</td>
             <td>Prix Unitaire :</td>
             <td>Quantité :</td>
+            <td>Poids :</td>
             <td>Total :</td>
           </tr>
         </thead>
@@ -72,6 +75,7 @@ function FactureDocument({ facture, lignes }) {
               <td>{l.nom_article}</td>
               <td>{parseFloat(l.prix_ttc).toFixed(2)}€</td>
               <td>{l.quantite}</td>
+              <td>{l.poids ?? "-"}</td>
               <td>{(parseFloat(l.prix_ttc) * l.quantite).toFixed(2)}€</td>
             </tr>
           ))}
@@ -99,23 +103,25 @@ function FactureDocument({ facture, lignes }) {
             <span>TVA :</span>
             <span>{parseFloat(facture.MONTANT_TVA).toFixed(2)}€</span>
           </div>
+          {remise > 0 && (
+            <div className="ligne-total">
+              <span>TOTAL AVANT REMISE :</span>
+              <span>{totalAvantRemise.toFixed(2)}€</span>
+            </div>
+          )}
           <div className="ligne-total">
-            <span>REMISE :</span>
-            <span>-</span>
+            <span>REMISE FIDÉLITÉ :</span>
+            <span>{remise > 0 ? `− ${remise.toFixed(2)}€` : "-"}</span>
           </div>
           <div className="ligne-ttc">
             <span>TOTAL TTC :</span>
-            <span>{parseFloat(facture.MONTANT_TTC).toFixed(2)}€</span>
+            <span>{totalTTC.toFixed(2)}€</span>
           </div>
         </div>
       </div>
 
       {/* Mentions légales */}
       <div className="mentions">
-        <p>
-          En cas de retard de paiement, une indemnité de 10% par jour de retard
-          ainsi que des frais de recouvrement de 40 euros seront exigibles.
-        </p>
         <p>CGV consultables sur : www.cafthe.fr</p>
       </div>
     </div>

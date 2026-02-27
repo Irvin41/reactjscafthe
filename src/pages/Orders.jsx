@@ -25,7 +25,6 @@ const statusLabel = (statut = "") => {
   return statut;
 };
 
-// Commande "en cours" = tout sauf livré et annulé
 const isEnCours = (statut = "") => {
   const s = statut.toUpperCase();
   return !s.includes("LIVRE") && !s.includes("ANNUL");
@@ -49,7 +48,10 @@ const Orders = () => {
       .then((d) => {
         const data = d.commandes || d;
         console.log("Premier article :", data[0]?.articles[0]);
-        setCommandes(Array.isArray(data) ? data : []);
+        const sorted = Array.isArray(data)
+          ? [...data].sort((a, b) => b.id_commande - a.id_commande)
+          : [];
+        setCommandes(sorted);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -150,7 +152,6 @@ const Orders = () => {
                       </strong>
                     </div>
 
-                    {/* Miniatures dans la ligne — max 3 */}
                     {order.articles?.length > 0 && (
                       <div className="order-head-thumbs">
                         {order.articles.slice(0, 3).map((a, i) =>
@@ -205,14 +206,12 @@ const Orders = () => {
                   {isOpen && (
                     <div className="order-full-detail">
                       <div className="order-detail-grid">
-                        {/* Articles avec miniatures */}
                         <div className="order-detail-articles">
                           <h4>ARTICLES</h4>
                           {order.articles?.length > 0 ? (
                             <ul>
                               {order.articles.map((a, i) => (
                                 <li key={i}>
-                                  {/* Miniature 75×75 */}
                                   <div className="article-thumb-wrap">
                                     {a.image ? (
                                       <img
@@ -255,7 +254,6 @@ const Orders = () => {
                           )}
                         </div>
 
-                        {/* Récap */}
                         <div className="order-detail-recap">
                           <h4>RÉCAPITULATIF</h4>
                           <div className="recap-row">
@@ -286,6 +284,16 @@ const Orders = () => {
                                 .replace(".", ",")}{" "}
                               €
                             </strong>
+                          </div>
+                          <div className="recap-row recap-facture">
+                            <Link
+                              to={`/facture/${order.id_commande}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="lien"
+                            >
+                              Voir la facture
+                            </Link>
                           </div>
                         </div>
                       </div>

@@ -180,7 +180,6 @@ const Paiement = () => {
     if (!hasModified) setHasModified(true);
   };
 
-  // ── Articles formatés (réutilisé dans plusieurs handlers) ──
   const getArticles = () =>
     cartDisplayed
       .filter((item) => !item.isSample)
@@ -210,7 +209,12 @@ const Paiement = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ id_client: idClient, articles }),
+          body: JSON.stringify({
+            id_client: idClient,
+            articles,
+            remise_fidelite: loyaltySavings,
+            mode_paiement: "Paiement au comptoir",
+          }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
@@ -238,7 +242,12 @@ const Paiement = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ id_client: idClient, articles }),
+        body: JSON.stringify({
+          id_client: idClient,
+          articles,
+          remise_fidelite: loyaltySavings,
+          mode_paiement: "Carte Bancaire",
+        }),
       });
 
       const data = await res.json();
@@ -272,6 +281,8 @@ const Paiement = () => {
         body: JSON.stringify({
           id_client: idClient,
           articles,
+          remise_fidelite: loyaltySavings,
+          mode_paiement: "Paypal",
           paypal: true,
           paypal_order_id: details.id,
         }),
@@ -582,7 +593,6 @@ const Paiement = () => {
 
           {erreurPaiement && <p style={{ color: "red" }}>{erreurPaiement}</p>}
 
-          {/* Bouton principal — masqué si PayPal sélectionné ou si clientSecret Stripe présent */}
           {!clientSecret && modePaiement !== "Paypal" && (
             <button
               className="bouton bouton-principal large"
