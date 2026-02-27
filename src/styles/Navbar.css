@@ -35,24 +35,6 @@
   gap: clamp(12px, 1.8vw, 28px);
 }
 
-.nav-menu a {
-  text-decoration: none;
-  font-family: var(--font-brand);
-  font-size:  1.2rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--color-text);
-  transition: color 0.2s ease;
-}
-
-.nav-menu a:hover {
-  color: var(--color-nav-active);
-}
-.nav-menu a.active {
-  color: var(--color-nav-active);
-  border-bottom: 2px solid var(--color-nav-active);
-}
-
 /*  Actions (panier, compte, recherche) */
 .nav-actions {
   display: flex;
@@ -65,24 +47,16 @@
   align-items: center;
   gap: 10px;
 }
-
-.account-link,
-.cart-btn-nav {
-  border: none;
+.account-link-red{
   background: none;
-  font-family: var(--font-brand);
-  letter-spacing: 0.1em;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--color-text);
-  text-decoration: none;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.2s ease;
-}
-.account-link:hover,
-.cart-btn-nav:hover {
+  border: none;
   color: var(--color-nav-active);
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.1rem;
+  transition: var(--transition);
 }
 
 .account-link-red:hover {
@@ -90,21 +64,26 @@
 }
 
 /*  Badge panier  */
+.cart-btn-nav{
+  position: relative;
+}
+
 .cart-btn-nav .badge {
   position: absolute;
-  top: -8px;
-  right: -14px;
-  width: 18px;
-  height: 18px;
+  padding: 3px;
+  top: -20px;
+  right: -20px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--color-badge-bg, var(--color-green));
+  background: var(--color-badge-bg);
   color: #fff;
   font-size: 0.72rem;
   font-family: var(--font-body);
   font-weight: 700;
-  transition: background var(--transition); /* Pour que le changement de couleur soit fluide */
+  transition: background var(--transition);
 }
 
 /*  Burger (mobile)  */

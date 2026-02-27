@@ -20,16 +20,24 @@ const Footer = () => {
           <h3>BOUTIQUE</h3>
           <ul>
             <li>
-              <Link to="/thes">Thes</Link>
+              <Link className="lien" to="/thes">
+                Thes
+              </Link>
             </li>
             <li>
-              <Link to="/cafes">Cafe</Link>
+              <Link className="lien" to="/cafes">
+                Cafe
+              </Link>
             </li>
             <li>
-              <Link to="/accessoires">Accessoires</Link>
+              <Link className="lien" to="/accessoires">
+                Accessoires
+              </Link>
             </li>
             <li>
-              <Link to="/coffret">Coffrets</Link>
+              <Link className="lien" to="/coffret">
+                Coffrets
+              </Link>
             </li>
           </ul>
         </div>
@@ -38,16 +46,25 @@ const Footer = () => {
           <h3>INFORMATION</h3>
           <ul>
             <li>
-              <Link to="/a-propos">A Propos</Link>
+              <Link className="lien" to="/a-propos">
+                A Propos
+              </Link>
             </li>
             <li>
-              <Link to="/livraison">Livraison</Link>
+              <Link className="lien" to="/livraison">
+                Livraison
+              </Link>
             </li>
             <li>
-              <Link to="/retour">Retour</Link>
+              <Link className="lien" to="/retour">
+                Retour
+              </Link>
             </li>
             <li>
-              <Link to="/contact"> Nous Contacter</Link>
+              <Link className="lien" to="/contact">
+                {" "}
+                Nous Contacter
+              </Link>
             </li>
           </ul>
         </div>
@@ -80,6 +97,12 @@ const Footer = () => {
             <Link className="lien" to="/mentions-legales">
               {" "}
               mentions légales{" "}
+            </Link>
+          </li>
+          <li>
+            <Link className="lien" to="/plan-du-site">
+              {" "}
+              plan du site{" "}
             </Link>
           </li>
         </ul>

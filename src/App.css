@@ -374,17 +374,10 @@ body {
 
   .footer-col ul {
     display: grid;
+    color: var(--color-nav-active);
     gap: 8px;
   }
 
-  .footer-col a {
-    color: var(--color-text);
-    font-size: 0.95rem;
-  }
-
-  .footer-col a:hover {
-    color: var(--color-nav-active);
-  }
 
   .footer-newsletter-form {
     display: flex;

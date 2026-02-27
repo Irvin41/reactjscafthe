@@ -46,27 +46,52 @@ const Navbar = () => {
               role="menubar"
             >
               <li role="none">
-                <NavLink to="/cafes" role="menuitem" onClick={closeMenu}>
+                <NavLink
+                  className="lien"
+                  to="/cafes"
+                  role="menuitem"
+                  onClick={closeMenu}
+                >
                   Cafés
                 </NavLink>
               </li>
               <li role="none">
-                <NavLink to="/thes" role="menuitem" onClick={closeMenu}>
+                <NavLink
+                  className="lien"
+                  to="/thes"
+                  role="menuitem"
+                  onClick={closeMenu}
+                >
                   Thés
                 </NavLink>
               </li>
               <li role="none">
-                <NavLink to="/accessoires" role="menuitem" onClick={closeMenu}>
+                <NavLink
+                  className="lien"
+                  to="/accessoires"
+                  role="menuitem"
+                  onClick={closeMenu}
+                >
                   Accessoires
                 </NavLink>
               </li>
               <li role="none">
-                <NavLink to="/coffrets" role="menuitem" onClick={closeMenu}>
+                <NavLink
+                  className="lien"
+                  to="/coffrets"
+                  role="menuitem"
+                  onClick={closeMenu}
+                >
                   Coffrets
                 </NavLink>
               </li>
               <li role="none">
-                <NavLink to="/a-propos" role="menuitem" onClick={closeMenu}>
+                <NavLink
+                  className="lien"
+                  to="/a-propos"
+                  role="menuitem"
+                  onClick={closeMenu}
+                >
                   À Propos
                 </NavLink>
               </li>
@@ -79,7 +104,7 @@ const Navbar = () => {
             aria-label="Actions utilisateur"
           >
             <button
-              className="nav-search-btn"
+              className="lien"
               type="button"
               aria-label="Rechercher"
               aria-expanded={searchOpen}
@@ -102,7 +127,7 @@ const Navbar = () => {
             </button>
 
             <button
-              className="cart-btn-nav"
+              className="lien cart-btn-nav"
               type="button"
               onClick={toggleCart}
               aria-label="Mon panier"
@@ -117,15 +142,11 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="user-logged" role="group">
-                <Link
-                  to="/profile"
-                  className="account-link"
-                  onClick={closeMenu}
-                >
+                <Link to="/profile" className="lien" onClick={closeMenu}>
                   {user?.prenom ?? "Mon profil"}
                 </Link>
                 <button
-                  className="cart-btn-nav account-link-red"
+                  className="account-link-red"
                   type="button"
                   onClick={async () => {
                     await logout();
@@ -136,7 +157,7 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="account-link" onClick={closeMenu}>
+              <Link to="/login" className="lien" onClick={closeMenu}>
                 Mon Compte
               </Link>
             )}

@@ -25,6 +25,8 @@ import CGV from "./pages/CGV.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import Confirmation from "./pages/Confirmation.jsx";
 import LoyaltySync from "./components/LoyaltySync.jsx";
+import MapSite from "./pages/Mapsite.jsx";
+
 function App() {
   return (
     <AuthProvider>
@@ -54,6 +56,7 @@ function App() {
               <Route path="cgv" element={<CGV />} />
               <Route path="mentions-legales" element={<MentionsLegales />} />
               <Route path="confirmation" element={<Confirmation />} />
+              <Route path="plan-du-site" element={<MapSite />} />;
             </Route>
           </Routes>
         </BrowserRouter>
