@@ -261,7 +261,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 60px 20px 90px;
-    background: var(--color-surface);
+    background: var(--color-bg);
   }
 
   .auth-card {
