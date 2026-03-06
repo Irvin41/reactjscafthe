@@ -21,7 +21,7 @@ const MentionsLegalesPage = () => {
           <strong className="vert">CafThé</strong>, dont les informations sont
           les suivantes :
         </p>
-        <ul>
+        <ul className="texte">
           <li>
             <strong className="vert">Raison sociale :</strong> CafThé
           </li>
@@ -76,7 +76,7 @@ const MentionsLegalesPage = () => {
           question relative à l'hébergement, les coordonnées de l'hébergeur sont
           les suivantes :
         </p>
-        <ul>
+        <ul className="texte">
           <li>
             <strong className="vert">Hébergeur :</strong> [Nom de l'hébergeur à
             compléter]
@@ -134,7 +134,7 @@ const MentionsLegalesPage = () => {
           Conformément à la réglementation en vigueur, vous disposez des droits
           suivants sur vos données :
         </p>
-        <ul>
+        <ul className="texte">
           <li>
             <strong className="vert">Droit d'accès :</strong> consulter les
             données que nous détenons vous concernant.
@@ -190,7 +190,7 @@ const MentionsLegalesPage = () => {
           Le site CafThé met en œuvre les mesures techniques nécessaires pour
           garantir la sécurité de vos données :
         </p>
-        <ul>
+        <ul className="texte">
           <li>
             <strong className="vert">Chiffrement HTTPS :</strong> toutes les
             communications entre votre navigateur et nos serveurs sont

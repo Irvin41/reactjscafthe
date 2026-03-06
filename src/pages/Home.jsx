@@ -16,10 +16,10 @@ const Home = () => {
       <section className="hero contenu">
         <div className="hero-contenu">
           <img src={logo} alt="logo du site" className="hero-logo" />
-          <h1 className="titre">L'ESSENCE DU THÉ ET DU CAFÉ</h1>
+          <h1 className="titre">Thé & Café d'exception</h1>
           <h2 className="centre discret">
-            Découvrez notre sélection exclusive de thés et cafés sourcés
-            directement auprès des producteurs.
+            Découvrez notre sélection exclusive de thés et cafés issus
+            directement des producteurs.
           </h2>
         </div>
         <picture className="hero-image">
@@ -45,9 +45,7 @@ const Home = () => {
       {/*  FIDÉLITÉ  */}
       <section className="contenu etroit centre">
         <div className="fidelite">
-          <h2 className="dore fidelite-accroche">
-            ✦ VOTRE FIDÉLITÉ SE SAVOURE ✦
-          </h2>
+          <h2 className="dore fidelite-accroche">VOTRE FIDÉLITÉ SE SAVOURE</h2>
           <h3 className="fidelite-titre">
             Parce que chaque tasse compte, rejoignez le Cercle Cafthé.
           </h3>

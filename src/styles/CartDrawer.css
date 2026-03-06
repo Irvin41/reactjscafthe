@@ -62,7 +62,7 @@
 
 .close-drawer {
     border: none;
-    background: none;
+
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;
@@ -95,8 +95,8 @@
 }
 
 .item-price {
-    color: #666;
-    font-size: 0.93rem;
+    color: var(--color-prix);
+    font-size: 1rem;
     margin: 4px 0;
 }
 
@@ -138,6 +138,7 @@
     font-size: 1.08rem;
     font-weight: 700;
     margin-bottom: 12px;
+    color: var(--color-prix);
 }
 
 .checkout-btn {
@@ -242,26 +243,6 @@
 [data-theme='dark'] .drawer-loyalty-banner.palier-bronze { color: #e8a060; }
 [data-theme='dark'] .drawer-loyalty-banner.palier-argent { color: #c0c0c0; }
 [data-theme='dark'] .drawer-loyalty-banner.palier-or     { color: var(--color-gold-soft); }
-
-/*  Prix barrés  */
-.item-price-original {
-    color: #aaa;
-    font-size: 0.85rem;
-    margin-right: 4px;
-    text-decoration: line-through;
-}
-
-.item-price-reduced {
-    font-weight: 700;
-    color: var(--color-green);
-}
-
-.item-price-label {
-    font-style: italic;
-    font-size: 0.75rem;
-    margin-left: 4px;
-    opacity: 0.85;
-}
 
 .item-price-label.palier-bronze { color: #cd7f32; }
 .item-price-label.palier-argent { color: #909090; }

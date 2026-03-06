@@ -89,7 +89,9 @@ const CartDrawer = () => {
                     <p className="item-price">
                       {item.isSample
                         ? "Gratuit"
-                        : formatPrice(item.originalPrice ?? item.price)}
+                        : formatPrice(
+                            (item.originalPrice ?? item.price) * item.quantity,
+                          )}
                     </p>
 
                     {/* Quantité — masquée pour l'échantillon */}

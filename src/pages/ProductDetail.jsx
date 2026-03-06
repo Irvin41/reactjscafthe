@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { formatText, formatStock } from "../utils/formatters";
+import { formatText, formatStock, formatPrice } from "../utils/formatters";
 import "../styles/ProductDetail.css";
 
 const CATEGORIES_POIDS = [
@@ -162,9 +162,10 @@ const ProductDetail = () => {
 
   const afficherPoids = isCafeThe(produit.categorie);
   const poidsDisponibles = getPoidsByCategorie(produit.categorie);
-  const prixAffiche = afficherPoids
+  const prixUnitaire = afficherPoids
     ? calculerPrix(produit.prix_ttc, produit.categorie, selectedPoids)
     : Number(produit.prix_ttc).toFixed(2);
+  const prixAffiche = (parseFloat(prixUnitaire) * quantity).toFixed(2);
   const infosSupplementaires = Object.entries(produit).filter(
     ([key, value]) => {
       if (EXCLUDED_EXTRA_FIELDS.has(key)) return false;

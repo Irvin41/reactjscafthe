@@ -205,6 +205,7 @@ body {
     margin-bottom: 50px;
     position: relative;
     padding-bottom: 15px;
+    color: var(--color-text);
   }
 
   .titre::after {
@@ -224,12 +225,14 @@ body {
     margin-bottom: 20px;
     border-left: 4px solid var(--color-green);
     padding-left: 15px;
+    color: var(--color-text);
   }
 
 
   .texte {
     text-align: left;
     margin: 3rem auto 3rem auto;
+    color: var(--color-text);
   }
 
   .gros-chiffre {
@@ -421,6 +424,7 @@ body {
     display: flex;
     flex-direction: row;
     gap: 2rem;
+    color: var(--color-text);
   }
   /* Responsive */
 

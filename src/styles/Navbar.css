@@ -7,8 +7,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
-
+.logout{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 /*  Logo  */
 .logo-section {
   display: flex;
@@ -33,6 +39,7 @@
   align-items: center;
   list-style: none;
   gap: clamp(12px, 1.8vw, 28px);
+  flex-wrap: nowrap;
 }
 
 /*  Actions (panier, compte, recherche) */

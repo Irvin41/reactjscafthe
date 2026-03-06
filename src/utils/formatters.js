@@ -18,7 +18,6 @@ export const formatText = (text) => {
     return categoryMap[text];
   }
 
-  // Sinon, formatage générique
   return text
     .replace(/_/g, " ")
     .replace(/-/g, " ")

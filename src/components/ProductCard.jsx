@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
-import { formatStock, formatText } from "../utils/formatters";
+import { formatStock, formatText, formatPrice } from "../utils/formatters";
 import "../styles/ProductDetail.css";
 
 const CATEGORIES_POIDS = [
@@ -34,7 +34,7 @@ const poidsEnGrammes = (poids) => {
   return parseFloat(poids);
 };
 
-const calculerPrix = (prixBase, categorie, selectedPoids) => {
+const calculerPrixUnitaireAjuste = (prixBase, categorie, selectedPoids) => {
   if (!prixBase || !selectedPoids) return prixBase;
   if (selectedPoids === "20 sachets") {
     return (parseFloat(prixBase) * 1.2).toFixed(2);
@@ -46,6 +46,9 @@ const calculerPrix = (prixBase, categorie, selectedPoids) => {
 
 const isCafeThe = (categorie) => CATEGORIES_POIDS.includes(categorie);
 
+// ✅ Poids de substitution pour les cartes sans sélecteur (réserve l'espace)
+const POIDS_PLACEHOLDER = ["—", "—", "—"];
+
 const ProductCard = ({ produit, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
@@ -56,6 +59,7 @@ const ProductCard = ({ produit, onAddToCart }) => {
     const base = getPoidsBase(produit?.categorie);
     return poids.find((p) => poidsEnGrammes(p) === base) || poids[0];
   });
+
   const { addToCart } = useCart();
 
   const imageUrl = produit.image
@@ -64,9 +68,18 @@ const ProductCard = ({ produit, onAddToCart }) => {
 
   const afficherPoids = isCafeThe(produit.categorie);
   const poidsDisponibles = getPoidsByCategorie(produit.categorie);
-  const prixAffiche = afficherPoids
-    ? calculerPrix(produit.prix_ttc, produit.categorie, selectedPoids)
+
+  const prixUnitaireAjuste = afficherPoids
+    ? calculerPrixUnitaireAjuste(
+        produit.prix_ttc,
+        produit.categorie,
+        selectedPoids,
+      )
     : Number(produit.prix_ttc).toFixed(2);
+
+  const prixTotalAffiche = (parseFloat(prixUnitaireAjuste) * quantity).toFixed(
+    2,
+  );
 
   const maxStock =
     typeof produit.stock === "number" && produit.stock > 0 ? produit.stock : 99;
@@ -90,20 +103,16 @@ const ProductCard = ({ produit, onAddToCart }) => {
   const handleAddToCart = () => {
     setIsAdding(true);
     const add = onAddToCart ?? addToCart;
-    const itemToAdd = afficherPoids
-      ? {
-          ...produit,
-          poids: selectedPoids,
-          prix_ttc: calculerPrix(
-            produit.prix_ttc,
-            produit.categorie,
-            selectedPoids,
-          ),
-        }
-      : produit;
-    for (let i = 0; i < quantity; i += 1) {
-      add(itemToAdd);
-    }
+
+    const itemToAdd = {
+      ...produit,
+      poids: afficherPoids ? selectedPoids : null,
+      prix_ttc: prixUnitaireAjuste,
+      quantity: quantity,
+    };
+
+    add(itemToAdd, quantity);
+
     setTimeout(() => setIsAdding(false), 800);
   };
 
@@ -141,7 +150,7 @@ const ProductCard = ({ produit, onAddToCart }) => {
       <div className="produit-infos">
         <div className="produit-pied">
           <span className="detail-prix">
-            {String(prixAffiche).replace(".", ",")} €
+            {String(prixTotalAffiche).replace(".", ",")} €
           </span>
           {produit.stock !== undefined && produit.stock !== null && (
             <span
@@ -158,32 +167,43 @@ const ProductCard = ({ produit, onAddToCart }) => {
           )}
         </div>
 
-        {produit.origine && (
-          <div className="produit-origine-boite">
-            <span className="produit-origine-label">ORIGINE</span>
-            <span className="produit-origine-valeur">{produit.origine}</span>
-          </div>
-        )}
+        <div
+          className="produit-origine-boite"
+          style={{ visibility: produit.origine ? "visible" : "hidden" }}
+        >
+          <span className="produit-origine-label">ORIGINE</span>
+          <span className="produit-origine-valeur">
+            {produit.origine || "—"}
+          </span>
+        </div>
 
-        {afficherPoids && (
-          <div className="produit-poids">
-            <span className="produit-poids-label">QUANTITÉ</span>
-            <div className="produit-poids-options">
-              {poidsDisponibles.map((poids) => (
+        <div
+          className="produit-poids"
+          style={{ visibility: afficherPoids ? "visible" : "hidden" }}
+        >
+          <span className="produit-poids-label">POIDS</span>
+          <div className="produit-poids-options">
+            {(afficherPoids ? poidsDisponibles : POIDS_PLACEHOLDER).map(
+              (poids) => (
                 <button
                   key={poids}
                   type="button"
-                  className={`produit-poids-bouton ${selectedPoids === poids ? "produit-poids-bouton--actif" : ""}`}
-                  onClick={() => setSelectedPoids(poids)}
+                  className={`produit-poids-bouton ${
+                    afficherPoids && selectedPoids === poids
+                      ? "produit-poids-bouton--actif"
+                      : ""
+                  }`}
+                  onClick={() => afficherPoids && setSelectedPoids(poids)}
+                  tabIndex={afficherPoids ? 0 : -1}
                 >
                   {poids}
                 </button>
-              ))}
-            </div>
+              ),
+            )}
           </div>
-        )}
+        </div>
 
-        {!afficherPoids && (
+        <div className="footer-accessoire">
           <div className="produit-poids">
             <span className="produit-poids-label">QUANTITÉ</span>
             <div className="produit-quantite">
@@ -198,8 +218,6 @@ const ProductCard = ({ produit, onAddToCart }) => {
               <input
                 className="produit-quantite-input"
                 type="number"
-                min="1"
-                max={maxStock}
                 value={quantityInput}
                 onChange={(e) => {
                   const raw = e.target.value;
@@ -214,15 +232,13 @@ const ProductCard = ({ produit, onAddToCart }) => {
                   if (Number.isNaN(val) || val < 1) {
                     setQuantity(1);
                     setQuantityInput("1");
-                    return;
-                  }
-                  if (val > maxStock) {
+                  } else if (val > maxStock) {
                     setQuantity(maxStock);
                     setQuantityInput(String(maxStock));
-                    return;
+                  } else {
+                    setQuantity(val);
+                    setQuantityInput(String(val));
                   }
-                  setQuantity(val);
-                  setQuantityInput(String(val));
                 }}
               />
               <button
@@ -235,17 +251,17 @@ const ProductCard = ({ produit, onAddToCart }) => {
               </button>
             </div>
           </div>
-        )}
 
-        <div className="produit-actions--pile">
-          <button
-            type="button"
-            className={`bouton bouton-principal ${isAdding ? "bouton-ajoute" : ""}`}
-            onClick={handleAddToCart}
-            disabled={produit.stock === 0}
-          >
-            {isAdding ? "Ajouté" : "Ajouter au panier"}
-          </button>
+          <div className="produit-actions--pile">
+            <button
+              type="button"
+              className={`bouton bouton-principal ${isAdding ? "bouton-ajoute" : ""}`}
+              onClick={handleAddToCart}
+              disabled={produit.stock === 0}
+            >
+              {isAdding ? "Ajouté" : "Ajouter au panier"}
+            </button>
+          </div>
         </div>
       </div>
     </article>
