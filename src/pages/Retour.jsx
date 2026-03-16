@@ -4,7 +4,7 @@ import "../styles/Contact.css";
 
 const Retour = () => {
   return (
-    <main className="page">
+    <main className="contenu page">
       <header>
         <h1 className="titre">Retours et Remboursements</h1>
         <p className="texte centre">

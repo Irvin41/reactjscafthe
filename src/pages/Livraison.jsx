@@ -2,7 +2,7 @@ import React from "react";
 
 const Livraison = () => {
   return (
-    <main className="page">
+    <main className="contenu page">
       <header>
         <h1 className="titre">Modalités de Livraison</h1>
         <p className="texte centre">
