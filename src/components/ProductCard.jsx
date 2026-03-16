@@ -46,7 +46,7 @@ const calculerPrixUnitaireAjuste = (prixBase, categorie, selectedPoids) => {
 
 const isCafeThe = (categorie) => CATEGORIES_POIDS.includes(categorie);
 
-// ✅ Poids de substitution pour les cartes sans sélecteur (réserve l'espace)
+//
 const POIDS_PLACEHOLDER = ["—", "—", "—"];
 
 const ProductCard = ({ produit, onAddToCart }) => {

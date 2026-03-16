@@ -8,7 +8,7 @@ function FactureDocument({ facture, lignes, logoBase64 }) {
   const totalAvantRemise = totalTTC + remise;
 
   return (
-    <div className="page">
+    <div className="facture">
       {/* Décorations */}
       <div className="deco-gauche" />
       <div className="deco-droite" />

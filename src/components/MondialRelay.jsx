@@ -4,9 +4,7 @@ const MondialRelayLoader = ({ onSelect }) => {
   const [selection, setSelection] = useState(null);
 
   useEffect(() => {
-    // 1. Fonction pour charger les scripts un par un
     const loadScripts = async () => {
-      // Charger jQuery
       const jq = document.createElement("script");
       jq.src = "https://code.jquery.com/jquery-3.6.0.min.js";
       document.head.appendChild(jq);

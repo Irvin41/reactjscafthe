@@ -74,7 +74,7 @@ function getSampleItem(palier) {
   };
 }
 
-// ─── Provider ────────────────────────────────────────────────────────────────
+// Provider
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
@@ -83,7 +83,7 @@ export const CartProvider = ({ children }) => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Points fidélité — à remplacer par ton store auth : setUserPoints(user.loyalty_points)
+  // Points fidélité
   const [userPoints, setUserPoints] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("point_relais");
 
