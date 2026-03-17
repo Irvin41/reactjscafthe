@@ -17,7 +17,7 @@ function FactureDocument({ facture, lignes, logoBase64 }) {
       <div className="header">
         <div>
           <picture>
-            <img className="logo" src={logoBase64} alt="logo" />
+            <img className="logo-facture" src={logoBase64} alt="logo" />
           </picture>
         </div>
         <div className="titre-facture">FACTURE</div>

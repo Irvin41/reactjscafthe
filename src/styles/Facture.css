@@ -1,5 +1,79 @@
-/* components/FactureTemplate.css */
+/* ── Reset ── */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
+/* ── Layout page (écran) ── */
+body {
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0 100px;
+    min-height: 100vh;
+}
+
+/* ── Layout page (impression) ── */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+        display: block;
+    }
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    .no-print {
+        display: none !important;
+    }
+    .facture {
+        width: 210mm !important;
+        min-height: 297mm;
+        box-shadow: none !important;
+    }
+}
+
+/* ── Iframe (rendu dans React) ── */
+.facture-iframe {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+
+/* ── Messages d'état ── */
+.facture-erreur,
+.facture-chargement {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: 40px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* ── Bouton téléchargement ── */
+.btn-telecharger {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    padding: 12px 24px;
+    background: #4a7c59;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-telecharger:hover {
+    background: #3a6348;
+}
+
+/* ── Facture ── */
 .facture {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 50px;
@@ -8,11 +82,14 @@
     position: relative;
     background-color: #fff;
     box-sizing: border-box;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 }
-.logo{
+
+.logo-facture {
     width: 200px;
     height: auto;
 }
+
 .deco-gauche {
     position: absolute;
     top: 0;
@@ -32,7 +109,6 @@
 }
 
 /* ── En-tête ── */
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -59,7 +135,6 @@
 }
 
 /* ── Meta ── */
-
 .meta {
     display: flex;
     justify-content: space-between;
@@ -71,7 +146,6 @@
 }
 
 /* ── Parties émetteur / destinataire ── */
-
 .parties {
     display: flex;
     justify-content: space-between;
@@ -100,7 +174,6 @@
 }
 
 /* ── Tableau ── */
-
 .facture-table {
     width: 100%;
     border-collapse: collapse;
@@ -148,7 +221,6 @@
 }
 
 /* ── Bas de page ── */
-
 .bas-page {
     display: flex;
     justify-content: space-between;
@@ -167,7 +239,6 @@
 }
 
 /* ── Totaux ── */
-
 .totaux {
     width: 40%;
 }
@@ -190,7 +261,6 @@
 }
 
 /* ── Mentions légales ── */
-
 .mentions {
     margin-top: 40px;
     padding-top: 15px;

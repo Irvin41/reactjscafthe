@@ -27,19 +27,51 @@ const FacturePage = () => {
   useEffect(() => {
     const genererPDF = async () => {
       try {
-        // 1. Récupère les données de la facture
-        const res = await fetch(`${API}/api/facture/${idCommande}`, {
+        // 1. Tente de récupérer la facture existante
+        let res = await fetch(`${API}/api/facture/${idCommande}`, {
           credentials: "include",
         });
+
+        // 2. Si elle n'existe pas encore, on la crée d'abord
+        if (res.status === 404) {
+          // Récupère les données de la commande pour calculer les montants
+          const commandeRes = await fetch(`${API}/api/commande/${idCommande}`, {
+            credentials: "include",
+          });
+          const commandeData = await commandeRes.json();
+          const { commande } = commandeData;
+
+          await fetch(`${API}/api/facture/`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id_commande: idCommande,
+              montantHT: commande.MONTANT_HT,
+              montantTVA: commande.MONTANT_TVA,
+              montantTTC: commande.MONTANT_TTC,
+              modePaiement: commande.MODE_PAIEMENT,
+            }),
+          });
+
+          // Re-fetch la facture fraîchement créée
+          res = await fetch(`${API}/api/facture/${idCommande}`, {
+            credentials: "include",
+          });
+        }
+
+        if (!res.ok) {
+          throw new Error(`Erreur serveur : ${res.status}`);
+        }
+
         const data = await res.json();
         const { facture, lignes } = data;
-        console.log(data);
 
-        // 2. Convertit le logo en base64
+        // 3. Convertit le logo en base64
         const logoBase64 = await toBase64(logoUrl);
 
-        // 3. Génère le HTML depuis le composant React
-        const html = renderToStaticMarkup(
+        // 4. Génère le HTML depuis le composant React
+        const bodyHtml = renderToStaticMarkup(
           <FactureDocument
             facture={facture}
             lignes={lignes}
@@ -47,21 +79,27 @@ const FacturePage = () => {
           />,
         );
 
-        // 4. Envoie au backend pour générer le PDF
-        const pdfRes = await fetch(`${API}/api/facture/html-to-pdf`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            html,
-            css: factureCSS,
-            numeroFacture: facture.NUMERO_FACTURE,
-          }),
-        });
+        // 5. Construit un document HTML complet avec le CSS embarqué
+        const fullHtml = `<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Facture n°${String(facture.NUMERO_FACTURE).padStart(6, "0")}</title>
+    <style>${factureCSS}</style>
+  </head>
+  <body>
+    ${bodyHtml}
+    <button class="btn-telecharger no-print" onclick="window.print()">
+      Télécharger la facture
+    </button>
+    <script>
+      window.addEventListener('load', () => window.print());
+    </script>
+  </body>
+</html>`;
 
-        // 5. Affiche le PDF dans la page
-        const blob = await pdfRes.blob();
-        const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
+        const blob = new Blob([fullHtml], { type: "text/html" });
+        setPdfUrl(URL.createObjectURL(blob));
       } catch (err) {
         setError(err.message);
       }
@@ -70,16 +108,11 @@ const FacturePage = () => {
     genererPDF();
   }, [idCommande]);
 
-  if (error) return <p>Erreur : {error}</p>;
-  if (!pdfUrl) return <p>Génération du PDF...</p>;
+  if (error) return <p className="facture-erreur">Erreur : {error}</p>;
+  if (!pdfUrl)
+    return <p className="facture-chargement">Génération de la facture...</p>;
 
-  return (
-    <iframe
-      src={pdfUrl}
-      style={{ width: "100vw", height: "100vh", border: "none" }}
-      title="Facture PDF"
-    />
-  );
+  return <iframe className="facture-iframe" src={pdfUrl} title="Facture PDF" />;
 };
 
 export default FacturePage;
