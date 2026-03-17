@@ -79,7 +79,7 @@ const FacturePage = () => {
           />,
         );
 
-        // 5. Construit un document HTML complet avec le CSS embarqué
+        // 5. Construit un document HTML
         const fullHtml = `<!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -90,7 +90,7 @@ const FacturePage = () => {
   <body>
     ${bodyHtml}
     <button class="btn-telecharger no-print" onclick="window.print()">
-      Télécharger la facture
+      Imprimer la facture
     </button>
     <script>
       window.addEventListener('load', () => window.print());

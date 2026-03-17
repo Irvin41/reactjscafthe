@@ -2,7 +2,8 @@
 
 /* Conteneur flex  */
 .nav-container {
-  padding: 14px 4vw;
+  width: 1440px;
+  padding: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -181,22 +182,21 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(24px);
 }
-/* texte du mode CLAIRE / SOMBRE */
+
 .mode-light {
   color: var(--color-green);
   font-family: var(--font-brand);
 }
-/* Style pour le texte "Sombre" en doré */
+
 .mode-dark {
   color: var(--color-gold);
   font-family: var(--font-brand);
 }
-/* ─── Overlay (mobile) ──────────────────────────────────────── */
+/* ─── Overlay (mobile) */
 .nav-overlay {
   display: none;
 }
 
-/* ─── Responsive ≤ 920 px ───────────────────────────────────── */
 @media (max-width: 920px) {
   .navbar {
     padding: 10px 14px;
