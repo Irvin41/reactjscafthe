@@ -16,7 +16,7 @@
   align-items: center;
   gap: 6px;
 }
-/*  Logo  */
+
 .logo-section {
   display: flex;
   align-items: center;
@@ -33,7 +33,10 @@
   width: auto;
   display: block;
 }
-
+.logo img:hover {
+  transform: scale(1.08);
+  transition: transform 0.2s ease;
+}
 /* Menu principal  */
 .nav-menu {
   display: flex;
